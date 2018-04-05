@@ -1,6 +1,6 @@
 let LMOL = (function() {
     let backgroundColor = 0xFFFFFF;
-    let sphereScale = 0.1;
+    let sphereScale = 0.5;
     let elementColors = {
         "H": 0xFFFFFF,
         "He": 0xD9FFFF,
@@ -361,7 +361,7 @@ let LMOL = (function() {
                 offsets.push(0);
             }
 
-            let offsetAxis = bond.direction();
+            let offsetAxis = new THREE.Vector3(1, 0, 0);
             for (let i = 0; i < meshes.length; i += 2) {
 
                 meshes[i].position.x = (bond.x + bond.atom1.x)/2;
