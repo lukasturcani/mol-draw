@@ -1,6 +1,6 @@
 let LMOL = (function() {
     let backgroundColor = 0xFFFFFF;
-    let sphereScale = 0.5;
+    let sphereScale = 0.1;
     let elementColors = {
         "H": 0xFFFFFF,
         "He": 0xD9FFFF,
@@ -241,9 +241,9 @@ let LMOL = (function() {
         }
 
         direction() {
-            return [this.atom1.x - this.atom2.x,
-                    this.atom1.y - this.atom2.y,
-                    this.atom1.z - this.atom2.z];
+            return new THREE.Vector3(this.atom1.x - this.atom2.x,
+                                     this.atom1.y - this.atom2.y,
+                                     this.atom1.z - this.atom2.z).normalize();
         }
 
 
@@ -339,20 +339,48 @@ let LMOL = (function() {
 
 
     function drawBonds(mol, scene) {
+        let gapSize = 0.2;
+
         for (let bond of mol.bonds) {
-            let geo = new THREE.CylinderBufferGeometry(0.1, 0.1, bond.length(), 30)
-            let mesh = new THREE.Mesh(geo, materials['C']);
+            let bondSize = 0.1/bond.order;
+            let geo = new THREE.CylinderBufferGeometry(bondSize, bondSize, bond.length()/2, 30)
+            geo.rotateX(Math.PI/2);
 
-            mesh.position.x = bond.x;
-            mesh.position.y = bond.y;
-            mesh.position.z = bond.z;
+            let meshes = [];
+            for (let i = 0; i < bond.order; i++) {
+                meshes.push(new THREE.Mesh(geo, materials[bond.atom1.element]));
+                meshes.push(new THREE.Mesh(geo, materials[bond.atom2.element]));
+            }
 
-            let v1 = new THREE.Vector3(0, 0, 1);
-            let v2 = new THREE.Vector3(...bond.direction()).normalize();
-            let angle = v1.angleTo(v2);
-            let axis = v1.cross(v2).normalize();
-            mesh.setRotationFromAxisAngle(axis, angle);
-            scene.add(mesh);
+            let offsets = [];
+            for (let i = 1; i < Math.floor(bond.order/2)+1; i++) {
+                offsets.push(i, -i)
+            }
+
+            if (bond.order % 2 !== 0) {
+                offsets.push(0);
+            }
+
+            let offsetAxis = bond.direction();
+            for (let i = 0; i < meshes.length; i += 2) {
+
+                meshes[i].position.x = (bond.x + bond.atom1.x)/2;
+                meshes[i].position.y = (bond.y + bond.atom1.y)/2;
+                meshes[i].position.z = (bond.z + bond.atom1.z)/2;
+                meshes[i].lookAt(bond.atom1.x, bond.atom1.y, bond.atom1.z);
+                meshes[i].translateOnAxis(offsetAxis, gapSize*offsets[i/2]);
+
+                meshes[i+1].position.x = (bond.x + bond.atom2.x)/2;
+                meshes[i+1].position.y = (bond.y + bond.atom2.y)/2;
+                meshes[i+1].position.z = (bond.z + bond.atom2.z)/2;
+                meshes[i+1].lookAt(bond.atom1.x, bond.atom1.y, bond.atom1.z);
+                meshes[i+1].translateOnAxis(offsetAxis, gapSize*offsets[i/2]);
+
+            }
+
+            for (let mesh of meshes) {
+                scene.add(mesh);
+            }
         }
     }
 
