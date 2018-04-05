@@ -261,22 +261,13 @@ let LMOL = (function() {
 
     function parseMOL3000(molStr) {
         let lines = molStr.split('\n')
-        let atoms = undefined;
-        let bonds = undefined;
+        let atoms = [];
+        let bonds = [];
         let atomBlock = false;
         let bondBlock = false;
 
         for (let i = 0; i < lines.length; ++i) {
             lines[i] = lines[i].trim();
-
-            if (lines[i].includes("M  V30 COUNTS")) {
-                let lineData = lines[i].split(/(?: )+/g);
-                let nAtoms = parseInt(lineData[3]);
-                let nBonds = parseInt(lineData[4]);
-                atoms = new Array(nAtoms);
-                bonds = new Array(nBonds);
-                continue;
-            }
 
             if (lines[i].includes("M  V30 BEGIN ATOM")) {
     			atomBlock = true;
@@ -297,22 +288,20 @@ let LMOL = (function() {
 
             if (atomBlock) {
                 let lineData = lines[i].split(/(?: )+/g);
-                let atom = new Atom(parseInt(lineData[2]),
+                atoms.push(new Atom(parseInt(lineData[2]),
                                     lineData[3],
                                     parseFloat(lineData[4]),
                                     parseFloat(lineData[5]),
-                                    parseFloat(lineData[6]))
-                atoms[atom.id-1] = atom;
+                                    parseFloat(lineData[6])));
                 continue;
             }
 
             if (bondBlock) {
                 let lineData = lines[i].split(/(?: )+/g);
-                let bond = new Bond(parseInt(lineData[2]),
+                bonds.push(new Bond(parseInt(lineData[2]),
                                     atoms[parseInt(lineData[4])-1],
                                     atoms[parseInt(lineData[5])-1],
-                                    parseInt(lineData[3]));
-                bonds[bond.id-1] = bond;
+                                    parseInt(lineData[3])));
                 continue;
             }
         }
