@@ -373,15 +373,38 @@ let LMOL = (function() {
     }
 
 
+    let scenes = [];
+
+    function render() {
+        for (let scene of scenes) {
+            scene.userData.renderer.render(scene, scene.userData.camera);
+            scene.userData.outline.render(scene, scene.userData.camera);
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        for (let scene of scenes) {
+            scene.userData.controls.update();
+        }
+    }
+    animate();
+
     function drawMol(molStr, elementId) {
         let mol = parseMOL3000(molStr);
 
         let scene = new THREE.Scene();
         scene.background = new THREE.Color(backgroundColor);
+        scenes.push(scene);
 
         let container = document.getElementById(elementId);
         let aspectRatio = container.clientWidth / container.clientHeight;
+        scene.userData.container = container;
+
         let camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+        camera.position.z = 5;
+        scene.userData.camera = camera;
+
         let light = new THREE.DirectionalLight(0xFFFFFF);
         light.position.set(0, 1, 1).normalize();
         scene.add(light);
@@ -389,6 +412,7 @@ let LMOL = (function() {
         let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
+        scene.userData.renderer = renderer;
 
 
 		controls = new THREE.TrackballControls(camera, container);
@@ -396,37 +420,28 @@ let LMOL = (function() {
 		controls.zoomSpeed = 3;
 		controls.panSpeed = 2;
 		controls.staticMoving = true;
-		controls.addEventListener('change', render);
+        scene.userData.controls = controls;
+        controls.addEventListener('change', render);
 
 
-        let effect = new THREE.OutlineEffect(renderer);
+        let outline = new THREE.OutlineEffect(renderer);
+        scene.userData.outline = outline;
 
         drawAtoms(mol, scene);
         drawBonds(mol, scene);
+        render();
 
-        camera.position.z = 5;
-
-        function render() {
-            renderer.render(scene, camera);
-            effect.render(scene, camera);
         }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-        }
-        animate();
 
         window.addEventListener('resize', onWindowResize, false)
         function onWindowResize() {
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
+            for (let scene of scenes) {
+                scene.userData.renderer.setSize(scene.userData.container.clientWidth, scene.userData.container.clientHeight);
+                scene.userData.camera.aspect = scene.userData.container.clientWidth / scene.userData.container.clientHeight;
+                scene.userData.camera.updateProjectionMatrix();
+            }
             render();
-
         }
-
-    }
 
     return {drawMol: drawMol};
 }());
