@@ -388,10 +388,8 @@ let LMOL = (function() {
         scene.add(light);
 
         let controller = new THREE.OrbitControls(camera);
-        let renderer = new THREE.WebGLRenderer({antialias: true});
+        let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, canvas: document.getElementById(elementId)});
         renderer.setSize(container.clientWidth, container.clientHeight);
-        container.appendChild(renderer.domElement);
-
         let effect = new THREE.OutlineEffect(renderer);
 
         drawAtoms(mol, scene);
