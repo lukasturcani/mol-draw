@@ -386,8 +386,9 @@ let LMOL = (function() {
         light.position.set(0, 1, 1).normalize();
         scene.add(light);
 
-        let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, canvas: document.getElementById(elementId)});
+        let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
         renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
 
 
 		controls = new THREE.TrackballControls( camera );
@@ -395,7 +396,7 @@ let LMOL = (function() {
 		controls.zoomSpeed = 3;
 		controls.panSpeed = 2;
 		controls.staticMoving = true;
-		controls.addEventListener( 'change', render);
+		controls.addEventListener('change', render);
 
 
         let effect = new THREE.OutlineEffect(renderer);
@@ -415,6 +416,15 @@ let LMOL = (function() {
             controls.update();
         }
         animate();
+
+        window.addEventListener('resize', onWindowResize, false)
+        function onWindowResize() {
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            render();
+
+        }
 
     }
 

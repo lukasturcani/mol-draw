@@ -3,10 +3,10 @@
 		<title>lmol example</title>
 		<style>
 			body { margin: 0; background-color: red;}
-			canvas { width: 100%; height: 100%; border-radius: 200px }
             div { width: 50%;
 				  height: 100%;
 				  background-color: blue;
+				  border-radius: 200px;
 
 			  }
 		</style>
@@ -15,7 +15,6 @@
 	</head>
 	<body>
         <div id="div1">
-			<canvas id='c1'>
 				<script>
 	                let molStr = `
 	                                    6f
@@ -228,9 +227,8 @@
 	                        $$$$
 
 	                `;
-	                LMOL.drawMol(molStr, 'c1');
+	                LMOL.drawMol(molStr, 'div1');
 	    		</script>
-			</canvas>
         </div>
 	</body>
 </html>
