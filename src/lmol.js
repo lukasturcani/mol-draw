@@ -255,6 +255,16 @@ let LMOL = (function() {
             this.atoms = atoms;
             this.bonds = bonds;
         }
+
+        centroid() {
+            let centroid = new THREE.Vector3(0, 0, 0);
+            for (let atom of this.atoms) {
+                let coord = new THREE.Vector3(atom.x, atom.y, atom.z);
+                centroid.add(coord);
+            }
+            return centroid.divideScalar(this.atoms.length);
+        }
+
     }
 
 
@@ -402,7 +412,11 @@ let LMOL = (function() {
         scene.userData.container = container;
 
         let camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
-        camera.position.z = 5;
+        let zValues = mol.atoms.map(x => x.z);
+        let molCenter = mol.centroid();
+        camera.position.x = molCenter.x;
+        camera.position.y = molCenter.y;
+        camera.position.z = molCenter.z + Math.max(...zValues) + 10;
         scene.userData.camera = camera;
 
         let light = new THREE.DirectionalLight(0xFFFFFF);
