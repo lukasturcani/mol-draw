@@ -6,16 +6,18 @@
             div { width: 50%;
 				  height: 100%;
 				  background-color: blue;
-				  border-radius: 200px;
-				  overflow: hidden;
+				  }
+			.lmol {	width: 100%;
+					overflow: hidden;
+				border-radius: 200px;}
 
-			  }
 		</style>
         <script src="src/three.js"></script>
         <script src="src/lmol.js"></script>
 	</head>
 	<body>
-        <div id="div1">
+		<div>
+        <div class="lmol" id="div1">
 				<script>
 	                let molStr = `
 	                                    6f
@@ -230,6 +232,7 @@
 	                `;
 	                LMOL.drawMol(molStr, 'div1');
 	    		</script>
-        </div>
+        	</div>
+		</div>
 	</body>
 </html>
