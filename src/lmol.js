@@ -391,7 +391,7 @@ let LMOL = (function() {
         container.appendChild(renderer.domElement);
 
 
-		controls = new THREE.TrackballControls( camera );
+		controls = new THREE.TrackballControls(camera, container);
 		controls.rotateSpeed = 3.0;
 		controls.zoomSpeed = 3;
 		controls.panSpeed = 2;
