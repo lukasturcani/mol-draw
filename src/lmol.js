@@ -208,8 +208,7 @@ let LMOL = (function() {
         "Pu": 1.75,
         "Am": 1.75};
 
-    let atomGeo = {}
-    let bondGeo = {};
+    let atomGeo = {};
     let materials = {};
 
     class Atom {
@@ -387,9 +386,18 @@ let LMOL = (function() {
         light.position.set(0, 1, 1).normalize();
         scene.add(light);
 
-        let controller = new THREE.OrbitControls(camera);
         let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, canvas: document.getElementById(elementId)});
         renderer.setSize(container.clientWidth, container.clientHeight);
+
+
+		controls = new THREE.TrackballControls( camera );
+		controls.rotateSpeed = 3.0;
+		controls.zoomSpeed = 3;
+		controls.panSpeed = 2;
+		controls.staticMoving = true;
+		controls.addEventListener( 'change', render);
+
+
         let effect = new THREE.OutlineEffect(renderer);
 
         drawAtoms(mol, scene);
@@ -397,12 +405,15 @@ let LMOL = (function() {
 
         camera.position.z = 5;
 
-        function animate() {
-            requestAnimationFrame(animate);
+        function render() {
             renderer.render(scene, camera);
             effect.render(scene, camera);
         }
 
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+        }
         animate();
 
     }
