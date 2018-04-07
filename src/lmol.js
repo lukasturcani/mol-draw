@@ -424,6 +424,7 @@ let LMOL = (function() {
         for (let scene of scenes) {
             scene.userData.renderer.render(scene, scene.userData.camera);
             scene.userData.outline.render(scene, scene.userData.camera);
+            console.log(scene.userData.renderer.info.render)
         }
     }
 
