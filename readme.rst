@@ -1,6 +1,7 @@
 :author: Lukas Turcani
 
-A simple, lightweight molecular viewer.
+A simple, lightweight molecular viewer for embedding molecules into
+web pages.
 
 Live demo: https://lukasturcani.github.io/lmol/example.html
 
