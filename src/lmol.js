@@ -333,10 +333,14 @@ let LMOL = (function() {
     function makeAtomGeometries(mol, mergedGeo) {
 
         for (let atom of mol.atoms) {
+
+            if (!mergedGeo.hasOwnProperty(atom.element)) {
+                mergedGeo[atom.element] = new THREE.Geometry();
+            }
+
             if (!atomGeo.hasOwnProperty(atom.element)) {
                 atomGeo[atom.element] = new THREE.SphereGeometry(elementSizes[atom.element]*sphereScale, 30, 30);
                 materials[atom.element] = new Material({color: elementColors[atom.element]});
-                mergedGeo[atom.element] = new THREE.Geometry();
             }
 
             atomGeo[atom.element].translate(atom.x, atom.y, atom.z);
