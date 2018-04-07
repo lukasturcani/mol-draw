@@ -218,9 +218,6 @@ let LMOL = (function() {
     // Holds the material object for an atom of each element. Only one
     // materials is created per element.
     let materials = {};
-    // Holds the merged geometry object for each element. This holds
-    // the merged meshes of all atoms and bonds of a given element.
-    let mergedGeo = {};
     // Holds all created scenes.
     let scenes = [];
 
@@ -228,7 +225,6 @@ let LMOL = (function() {
         constructor(id, element, x, y, z) {
             this.id = id;
             this.element = element;
-            this.coord = new THREE.Vector3(x, y, z);
             this.x = x;
             this.y = y;
             this.z = z;
@@ -273,7 +269,8 @@ let LMOL = (function() {
         centroid() {
             let centroid = new THREE.Vector3(0, 0, 0);
             for (let atom of this.atoms) {
-                centroid.add(atom.coord);
+                let coord = new THREE.Vector3(atom.x, atom.y, atom.z);
+                centroid.add(coord);
             }
             return centroid.divideScalar(this.atoms.length);
         }
@@ -332,39 +329,38 @@ let LMOL = (function() {
     }
 
 
-    /** Adds atoms to the merged geometries. */
-    function makeAtomGeometries(mol) {
+    /** Adds meshes of atoms in a mol to the scene. */
+    function drawAtoms(mol, scene) {
 
         for (let atom of mol.atoms) {
             if (!atomGeo.hasOwnProperty(atom.element)) {
-                atomGeo[atom.element] = new THREE.SphereGeometry(elementSizes[atom.element]*sphereScale, 30, 30);
+                atomGeo[atom.element] = new THREE.SphereBufferGeometry(elementSizes[atom.element]*sphereScale, 30, 30);
                 materials[atom.element] = new Material({color: elementColors[atom.element]});
-                mergedGeo[atom.element] = new THREE.Geometry();
             }
 
-            atomGeo[atom.element].translate(atom.x, atom.y, atom.z);
-            mergedGeo[atom.element].merge(atomGeo[atom.element]);
-            atomGeo[atom.element].translate(-atom.x, -atom.y, -atom.z);
+            let mesh = new THREE.Mesh(atomGeo[atom.element], materials[atom.element]);
+            mesh.position.set(atom.x, atom.y, atom.z);
+            scene.add(mesh);
         }
     }
 
 
     /**
-     * Adds bonds to the merged geometries.
+     * Adds meshes of the bonds in a mol to the scene.
      *
-     * Two geometries per bond are made, each going from the center of the
+     * Two meshes per bond are made, each going from the center of the
      * bond to an atom. This allows the bond to have two different colors,
      * for cases where the bond links atoms of two different elements.
      */
-    function makeBondGeometries(mol) {
-        // Gap between geometries for cases where bond order is greater than 1.
+    function drawBonds(mol, scene) {
+        // Gap between meshes for cases where bond order is greater than 1.
         let gapSize = 0.2;
 
         for (let bond of mol.bonds) {
             // When bond order is greater than 1, each bond must be made
             // smaller.
             let bondSize = 0.1/bond.order;
-            let geo = new THREE.CylinderGeometry(bondSize, bondSize, bond.length()/2, 30);
+            let geo = new THREE.CylinderBufferGeometry(bondSize, bondSize, bond.length()/2, 30)
             geo.rotateX(Math.PI/2);
 
             // Create two meshes per bond, one going from center to atom1
@@ -391,46 +387,35 @@ let LMOL = (function() {
                 offsets.push(0);
             }
 
-
             let offsetAxis = new THREE.Vector3(1, 0, 0);
             for (let i = 0; i < meshes.length; i += 2) {
 
-                meshes[i].position.set((bond.x + bond.atom1.x)/2,
-                                       (bond.y + bond.atom1.y)/2,
-                                       (bond.z + bond.atom1.z)/2);
+                meshes[i].position.x = (bond.x + bond.atom1.x)/2;
+                meshes[i].position.y = (bond.y + bond.atom1.y)/2;
+                meshes[i].position.z = (bond.z + bond.atom1.z)/2;
                 meshes[i].lookAt(bond.atom1.x, bond.atom1.y, bond.atom1.z);
                 meshes[i].translateOnAxis(offsetAxis, gapSize*offsets[i/2]);
-                mergedGeo[bond.atom1.element].mergeMesh(meshes[i]);
 
-                meshes[i+1].position.set((bond.x + bond.atom2.x)/2,
-                                         (bond.y + bond.atom2.y)/2,
-                                         (bond.z + bond.atom2.z)/2);
+                meshes[i+1].position.x = (bond.x + bond.atom2.x)/2;
+                meshes[i+1].position.y = (bond.y + bond.atom2.y)/2;
+                meshes[i+1].position.z = (bond.z + bond.atom2.z)/2;
                 meshes[i+1].lookAt(bond.atom1.x, bond.atom1.y, bond.atom1.z);
                 meshes[i+1].translateOnAxis(offsetAxis, gapSize*offsets[i/2]);
-                mergedGeo[bond.atom2.element].mergeMesh(meshes[i+1]);
 
             }
 
+            for (let mesh of meshes) {
+                scene.add(mesh);
+            }
         }
     }
-
-
-    function addMeshes(scene) {
-        for (let element in mergedGeo) {
-            let mesh = new THREE.Mesh(mergedGeo[element], materials[element]);
-            scene.add(mesh);
-        }
-    }
-
 
     function render() {
         for (let scene of scenes) {
             scene.userData.renderer.render(scene, scene.userData.camera);
             scene.userData.outline.render(scene, scene.userData.camera);
-            console.log(scene.userData.renderer.info.render)
         }
     }
-
 
     function animate() {
         requestAnimationFrame(animate);
@@ -481,9 +466,8 @@ let LMOL = (function() {
         let outline = new THREE.OutlineEffect(renderer);
         scene.userData.outline = outline;
 
-        makeAtomGeometries(mol);
-        makeBondGeometries(mol);
-        addMeshes(scene);
+        drawAtoms(mol, scene);
+        drawBonds(mol, scene);
         render();
 
         }
