@@ -218,6 +218,9 @@ let LMOL = (function() {
     // Holds the material object for an atom of each element. Only one
     // materials is created per element.
     let materials = {};
+    // Holds the merged geometry object for each element. This holds
+    // the merged meshes of all atoms and bonds of a given element.
+    let mergedGeo = {};
     // Holds all created scenes.
     let scenes = [];
 
@@ -330,7 +333,7 @@ let LMOL = (function() {
 
 
     /** Adds atoms to the merged geometries. */
-    function makeAtomGeometries(mol, mergedGeo) {
+    function makeAtomGeometries(mol) {
 
         for (let atom of mol.atoms) {
             if (!atomGeo.hasOwnProperty(atom.element)) {
@@ -353,7 +356,7 @@ let LMOL = (function() {
      * bond to an atom. This allows the bond to have two different colors,
      * for cases where the bond links atoms of two different elements.
      */
-    function makeBondGeometries(mol, mergedGeo) {
+    function makeBondGeometries(mol) {
         // Gap between geometries for cases where bond order is greater than 1.
         let gapSize = 0.2;
 
@@ -412,7 +415,7 @@ let LMOL = (function() {
     }
 
 
-    function addMeshes(scene, mergedGeo) {
+    function addMeshes(scene) {
         for (let element in mergedGeo) {
             let mesh = new THREE.Mesh(mergedGeo[element], materials[element]);
             scene.add(mesh);
@@ -441,9 +444,6 @@ let LMOL = (function() {
     /** Draws a molecule into DOM element with id elementId. */
     function drawMol(molStr, elementId) {
         let mol = parseMOL3000(molStr);
-        // Holds the merged geometry object for each element. This holds
-        // the merged meshes of all atoms and bonds of a given element.
-        let mergedGeo = {};
 
         let scene = new THREE.Scene();
         scene.background = new THREE.Color(backgroundColor);
@@ -481,9 +481,9 @@ let LMOL = (function() {
         let outline = new THREE.OutlineEffect(renderer);
         scene.userData.outline = outline;
 
-        makeAtomGeometries(mol, mergedGeo);
-        makeBondGeometries(mol, mergedGeo);
-        addMeshes(scene, mergedGeo);
+        makeAtomGeometries(mol);
+        makeBondGeometries(mol);
+        addMeshes(scene);
         render();
 
         }
