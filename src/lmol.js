@@ -422,10 +422,26 @@ let LMOL = (function() {
 
 
     function addMeshes(scene, mergedGeo) {
+        let meshes = [];
         for (let element in mergedGeo) {
             let mesh = new THREE.Mesh(mergedGeo[element], materials[element]);
             scene.add(mesh);
+            meshes.push(mesh);
         }
+        return meshes;
+    }
+
+
+    /** Calculates the bounding box of some meshes. */
+    function getBoundingBox(meshes) {
+        meshes[0].geometry.computeBoundingBox();
+        let bb = meshes[0].geometry.boundingBox.clone();
+        for (let mesh of meshes.slice(1)) {
+            mesh.geometry.computeBoundingBox();
+            bb.union(mesh.geometry.boundingBox);
+
+        }
+        return bb;
     }
 
 
@@ -462,9 +478,6 @@ let LMOL = (function() {
         scene.userData.container = container;
 
         let camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
-        let zValues = mol.atoms.map(x => x.z);
-        let molCenter = mol.centroid();
-        camera.position.set(molCenter.x, molCenter.y, molCenter.z+Math.max(...zValues) + 10);
         scene.userData.camera = camera;
 
         let light = new THREE.DirectionalLight(0xFFFFFF);
@@ -486,12 +499,14 @@ let LMOL = (function() {
         scene.userData.controls = controls;
 
 
+
         let outline = new THREE.OutlineEffect(renderer);
         scene.userData.outline = outline;
 
         makeAtomGeometries(mol, mergedGeo);
         makeBondGeometries(mol, mergedGeo);
-        addMeshes(scene, mergedGeo);
+        let meshes = addMeshes(scene, mergedGeo);
+        autoFitTo(getBoundingBox(meshes), camera, controls);
         render();
 
         }
@@ -505,6 +520,31 @@ let LMOL = (function() {
             }
             render();
         }
+
+        /**
+         * Fits molecule into camera view.
+         * @author { smcllns }
+         *
+         * https://github.com/mrdoob/three.js/issues/6784
+         */
+        function autoFitTo( boundingBox, camera, controls ) {
+          const boundingSphere = new THREE.Sphere();
+          boundingBox.getBoundingSphere(boundingSphere);
+          const scale = 1.25; // object size / display size
+          const objectAngularSize = ( camera.fov * Math.PI / 180 ) * scale;
+          const distanceToCamera = boundingSphere.radius / Math.tan( objectAngularSize / 2 )
+          const len = Math.sqrt( Math.pow( distanceToCamera, 2 ) + Math.pow( distanceToCamera, 2 ) )
+
+          camera.position.set(len, len, len);
+          controls.update();
+
+          camera.lookAt( boundingSphere.center );
+          controls.target.set( boundingSphere.center.x, boundingSphere.center.y, boundingSphere.center.z );
+
+          camera.updateProjectionMatrix();
+
+        }
+
 
     return {drawMol: drawMol};
 }());
