@@ -5,7 +5,7 @@ web pages.
 
 Drawing style and resolution of atoms and bonds is easily changed in ``src/lmol.js``.
 
-Live demo: https://lukasturcani.github.io/lmol/example.html
+Live demo: https://lukasturcani.github.io/lmol/example/example.html
 
 Files.
 ======
