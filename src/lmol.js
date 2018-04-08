@@ -447,6 +447,10 @@ let LMOL = (function() {
 
     function render() {
         for (let scene of scenes) {
+            scene.userData.light.position.copy(scene.userData.camera.position.clone().normalize());
+            scene.userData.light.position.z *= 2;
+            scene.userData.light.position.x *= 5;
+            scene.userData.light.position.normalize();
             scene.userData.renderer.render(scene, scene.userData.camera);
             scene.userData.outline.render(scene, scene.userData.camera);
         }
@@ -481,8 +485,13 @@ let LMOL = (function() {
         scene.userData.camera = camera;
 
         let light = new THREE.DirectionalLight(0xFFFFFF);
-        light.position.set(0, 1, 1).normalize();
+        light.position.copy(camera.position.clone().normalize());
+        light.position.z *= 2;
+        light.position.x *= 5;
+        light.position.normalize();
+        light.target.position.copy(mol.centroid());
         scene.add(light);
+        scene.userData.light = light;
 
         let renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
         renderer.setSize(container.clientWidth, container.clientHeight);
