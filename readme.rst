@@ -3,6 +3,8 @@
 A simple, lightweight molecular viewer for embedding molecules into
 web pages.
 
+Drawing style and resolution of atoms and bonds is easily changed in ``lmol.js``.
+
 Live demo: https://lukasturcani.github.io/lmol/example.html
 
 Files.
