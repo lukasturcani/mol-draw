@@ -477,7 +477,7 @@ let LMOL = (function() {
         let aspectRatio = container.clientWidth / container.clientHeight;
         scene.userData.container = container;
 
-        let camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+        let camera = new THREE.PerspectiveCamera(20, aspectRatio, 0.1, 10000);
         scene.userData.camera = camera;
 
         let light = new THREE.DirectionalLight(0xFFFFFF);
@@ -530,7 +530,7 @@ let LMOL = (function() {
         function autoFitTo( boundingBox, camera, controls ) {
           const boundingSphere = new THREE.Sphere();
           boundingBox.getBoundingSphere(boundingSphere);
-          const scale = 1.25; // object size / display size
+          const scale = 2.5; // object size / display size
           const objectAngularSize = ( camera.fov * Math.PI / 180 ) * scale;
           const distanceToCamera = boundingSphere.radius / Math.tan( objectAngularSize / 2 )
           const len = Math.sqrt( Math.pow( distanceToCamera, 2 ) + Math.pow( distanceToCamera, 2 ) )
