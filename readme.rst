@@ -12,6 +12,6 @@ Files.
 
 :src/mol.js: The source code.
 :src/three.js: The three.js dependency.
-:example.html: A very basic example of embedding ``lmol`` into a web page.
+:example.html: A very basic example of embedding ``mol`` into a web page.
 :license.txt: The license, MIT.
 :readme.rst: This readme.
