@@ -188,4 +188,4 @@ M  END
 
 `;
 
-LMOL.drawMol(molStr, 'container1');
+MOL.drawMol(molStr, 'container1');

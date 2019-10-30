@@ -1,4 +1,4 @@
-let LMOL = (function() {
+let MOL = (function() {
 
     // Global settings.
 

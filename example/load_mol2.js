@@ -361,4 +361,4 @@ M  END
 
 `;
 
-LMOL.drawMol(molStr, 'container2');
+MOL.drawMol(molStr, 'container2');
