@@ -253,7 +253,7 @@ atomToChemicalSymbol :: Atom -> ChemicalSymbol
 atomToChemicalSymbol (Atom { chemicalSymbol }) = chemicalSymbol
 
 atom :: ChemicalSymbol -> Position -> Atom
-atom symbol  pos = Atom  { chemicalSymbol: symbol, position: pos }
+atom symbol pos = Atom  { chemicalSymbol: symbol, position: pos }
 
 
 size :: Atom -> Number
