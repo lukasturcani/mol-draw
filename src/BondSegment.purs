@@ -7,12 +7,13 @@ import Math (sqrt)
 import Data.List (List ( Nil ), (:), (..))
 import MolDraw.Position (Position ( Position ))
 import MolDraw.Atom as Atom
+import MolDraw.ChemicalSymbol (ChemicalSymbol)
 
 
 
 data BondSegment = BondSegment
     { position       :: Position
-    , chemicalSymbol :: Atom.ChemicalSymbol
+    , chemicalSymbol :: ChemicalSymbol
     , length         :: Number
     , order          :: Int
     , offset         :: Int
@@ -37,14 +38,14 @@ bondSegments order atom1 atom2 = do
     offset <- offsets order
     (BondSegment
         { position: segment1Position
-        , chemicalSymbol: Atom.atomToChemicalSymbol atom1
+        , chemicalSymbol: Atom.chemicalSymbol atom1
         , length: length
         , order: order
         , offset: offset
         }
     ) : (BondSegment
             { position: segment2Position
-            , chemicalSymbol: Atom.atomToChemicalSymbol atom2
+            , chemicalSymbol: Atom.chemicalSymbol atom2
             , length: length
             , order: order
             , offset: offset
@@ -58,7 +59,7 @@ bondSegments order atom1 atom2 = do
         , y: (y2-y1)
         , z: (z2-z1)
         }
-    length = sqrt $ selfDot displacement
+    length = (sqrt $ selfDot displacement) / 2.0
     bx = (x1+x2) / 2.0
     by = (y1+y2) / 2.0
     bz = (z1+z2) / 2.0
