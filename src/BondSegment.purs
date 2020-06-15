@@ -4,9 +4,10 @@ module MolDraw.BondSegment
 
 import Prelude
 import Math (sqrt)
-import Data.List (List ( Nil, Cons ))
+import Data.List (List ( Nil ), (:), (..))
 import MolDraw.Position (Position ( Position ))
 import MolDraw.Atom as Atom
+
 
 
 data BondSegment = BondSegment
@@ -18,37 +19,37 @@ data BondSegment = BondSegment
     }
 
 
+
 selfDot :: Position -> Number
 selfDot (Position { x, y, z }) = (x*x) + (y*y) + (z*z)
 
 
+
 offsets :: Int -> List Int
-offsets order = Cons 1 $ Cons 2 $ Cons 3 Nil
+offsets order
+    | order `mod` 2 == 0 = (1 .. (order/2))
+    | otherwise          = 0 : (1 .. (order/2))
+
 
 
 bondSegments :: Int -> Atom.Atom -> Atom.Atom -> List BondSegment
 bondSegments order atom1 atom2 = do
     offset <- offsets order
-    Cons
-        (BondSegment
-            { position: segment1Position
-            , chemicalSymbol: Atom.atomToChemicalSymbol atom1
+    (BondSegment
+        { position: segment1Position
+        , chemicalSymbol: Atom.atomToChemicalSymbol atom1
+        , length: length
+        , order: order
+        , offset: offset
+        }
+    ) : (BondSegment
+            { position: segment2Position
+            , chemicalSymbol: Atom.atomToChemicalSymbol atom2
             , length: length
             , order: order
             , offset: offset
             }
-        )
-        (Cons
-            (BondSegment
-                { position: segment2Position
-                , chemicalSymbol: Atom.atomToChemicalSymbol atom2
-                , length: length
-                , order: order
-                , offset: offset
-                }
-            )
-            Nil
-        )
+        ) : Nil
   where
     (Position { x: x1, y: y1, z: z1 }) = Atom.position atom1
     (Position { x: x2, y: y2, z: z2 }) = Atom.position atom2
