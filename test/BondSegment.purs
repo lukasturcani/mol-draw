@@ -1,4 +1,5 @@
-module Test.MolDraw.Molecule where
+module Test.MolDraw.BondSegment
+where
 
 import Prelude
 
