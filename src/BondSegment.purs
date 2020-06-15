@@ -4,7 +4,7 @@ module MolDraw.BondSegment
 
 import Prelude
 import Math (sqrt)
-import Data.List (List ( Nil ), (:), (..))
+import Data.List (List ( Nil ), (:))
 import MolDraw.Position (Position ( Position ))
 import MolDraw.Atom as Atom
 import MolDraw.ChemicalSymbol (ChemicalSymbol)
@@ -26,10 +26,17 @@ selfDot (Position { x, y, z }) = (x*x) + (y*y) + (z*z)
 
 
 
+biRange :: Int -> Int -> List Int
+biRange start stop
+    | start < stop = -start : start : biRange (start+1) stop
+    | otherwise    = Nil
+
+
+
 offsets :: Int -> List Int
 offsets order
-    | order `mod` 2 == 0 = (1 .. (order/2))
-    | otherwise          = 0 : (1 .. (order/2))
+    | order `mod` 2 == 0 = biRange 1 (order/2 + 1)
+    | otherwise          = 0 : biRange 1 (order/2 + 1)
 
 
 
