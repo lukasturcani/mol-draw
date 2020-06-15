@@ -1,5 +1,6 @@
 module MolDraw.BondSegment
 ( BondSegment
+, bondSegments
 ) where
 
 import Prelude
@@ -18,6 +19,30 @@ data BondSegment = BondSegment
     , order          :: Int
     , offset         :: Int
     }
+
+
+
+instance showBondSegment :: Show BondSegment where
+    show
+        (BondSegment
+            { position
+            , chemicalSymbol
+            , length
+            , order
+            , offset
+            }
+        )
+        =  "BondSegment { position: "
+        <> show position
+        <> ", chemicalSymbol: "
+        <> show chemicalSymbol
+        <> ", length: "
+        <> show length
+        <> ", order: "
+        <> show order
+        <> ", offset: "
+        <> show offset
+        <> " }"
 
 
 
