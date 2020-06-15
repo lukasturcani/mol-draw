@@ -7,7 +7,7 @@ module MolDraw.Atom
 ) where
 
 import MolDraw.Position (Position)
-import MolDraw.ChemicalSymbol (ChemicalSymbol ( .. ))
+import MolDraw.ChemicalSymbol (ChemicalSymbol (..))
 
 
 data Atom = Atom
