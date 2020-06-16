@@ -41,13 +41,13 @@ type Content = V3000Content
 
 instance showV3000Content :: Show V3000Content where
     show (V3000Content { atoms, bondSegments, state })
-        =  "V30000Content { atoms: "
+        =  "(V30000Content { atoms: "
         <> show atoms
         <> ", bondSegments: "
         <> show bondSegments
         <> ", state: "
         <> show state
-        <> " }"
+        <> " })"
 
 
 
@@ -59,7 +59,7 @@ emptyContent = V3000Content
     }
 
 parseV3000 :: String -> Either String V3000Content
-parseV3000 = foldr parser (Right emptyContent) <<< lines
+parseV3000 = foldr parser (Right emptyContent) <<< filter ((>)0 <<< length) <<< lines
   where
     parser :: String -> Either String Content -> Either String Content
     parser line mcontent = do

@@ -32,7 +32,7 @@ instance showBondSegment :: Show BondSegment where
             , offset
             }
         )
-        =  "BondSegment { position: "
+        =  "(BondSegment { position: "
         <> show position
         <> ", chemicalSymbol: "
         <> show chemicalSymbol
@@ -42,7 +42,7 @@ instance showBondSegment :: Show BondSegment where
         <> show order
         <> ", offset: "
         <> show offset
-        <> " }"
+        <> " })"
 
 
 

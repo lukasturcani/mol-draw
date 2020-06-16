@@ -19,11 +19,11 @@ data Atom = Atom
 
 instance showAtom :: Show Atom where
     show (Atom { chemicalSymbol: symbol, position: pos })
-        =  "Atom { chemicalSymbol: "
+        =  "(Atom { chemicalSymbol: "
         <> show symbol
         <> ", position: "
         <> show pos
-        <> " }"
+        <> " })"
 
 
 position :: Atom -> Position
