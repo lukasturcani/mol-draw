@@ -51,24 +51,25 @@ instance showV3000Content :: Show V3000Content where
 
 
 
-emptyContent :: V3000Content
+emptyContent :: Content
 emptyContent = V3000Content
     { atoms: empty
     , bondSegments: Nil
     , state: NotReading
     }
 
-parseV3000 :: String -> Either String V3000Content
+parseV3000 :: String -> Either String Content
 parseV3000 = foldr parser (Right emptyContent) <<< validLines
   where
     validLines = filter ((>)0 <<< length) <<< lines
+
     parser :: String -> Either String Content -> Either String Content
     parser line mcontent = do
        content <- mcontent
        v3000Parser line content
 
 
-v3000Parser :: String -> V3000Content -> Either String V3000Content
+v3000Parser :: String -> Content -> Either String Content
 v3000Parser
     line
     content@(V3000Content { atoms, bondSegments, state: ReadingAtoms })
@@ -165,7 +166,7 @@ readAtom failed = Left (show failed)
 
 
 
-addAtom :: V3000Content -> Int -> Atom -> V3000Content
+addAtom :: Content -> Int -> Atom -> Content
 addAtom (V3000Content { atoms, bondSegments, state }) id atom =
     V3000Content
     { atoms: insert id atom atoms
