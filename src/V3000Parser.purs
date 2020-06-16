@@ -11,7 +11,7 @@ import Data.List (List (Nil))
 import Data.Tuple (Tuple(Tuple))
 import Data.Either (Either(Left, Right))
 import Data.Maybe (Maybe (Just, Nothing))
-import Data.Array (filter, foldr)
+import Data.Array (filter, foldl)
 import Data.String (length)
 import Data.String.Utils (lines, words, includes)
 import MolDraw.Atom (Atom, atom)
@@ -61,12 +61,12 @@ emptyContent = V3000Content
 
 
 parseV3000 :: String -> Either String Content
-parseV3000 = foldr parser (Right emptyContent) <<< validLines
+parseV3000 = foldl parser (Right emptyContent) <<< validLines
   where
     validLines = filter ((<) 0 <<< length) <<< lines
 
-    parser :: String -> Either String Content -> Either String Content
-    parser line econtent = do
+    parser :: Either String Content -> String -> Either String Content
+    parser econtent line = do
        content <- econtent
        v3000Parser line content
 
