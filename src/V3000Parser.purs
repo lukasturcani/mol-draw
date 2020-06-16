@@ -59,8 +59,9 @@ emptyContent = V3000Content
     }
 
 parseV3000 :: String -> Either String V3000Content
-parseV3000 = foldr parser (Right emptyContent) <<< filter ((>)0 <<< length) <<< lines
+parseV3000 = foldr parser (Right emptyContent) <<< validLines
   where
+    validLines = filter ((>)0 <<< length) <<< lines
     parser :: String -> Either String Content -> Either String Content
     parser line mcontent = do
        content <- mcontent
