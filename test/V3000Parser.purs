@@ -40,7 +40,7 @@ $$$$
 
 main :: Effect Unit
 main = do
-    let validLines = filter ((>)0 <<< length) <<< lines
+    let validLines = filter ((<) 0 <<< length)<<< lines
     log $ show $ validLines content
     log $ show $ parseV3000 content
 

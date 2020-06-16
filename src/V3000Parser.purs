@@ -63,7 +63,7 @@ emptyContent = V3000Content
 parseV3000 :: String -> Either String Content
 parseV3000 = foldr parser (Right emptyContent) <<< validLines
   where
-    validLines = filter ((>)0 <<< length) <<< lines
+    validLines = filter ((<) 0 <<< length) <<< lines
 
     parser :: String -> Either String Content -> Either String Content
     parser line econtent = do
@@ -136,7 +136,7 @@ v3000Parser
 
 
 words' :: String -> Array String
-words' = filter ((>) 0 <<< length) <<< words
+words' = filter ((<) 0 <<< length) <<< words
 
 
 
