@@ -20,26 +20,27 @@ data V3000Content = V3000Content
 
 
 
-V3000Parser :: V3000Content -> String -> Maybe V3000Content
+v3000Parser :: V3000Content -> String -> Maybe V3000Content
+v3000Parser
+    state@(V3000Content { atoms, bondSegments, state: ReadingAtoms })
+    line
+        | includes "M  V30 END ATOM" line =
+            Just
+                (V3000Content
+                    { atoms: atoms
+                    , bondSegments: bondSegments
+                    , state: NotReading
+                    }
+                )
 
-parser state@(V3000Content { atoms, bondSegments, ReadingAtoms }) line
-
-    | includes "M  V30 END ATOM" line =
-        Just
-            (V3000Content
-                { atoms: atoms
-                , bondSegments: bondSegments
-                , state: NotReading
-                }
-            )
-
-    | otherwise =
-        case parseAtom line of
-            (Just (id, atom)) -> Just (addAtom state id atom)
+        | otherwise = case parseAtom line of
+            (Just (Tuple id atom) -> Just (addAtom state id atom)
             Nothing -> Nothing
 
 
-parser state@(V3000Content { atoms, bondSegments, ReadingBonds }) line
+v3000Parser
+    state@(V3000Content { atoms, bondSegments, state: ReadingBonds })
+    line
     = Just state
 --
 --    | includes "M  V30 END BOND" line =
@@ -57,27 +58,29 @@ parser state@(V3000Content { atoms, bondSegments, ReadingBonds }) line
 --            Nothing -> Nothing
 
 
-parser state@(V3000Content { atoms, bondSegments, NotReading }) line
+v3000Parser
+    state@(V3000Content { atoms, bondSegments, state: NotReading })
+    line
 
-    | includes "M  V30 BEGIN ATOM" line =
-        Just
-            (V3000Content
-                { atoms: atoms
-                , bondSegments: bondSegments
-                , state: ReadingAtoms
-                }
-            )
+        | includes "M  V30 BEGIN ATOM" line =
+            Just
+                (V3000Content
+                    { atoms: atoms
+                    , bondSegments: bondSegments
+                    , state: ReadingAtoms
+                    }
+                )
 
---    | includes "M  V30 BEGIN BOND" line =
---        Just
---            (V3000Content
---                { atoms: atoms
---                , bondSegments: bondSegments
---                , state: ReadingBonds
---                }
---            )
+    --    | includes "M  V30 BEGIN BOND" line =
+    --        Just
+    --            (V3000Content
+    --                { atoms: atoms
+    --                , bondSegments: bondSegments
+    --                , state: ReadingBonds
+    --                }
+    --            )
 
-    | otherwise -> Just state
+        | otherwise -> Just state
 
 
 
@@ -86,12 +89,12 @@ words' = filter ((>) 0 <<< length) words line
 
 
 
-parseAtom :: String -> Maybe (Tuple (Int, Atom))
+parseAtom :: String -> Maybe (Tuple Int Atom)
 parseAtom line = readAtom $ words' line
 
 
 
-readAtom :: Array String -> Maybe (Tuple (Int, Atom))
+readAtom :: Array String -> Maybe (Tuple Int Atom)
 readAtom [_, id, element, x, y, z] = do
     symbol <- chemicalSymbol element
     Just (Tuple id atom')

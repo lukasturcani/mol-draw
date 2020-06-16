@@ -14,7 +14,7 @@ import MolDraw.Position (Position (Position))
 main :: Effect Unit
 main = do
 
-    let atom1 = atom C (Position {x:0.0,y:0.0,z:0.0})
-        atom2 = atom N (Position {x:1.0,y:0.0,z:0.0})
+    let atom1 = atom C (Position 0.0 0.0 0.0)
+        atom2 = atom N (Position 1.0 0.0 0.0)
         segments = bondSegments 1 atom1 atom2
     log $ show $ segments

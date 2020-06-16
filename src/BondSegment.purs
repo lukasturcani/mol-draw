@@ -84,18 +84,18 @@ bondSegments order atom1 atom2 = do
             }
         ) : Nil
   where
-    (Position { x: x1, y: y1, z: z1 }) = Atom.position atom1
-    (Position { x: x2, y: y2, z: z2 }) = Atom.position atom2
+    (Position x1 y1 z1) = Atom.position atom1
+    (Position x2 y2 z2) = Atom.position atom2
     displacement = Position (x2-x1) (y2-y1) (z2-z1)
     length = (sqrt $ selfDot displacement) / 2.0
     bx = (x1+x2) / 2.0
     by = (y1+y2) / 2.0
     bz = (z1+z2) / 2.0
     segment1Position = Position
-        (bx+x1) / 2.0
-        (by+y1) / 2.0
-        (bz+y1) / 2.0
+        ((bx+x1) / 2.0)
+        ((by+y1) / 2.0)
+        ((bz+y1) / 2.0)
     segment2Position = Position
-        (bx+x2) / 2.0
-        (by+y2) / 2.0
-        (bz+y2) / 2.0
+        ((bx+x2) / 2.0)
+        ((by+y2) / 2.0)
+        ((bz+y2) / 2.0)
