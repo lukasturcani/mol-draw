@@ -6,7 +6,7 @@ module MolDraw.V3000Parser
 import Prelude
 import Data.Int as I
 import Data.Number as N
-import Data.Map (Map, insert, empty)
+import Data.Map (Map, insert, empty, lookup)
 import Data.List (List (Nil), (:), fromFoldable)
 import Data.Tuple (Tuple(Tuple))
 import Data.Either (Either(Left, Right))
@@ -16,7 +16,7 @@ import Data.String (length)
 import Data.String.Utils (lines, words, includes)
 import MolDraw.Atom (Atom, atom)
 import MolDraw.Position (Position(Position))
-import MolDraw.BondSegment (BondSegment)
+import MolDraw.BondSegment (BondSegment, bondSegments)
 import MolDraw.ChemicalSymbol (chemicalSymbol)
 
 data Molecule = Molecule
@@ -92,21 +92,19 @@ v3000Parser
 v3000Parser
     line
     content@(V3000Content { atoms, bondSegments, state: ReadingBonds })
-    = Right content
---
---    | includes "M  V30 END BOND" line =
---        Right
---            (NotReading
---                { atoms: atoms
---                , bondSegments: bondSegments
---                , state: NotReading
---                }
---            )
---
---    | otherwise =
---        case parseBond line of
---            (Right bond) -> Right (addBond state bond)
---            left@(Left _) -> left
+        | includes "M  V30 END BOND" line =
+            Right
+                (V3000Content
+                    { atoms: atoms
+                    , bondSegments: bondSegments
+                    , state: NotReading
+                    }
+                )
+
+        | otherwise = case parseBond atoms line of
+            (Right bondSegments') ->
+                Right (addBondSegments content bondSegments')
+            (Left errorMessage) -> Left errorMessage
 
 
 v3000Parser
@@ -122,14 +120,14 @@ v3000Parser
                     }
                 )
 
-    --    | includes "M  V30 BEGIN BOND" line =
-    --        Right
-    --            (V3000Content
-    --                { atoms: atoms
-    --                , bondSegments: bondSegments
-    --                , state: ReadingBonds
-    --                }
-    --            )
+        | includes "M  V30 BEGIN BOND" line =
+            Right
+                (V3000Content
+                    { atoms: atoms
+                    , bondSegments: bondSegments
+                    , state: ReadingBonds
+                    }
+                )
 
         | otherwise = Right content
 
@@ -175,3 +173,39 @@ addAtom (V3000Content { atoms, bondSegments, state }) id atom =
     , bondSegments: bondSegments
     , state: state
     }
+
+
+
+parseBond ::
+    Map Int Atom -> String -> Either String (List BondSegment)
+parseBond atoms line = readBond atoms $ words' line
+
+
+
+readBond ::
+    Map Int Atom -> List String -> Either String (List BondSegment)
+readBond atoms (_:_:_:order:atom1Id:atom2Id:_) = do
+    order' <- maybeToEither "Failed to parse order." $
+        I.fromString order
+    atom1Id' <- maybeToEither "Failed to parse atom1 id." $
+        I.fromString atom1Id
+    atom2Id' <- maybeToEither "Failed to parse atom2 id." $
+        I.fromString atom2Id
+    atom1 <- maybeToEither "Atom 1 not found." $ lookup atom1Id' atoms
+    atom2 <- maybeToEither "Atom 2 not found." $ lookup atom2Id' atoms
+
+    Right $ bondSegments order' atom1 atom2
+
+readBond atoms failed = Left (show failed)
+
+
+
+addBondSegments :: Content -> List BondSegment -> Content
+addBondSegments
+    (V3000Content { atoms, bondSegments: bondSegments', state })
+    bondSegments
+        = V3000Content
+            { atoms: atoms
+            , bondSegments: bondSegments <> bondSegments'
+            , state: state
+            }
