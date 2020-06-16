@@ -1,17 +1,18 @@
-module MolDraw.Molecule
-( Molecule
+module MolDraw.V3000Parser
+( parseV3000
+, V3000Content
 ) where
 
 import Prelude
 import Data.Int as I
 import Data.Number as N
-import Data.Map (Map, insert)
-import Data.List (List)
+import Data.Map (Map, insert, empty)
+import Data.List (List (Nil))
 import Data.Tuple (Tuple(Tuple))
 import Data.Maybe (Maybe (Just, Nothing))
-import Data.Array (filter)
+import Data.Array (filter, foldr)
 import Data.String (length)
-import Data.String.Utils (words, includes)
+import Data.String.Utils (lines, words, includes)
 import MolDraw.Atom (Atom, atom)
 import MolDraw.Position (Position(Position))
 import MolDraw.BondSegment (BondSegment)
@@ -27,12 +28,26 @@ data V3000Content = V3000Content
     , state        :: V3000State
     }
 
+emptyContent :: V3000Content
+emptyContent = V3000Content
+    { atoms: empty
+    , bondSegments: Nil
+    , state: NotReading
+    }
+
+parseV3000 :: String -> Maybe V3000Content
+parseV3000 = foldr parser (Just emptyContent) <<< lines
+  where
+    parser :: String -> Maybe V3000Content -> Maybe V3000Content
+    parser line mcontent = do
+       content <- mcontent
+       v3000Parser line content
 
 
-v3000Parser :: V3000Content -> String -> Maybe V3000Content
+v3000Parser :: String -> V3000Content -> Maybe V3000Content
 v3000Parser
-    state@(V3000Content { atoms, bondSegments, state: ReadingAtoms })
     line
+    content@(V3000Content { atoms, bondSegments, state: ReadingAtoms })
         | includes "M  V30 END ATOM" line =
             Just
                 (V3000Content
@@ -43,14 +58,14 @@ v3000Parser
                 )
 
         | otherwise = case parseAtom line of
-            Just (Tuple id atom) -> Just (addAtom state id atom)
+            Just (Tuple id atom) -> Just (addAtom content id atom)
             Nothing -> Nothing
 
 
 v3000Parser
-    state@(V3000Content { atoms, bondSegments, state: ReadingBonds })
     line
-    = Just state
+    content@(V3000Content { atoms, bondSegments, state: ReadingBonds })
+    = Just content
 --
 --    | includes "M  V30 END BOND" line =
 --        Just
@@ -68,8 +83,8 @@ v3000Parser
 
 
 v3000Parser
-    state@(V3000Content { atoms, bondSegments, state: NotReading })
     line
+    content@(V3000Content { atoms, bondSegments, state: NotReading })
 
         | includes "M  V30 BEGIN ATOM" line =
             Just
@@ -89,7 +104,7 @@ v3000Parser
     --                }
     --            )
 
-        | otherwise = Just state
+        | otherwise = Just content
 
 
 
