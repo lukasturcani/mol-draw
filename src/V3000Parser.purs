@@ -58,14 +58,16 @@ emptyContent = V3000Content
     , state: NotReading
     }
 
+
+
 parseV3000 :: String -> Either String Content
 parseV3000 = foldr parser (Right emptyContent) <<< validLines
   where
     validLines = filter ((>)0 <<< length) <<< lines
 
     parser :: String -> Either String Content -> Either String Content
-    parser line mcontent = do
-       content <- mcontent
+    parser line econtent = do
+       content <- econtent
        v3000Parser line content
 
 

@@ -5,6 +5,9 @@ import Prelude
 
 import Effect (Effect)
 import Effect.Class.Console (log)
+import Data.Array (filter)
+import Data.String (length)
+import Data.String.Utils (lines)
 
 import MolDraw.V3000Parser (parseV3000)
 
@@ -37,6 +40,7 @@ $$$$
 
 main :: Effect Unit
 main = do
-    log $ content
+    let validLines = filter ((>)0 <<< length) <<< lines
+    log $ show $ validLines content
     log $ show $ parseV3000 content
 
