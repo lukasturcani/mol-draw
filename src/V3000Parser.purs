@@ -152,7 +152,7 @@ maybeToEither errorMessage (Just x) = Right x
 
 
 readAtom :: Array String -> Either String (Tuple Int Atom)
-readAtom [_, id, element, x, y, z] = do
+readAtom [_, _, id, element, x, y, z, _] = do
     symbol <- maybeToEither "Failed to parse element." $
         chemicalSymbol element
     id'    <- maybeToEither "Failed to parse id."     $ I.fromString id
