@@ -40,20 +40,21 @@ parser state@(V3000Content { atoms, bondSegments, ReadingAtoms }) line
 
 
 parser state@(V3000Content { atoms, bondSegments, ReadingBonds }) line
-
-    | includes "M  V30 END BOND" line =
-        Just
-            (NotReading
-                { atoms: atoms
-                , bondSegments: bondSegments
-                , state: NotReading
-                }
-            )
-
-    | otherwise =
-        case parseBond line of
-            (Just bond) -> Just (addBond state bond)
-            Nothing -> Nothing
+    = Just state
+--
+--    | includes "M  V30 END BOND" line =
+--        Just
+--            (NotReading
+--                { atoms: atoms
+--                , bondSegments: bondSegments
+--                , state: NotReading
+--                }
+--            )
+--
+--    | otherwise =
+--        case parseBond line of
+--            (Just bond) -> Just (addBond state bond)
+--            Nothing -> Nothing
 
 
 parser state@(V3000Content { atoms, bondSegments, NotReading }) line
@@ -67,14 +68,14 @@ parser state@(V3000Content { atoms, bondSegments, NotReading }) line
                 }
             )
 
-    | includes "M  V30 BEGIN BOND" line =
-        Just
-            (V3000Content
-                { atoms: atoms
-                , bondSegments: bondSegments
-                , state: ReadingBonds
-                }
-            )
+--    | includes "M  V30 BEGIN BOND" line =
+--        Just
+--            (V3000Content
+--                { atoms: atoms
+--                , bondSegments: bondSegments
+--                , state: ReadingBonds
+--                }
+--            )
 
     | otherwise -> Just state
 
