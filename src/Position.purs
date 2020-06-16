@@ -6,16 +6,11 @@ import Prelude
 
 
 
-data Position = Position
-    { x :: Number
-    , y :: Number
-    , z :: Number
-    }
-
+data Position = Position Number Number Number
 
 
 instance showPosition :: Show Position where
-    show (Position {x,y,z})
+    show (Position x y z)
         =  "Position { x: "
         <> show x
         <> ", y: "
