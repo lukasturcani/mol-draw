@@ -5,8 +5,8 @@ import Prelude
 
 import Effect (Effect)
 import Effect.Class.Console (log)
-import Data.Maybe (Maybe (Just, Nothing))
-import Data.Array (filter, foldr)
+
+import MolDraw.V3000Parser (parseV3000)
 
 content :: String
 content = """
@@ -34,17 +34,9 @@ $$$$
 
 """
 
-initial :: Int -> Int -> Int
-initial x acc = acc + x
-
-folder :: Int -> Maybe Int -> Maybe Int
-folder = map <<< initial
-
-
 
 main :: Effect Unit
 main = do
     log $ content
-    log $ show $ foldr folder (Just 0) [12,3,4,4]
-
+    log $ show $ parseV3000 content
 

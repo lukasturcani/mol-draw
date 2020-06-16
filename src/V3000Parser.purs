@@ -22,11 +22,31 @@ data Molecule = Molecule
 
 data V3000State = NotReading | ReadingAtoms | ReadingBonds
 
+
+instance showV3000State :: Show V3000State where
+    show NotReading   = "NotReading"
+    show ReadingAtoms = "ReadingAtoms"
+    show ReadingBonds = "ReadingBonds"
+
+
 data V3000Content = V3000Content
     { atoms        :: Map Int Atom
     , bondSegments :: List BondSegment
     , state        :: V3000State
     }
+
+
+instance showV3000Content :: Show V3000Content where
+    show (V3000Content { atoms, bondSegments, state })
+        =  "V30000Content { atoms: "
+        <> show atoms
+        <> ", bondSegments: "
+        <> show bondSegments
+        <> ", state: "
+        <> show state
+        <> " }"
+
+
 
 emptyContent :: V3000Content
 emptyContent = V3000Content

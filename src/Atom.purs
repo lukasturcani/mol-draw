@@ -6,14 +6,24 @@ module MolDraw.Atom
 , atom
 ) where
 
+import Prelude
 import MolDraw.Position (Position)
 import MolDraw.ChemicalSymbol (ChemicalSymbol (..))
 
 
 data Atom = Atom
-    { position :: Position
-    , chemicalSymbol :: ChemicalSymbol
+    { chemicalSymbol :: ChemicalSymbol
+    , position       :: Position
     }
+
+
+instance showAtom :: Show Atom where
+    show (Atom { chemicalSymbol: symbol, position: pos })
+        =  "Atom { chemicalSymbol: "
+        <> show symbol
+        <> ", position: "
+        <> show pos
+        <> " }"
 
 
 position :: Atom -> Position
