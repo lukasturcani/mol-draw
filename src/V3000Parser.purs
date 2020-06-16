@@ -9,6 +9,7 @@ import Data.Number as N
 import Data.Map (Map, insert, empty)
 import Data.List (List (Nil))
 import Data.Tuple (Tuple(Tuple))
+import Data.Either (Either(Left, Right))
 import Data.Maybe (Maybe (Just, Nothing))
 import Data.Array (filter, foldr)
 import Data.String (length)
@@ -35,6 +36,8 @@ data V3000Content = V3000Content
     , state        :: V3000State
     }
 
+type Content = V3000Content
+
 
 instance showV3000Content :: Show V3000Content where
     show (V3000Content { atoms, bondSegments, state })
@@ -55,21 +58,21 @@ emptyContent = V3000Content
     , state: NotReading
     }
 
-parseV3000 :: String -> Maybe V3000Content
-parseV3000 = foldr parser (Just emptyContent) <<< lines
+parseV3000 :: String -> Either String V3000Content
+parseV3000 = foldr parser (Right emptyContent) <<< lines
   where
-    parser :: String -> Maybe V3000Content -> Maybe V3000Content
+    parser :: String -> Either String Content -> Either String Content
     parser line mcontent = do
        content <- mcontent
        v3000Parser line content
 
 
-v3000Parser :: String -> V3000Content -> Maybe V3000Content
+v3000Parser :: String -> V3000Content -> Either String V3000Content
 v3000Parser
     line
     content@(V3000Content { atoms, bondSegments, state: ReadingAtoms })
         | includes "M  V30 END ATOM" line =
-            Just
+            Right
                 (V3000Content
                     { atoms: atoms
                     , bondSegments: bondSegments
@@ -78,17 +81,17 @@ v3000Parser
                 )
 
         | otherwise = case parseAtom line of
-            Just (Tuple id atom) -> Just (addAtom content id atom)
-            Nothing -> Nothing
+            Right (Tuple id atom) -> Right (addAtom content id atom)
+            (Left errorMessage) -> Left errorMessage
 
 
 v3000Parser
     line
     content@(V3000Content { atoms, bondSegments, state: ReadingBonds })
-    = Just content
+    = Right content
 --
 --    | includes "M  V30 END BOND" line =
---        Just
+--        Right
 --            (NotReading
 --                { atoms: atoms
 --                , bondSegments: bondSegments
@@ -98,8 +101,8 @@ v3000Parser
 --
 --    | otherwise =
 --        case parseBond line of
---            (Just bond) -> Just (addBond state bond)
---            Nothing -> Nothing
+--            (Right bond) -> Right (addBond state bond)
+--            left@(Left _) -> left
 
 
 v3000Parser
@@ -107,7 +110,7 @@ v3000Parser
     content@(V3000Content { atoms, bondSegments, state: NotReading })
 
         | includes "M  V30 BEGIN ATOM" line =
-            Just
+            Right
                 (V3000Content
                     { atoms: atoms
                     , bondSegments: bondSegments
@@ -116,7 +119,7 @@ v3000Parser
                 )
 
     --    | includes "M  V30 BEGIN BOND" line =
-    --        Just
+    --        Right
     --            (V3000Content
     --                { atoms: atoms
     --                , bondSegments: bondSegments
@@ -124,7 +127,7 @@ v3000Parser
     --                }
     --            )
 
-        | otherwise = Just content
+        | otherwise = Right content
 
 
 
@@ -133,24 +136,31 @@ words' = filter ((>) 0 <<< length) <<< words
 
 
 
-parseAtom :: String -> Maybe (Tuple Int Atom)
+parseAtom :: String -> Either String (Tuple Int Atom)
 parseAtom line = readAtom $ words' line
 
 
 
-readAtom :: Array String -> Maybe (Tuple Int Atom)
+maybeToEither :: forall a. String -> Maybe a -> Either String a
+maybeToEither errorMessage Nothing = Left errorMessage
+maybeToEither errorMessage (Just x) = Right x
+
+
+
+readAtom :: Array String -> Either String (Tuple Int Atom)
 readAtom [_, id, element, x, y, z] = do
-    symbol <- chemicalSymbol element
-    id'    <- I.fromString id
-    x'     <- N.fromString x
-    y'     <- N.fromString y
-    z'     <- N.fromString z
+    symbol <- maybeToEither "Failed to parse element." $
+        chemicalSymbol element
+    id'    <- maybeToEither "Failed to parse id."     $ I.fromString id
+    x'     <- maybeToEither "Failed to parse x."      $ N.fromString x
+    y'     <- maybeToEither "Failed to parse y."      $ N.fromString y
+    z'     <- maybeToEither "Failed to parse z."      $ N.fromString z
 
     let atom' = atom symbol (Position x' y' z')
 
-    Just (Tuple id' atom')
+    Right (Tuple id' atom')
 
-readAtom _ = Nothing
+readAtom failed = Left (show failed)
 
 
 
