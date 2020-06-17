@@ -1,6 +1,8 @@
 module MolDraw.V3000Parser
 ( parseV3000
 , V3000Content
+, atoms
+, bondSegments
 ) where
 
 import Prelude
@@ -16,7 +18,7 @@ import Data.String (length)
 import Data.String.Utils (lines, words, includes)
 import MolDraw.Atom (Atom, atom)
 import MolDraw.Position (Position(Position))
-import MolDraw.BondSegment (BondSegment, bondSegments)
+import MolDraw.BondSegment as BS
 import MolDraw.ChemicalSymbol (chemicalSymbol)
 
 
@@ -34,7 +36,7 @@ instance showV3000State :: Show V3000State where
 
 data V3000Content = V3000Content
     { atoms        :: Map Int Atom
-    , bondSegments :: List BondSegment
+    , bondSegments :: List BS.BondSegment
     , state        :: V3000State
     }
 
@@ -45,11 +47,16 @@ type Content = V3000Content
 
 
 instance showV3000Content :: Show V3000Content where
-    show (V3000Content { atoms, bondSegments, state })
+    show (V3000Content
+        { atoms: atoms'
+        , bondSegments: bondSegments'
+        , state
+        }
+    )
         =  "(V30000Content { atoms: "
-        <> show atoms
+        <> show atoms'
         <> ", bondSegments: "
-        <> show bondSegments
+        <> show bondSegments'
         <> ", state: "
         <> show state
         <> " })"
@@ -66,12 +73,12 @@ emptyContent = V3000Content
 
 
 atoms :: Content -> List Atom
-atoms (V3000Content { atoms }) = values atoms
+atoms (V3000Content { atoms: atoms' }) = values atoms'
 
 
 
-bondSegments :: Content -> List BondSegment
-bondSegments (V3000Content { bondSegments }) = bondSegments
+bondSegments :: Content -> List BS.BondSegment
+bondSegments (V3000Content { bondSegments: segments }) = segments
 
 
 
@@ -90,12 +97,17 @@ parseV3000 = foldl parser (Right emptyContent) <<< validLines
 v3000Parser :: String -> Content -> Either String Content
 v3000Parser
     line
-    content@(V3000Content { atoms, bondSegments, state: ReadingAtoms })
+    content@(V3000Content
+        { atoms: atoms'
+        , bondSegments: bondSegments'
+        , state: ReadingAtoms
+        }
+    )
         | includes "M  V30 END ATOM" line =
             Right
                 (V3000Content
-                    { atoms: atoms
-                    , bondSegments: bondSegments
+                    { atoms: atoms'
+                    , bondSegments: bondSegments'
                     , state: NotReading
                     }
                 )
@@ -107,31 +119,41 @@ v3000Parser
 
 v3000Parser
     line
-    content@(V3000Content { atoms, bondSegments, state: ReadingBonds })
+    content@(V3000Content
+        { atoms: atoms'
+        , bondSegments: bondSegments'
+        , state: ReadingBonds
+        }
+    )
         | includes "M  V30 END BOND" line =
             Right
                 (V3000Content
-                    { atoms: atoms
-                    , bondSegments: bondSegments
+                    { atoms: atoms'
+                    , bondSegments: bondSegments'
                     , state: NotReading
                     }
                 )
 
-        | otherwise = case parseBond atoms line of
-            (Right bondSegments') ->
-                Right (addBondSegments content bondSegments')
+        | otherwise = case parseBond atoms' line of
+            (Right bondSegments'') ->
+                Right (addBondSegments content bondSegments'')
             (Left errorMessage) -> Left errorMessage
 
 
 v3000Parser
     line
-    content@(V3000Content { atoms, bondSegments, state: NotReading })
+    content@(V3000Content
+        { atoms: atoms'
+        , bondSegments: bondSegments'
+        , state: NotReading
+        }
+    )
 
         | includes "M  V30 BEGIN ATOM" line =
             Right
                 (V3000Content
-                    { atoms: atoms
-                    , bondSegments: bondSegments
+                    { atoms: atoms'
+                    , bondSegments: bondSegments'
                     , state: ReadingAtoms
                     }
                 )
@@ -139,8 +161,8 @@ v3000Parser
         | includes "M  V30 BEGIN BOND" line =
             Right
                 (V3000Content
-                    { atoms: atoms
-                    , bondSegments: bondSegments
+                    { atoms: atoms'
+                    , bondSegments: bondSegments'
                     , state: ReadingBonds
                     }
                 )
@@ -183,45 +205,57 @@ readAtom failed = Left (show failed)
 
 
 addAtom :: Content -> Int -> Atom -> Content
-addAtom (V3000Content { atoms, bondSegments, state }) id atom =
-    V3000Content
-    { atoms: insert id atom atoms
-    , bondSegments: bondSegments
-    , state: state
-    }
+addAtom
+    (V3000Content
+        { atoms:            atoms'
+        , bondSegments:      bondSegments'
+        , state
+        }
+    )
+    id
+    atom = V3000Content
+        { atoms: insert id atom atoms'
+        , bondSegments: bondSegments'
+        , state: state
+        }
 
 
 
 parseBond ::
-    Map Int Atom -> String -> Either String (List BondSegment)
-parseBond atoms line = readBond atoms $ words' line
+    Map Int Atom -> String -> Either String (List BS.BondSegment)
+parseBond atoms' line = readBond atoms' $ words' line
 
 
 
 readBond ::
-    Map Int Atom -> List String -> Either String (List BondSegment)
-readBond atoms (_:_:_:order:atom1Id:atom2Id:_) = do
+    Map Int Atom -> List String -> Either String (List BS.BondSegment)
+readBond atoms' (_:_:_:order:atom1Id:atom2Id:_) = do
     order' <- maybeToEither "Failed to parse order." $
         I.fromString order
     atom1Id' <- maybeToEither "Failed to parse atom1 id." $
         I.fromString atom1Id
     atom2Id' <- maybeToEither "Failed to parse atom2 id." $
         I.fromString atom2Id
-    atom1 <- maybeToEither "Atom 1 not found." $ lookup atom1Id' atoms
-    atom2 <- maybeToEither "Atom 2 not found." $ lookup atom2Id' atoms
+    atom1 <- maybeToEither "Atom 1 not found." $ lookup atom1Id' atoms'
+    atom2 <- maybeToEither "Atom 2 not found." $ lookup atom2Id' atoms'
 
-    Right $ bondSegments order' atom1 atom2
+    Right $ BS.bondSegments order' atom1 atom2
 
-readBond atoms failed = Left (show failed)
+readBond atoms' failed = Left (show failed)
 
 
 
-addBondSegments :: Content -> List BondSegment -> Content
+addBondSegments :: Content -> List BS.BondSegment -> Content
 addBondSegments
-    (V3000Content { atoms, bondSegments: bondSegments', state })
-    bondSegments
+    (V3000Content
+        { atoms: atoms'
+        , bondSegments: oldSegments
+        , state
+        }
+    )
+    newSegments
         = V3000Content
-            { atoms: atoms
-            , bondSegments: bondSegments <> bondSegments'
+            { atoms: atoms'
+            , bondSegments: newSegments <> oldSegments
             , state: state
             }

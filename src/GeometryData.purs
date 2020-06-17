@@ -1,10 +1,13 @@
 module MolDraw.GeometryData
 ( GeometryData
 , atoms
-, bonds
+, bondSegments
 ) where
 
 
+import Data.List (List)
+import MolDraw.Atom (Atom)
+import MolDraw.BondSegment (BondSegment)
 import MolDraw.V3000Parser as V3P
 
 
@@ -16,11 +19,11 @@ data GeometryData = GeometryData
 
 
 atoms :: GeometryData -> List Atom
-atoms (GeometryData { atoms }) = atoms
+atoms (GeometryData { atoms: atoms' }) = atoms'
 
 
 bondSegments :: GeometryData -> List BondSegment
-bonds (GeometryData { bonds }) = bonds
+bondSegments (GeometryData { bondSegments: segments }) = segments
 
 
 fromV3000Content :: V3P.V3000Content -> GeometryData

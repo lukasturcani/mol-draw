@@ -2,14 +2,19 @@ module MolDraw.MeshData
 ( MeshData
 , meshData
 , MeshOptions (MeshOptions)
+, Color
 ) where
 
 
 import Data.List (List)
+import Data.Map (Map)
+import MolDraw.ChemicalSymbol (ChemicalSymbol)
 import MolDraw.Atom (Atom)
 import MolDraw.BondSegment (BondSegment)
 import MolDraw.GeometryData as GD
 
+
+type Color = Int
 
 
 data MeshOptions = MeshOptions
@@ -55,7 +60,7 @@ meshData
         { atoms: GD.atoms geometryData
         , bondSegments: GD.bondSegments geometryData
         , atomSize: atomSize
-        , atomScale: atomScale,
+        , atomScale: atomScale
         , atomWidthSegments
         , atomHeightSegments
         , bondRadialSegments

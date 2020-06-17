@@ -1,3 +1,1 @@
-
-data Mesh = Mesh
-mesh :: MeshData -> Mesh
+module MolDraw.Mesh where
