@@ -6,7 +6,7 @@ module MolDraw.V3000Parser
 import Prelude
 import Data.Int as I
 import Data.Number as N
-import Data.Map (Map, insert, empty, lookup)
+import Data.Map (Map, insert, empty, lookup, values)
 import Data.List (List (Nil), (:), fromFoldable)
 import Data.Tuple (Tuple(Tuple))
 import Data.Either (Either(Left, Right))
@@ -58,10 +58,21 @@ instance showV3000Content :: Show V3000Content where
 
 emptyContent :: Content
 emptyContent = V3000Content
-    { atoms: empty
-    , bondSegments: Nil
-    , state: NotReading
+    { atoms:            empty
+    , bondSegments:     Nil
+    , state:            NotReading
     }
+
+
+
+atoms :: Content -> List Atom
+atoms (V3000Content { atoms }) = values atoms
+
+
+
+bondSegments :: Content -> List BondSegment
+bondSegments (V3000Content { bondSegments }) = bondSegments
+
 
 
 
