@@ -2,6 +2,7 @@ module MolDraw.GeometryData
 ( GeometryData
 , atoms
 , bondSegments
+, fromV3000Content
 ) where
 
 
@@ -29,5 +30,5 @@ bondSegments (GeometryData { bondSegments: segments }) = segments
 fromV3000Content :: V3P.V3000Content -> GeometryData
 fromV3000Content content = GeometryData
     { atoms: V3P.atoms content
-    , bonds: V3P.bondSegments content
+    , bondSegments: V3P.bondSegments content
     }
