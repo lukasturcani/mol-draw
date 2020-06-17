@@ -24,12 +24,12 @@ data MeshOptions = MeshOptions
     , atomHeightSegments :: Int
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
-    , elementColors      :: Map ChemicalSymbol Color
+    , elementColors      :: ChemicalSymbol -> Color
     }
 
 
 
-data MeshData = MeshData
+type MeshData =
     { atoms              :: List Atom
     , atomSize           :: Atom -> Number
     , atomScale          :: Number
@@ -38,7 +38,7 @@ data MeshData = MeshData
     , bondSegments       :: List BondSegment
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
-    , elementColors      :: Map ChemicalSymbol Color
+    , elementColors      :: ChemicalSymbol -> Color
     }
 
 
@@ -69,5 +69,22 @@ meshData
         }
 
 
+type Helpers =
+    { atomElement                :: Atom           -> String
+    , atomChemicalSymbol         :: Atom           -> ChemicalSymbol
+    , atomPosition               :: Atom           -> Position
+    , atomSize                   :: Atom           -> Number
+    , bondSegmentElement         :: BondSegment    -> String
+    , bondSegmentPosition        :: BondSegment    -> Position
+    , bondSegmentWidth           :: BondSegment    -> Number
+    , bondSegmentLength          :: BondSegment    -> Number
+    , bondSegmentGapSize         :: BondSegment    -> Number
+    , bondSegmentAlignmentPoint  :: BondSegment    -> Position
+    }
 
-foreign import mesh :: MeshData -> Mesh
+foreign import meshes :: Helpers -> MeshData -> Array Mesh
+
+
+-- fromV3000 :: MeshOptions -> V3000Content -> Mesh
+
+

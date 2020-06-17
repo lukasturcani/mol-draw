@@ -1,6 +1,7 @@
 module MolDraw.BondSegment
 ( BondSegment
 , bondSegments
+, length
 ) where
 
 import Prelude
@@ -18,6 +19,7 @@ data BondSegment = BondSegment
     , length         :: Number
     , order          :: Int
     , offset         :: Int
+    , alignmentPoint :: Position
     }
 
 
@@ -69,22 +71,24 @@ bondSegments :: Int -> Atom.Atom -> Atom.Atom -> List BondSegment
 bondSegments order atom1 atom2 = do
     offset <- offsets order
     (BondSegment
-        { position: segment1Position
-        , chemicalSymbol: Atom.chemicalSymbol atom1
-        , length: length
-        , order: order
-        , offset: offset
+        { position:          segment1Position
+        , chemicalSymbol:    Atom.chemicalSymbol atom1
+        , length:            length
+        , order:             order
+        , offset:            offset
+        , alignmentPoint:    atom1Position
         }
     ) : (BondSegment
-            { position: segment2Position
-            , chemicalSymbol: Atom.chemicalSymbol atom2
-            , length: length
-            , order: order
-            , offset: offset
+            { position:          segment2Position
+            , chemicalSymbol:    Atom.chemicalSymbol atom2
+            , length:            length
+            , order:             order
+            , offset:            offset
+            , alignmentPoint:    atom1Position
             }
         ) : Nil
   where
-    (Position x1 y1 z1) = Atom.position atom1
+    atom1Position@(Position x1 y1 z1) = Atom.position atom1
     (Position x2 y2 z2) = Atom.position atom2
     displacement = Position (x2-x1) (y2-y1) (z2-z1)
     length = (sqrt $ selfDot displacement) / 2.0
