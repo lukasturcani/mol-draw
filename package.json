@@ -1,0 +1,13 @@
+{
+  "name": "molDraw",
+  "version": "1.0.0",
+  "description": "Lightweight 3D molecular viewer.",
+  "main": "index.js",
+  "repository": "https://github.com/lukasturcani/molDraw",
+  "author": "Lukas Turcani <lukasturcani93@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "three": "^0.117.1"
+  }
+}
