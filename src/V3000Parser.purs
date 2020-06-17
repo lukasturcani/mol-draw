@@ -19,9 +19,10 @@ import MolDraw.Position (Position(Position))
 import MolDraw.BondSegment (BondSegment, bondSegments)
 import MolDraw.ChemicalSymbol (chemicalSymbol)
 
-data Molecule = Molecule
+
 
 data V3000State = NotReading | ReadingAtoms | ReadingBonds
+
 
 
 instance showV3000State :: Show V3000State where
@@ -30,13 +31,17 @@ instance showV3000State :: Show V3000State where
     show ReadingBonds = "ReadingBonds"
 
 
+
 data V3000Content = V3000Content
     { atoms        :: Map Int Atom
     , bondSegments :: List BondSegment
     , state        :: V3000State
     }
 
+
+
 type Content = V3000Content
+
 
 
 instance showV3000Content :: Show V3000Content where
