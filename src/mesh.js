@@ -16,8 +16,8 @@ exports.meshes =
         bondSegmentLength,
         bondSegmentGapSize,
         bondSegmentAlignmentPoint,
-    })                          =>
-    meshData                    =>
+    })                              =>
+    meshData                        =>
 {
     let atomGeometries = {};
     let geometries = {};
