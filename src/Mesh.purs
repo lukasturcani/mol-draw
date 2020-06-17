@@ -1,6 +1,5 @@
-module MolDraw.MeshData
-( MeshData
-, meshData
+module MolDraw.Mesh
+( Mesh
 , MeshOptions (MeshOptions)
 , Color
 ) where
@@ -12,6 +11,7 @@ import MolDraw.ChemicalSymbol (ChemicalSymbol)
 import MolDraw.Atom (Atom)
 import MolDraw.BondSegment (BondSegment)
 import MolDraw.GeometryData as GD
+import MolDraw.Foreign.Mesh (mesh)
 
 
 type Color = Int
@@ -67,3 +67,7 @@ meshData
         , bondHeightSegments
         , elementColors
         }
+
+
+
+foreign import mesh :: MeshData -> Mesh
