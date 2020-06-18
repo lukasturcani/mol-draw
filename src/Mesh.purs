@@ -2,6 +2,7 @@ module MolDraw.Mesh
 ( Mesh
 , MeshOptions (MeshOptions)
 , Color
+, meshes
 ) where
 
 
@@ -84,7 +85,7 @@ type Helpers =
     , bondSegmentAlignmentPoint  :: BondSegment.BondSegment -> Position
     }
 
-foreign import meshes :: Helpers -> MeshData -> Array Mesh
+foreign import meshesImpl :: Helpers -> MeshData -> Array Mesh
 
 
 helpers :: Helpers
@@ -102,7 +103,5 @@ helpers =
     }
 
 
-
--- fromV3000 :: MeshOptions -> V3000Content -> Mesh
-
-
+meshes :: MeshData -> Array Mesh
+meshes = meshesImpl helpers
