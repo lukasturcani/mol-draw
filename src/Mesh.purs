@@ -1,6 +1,6 @@
 module MolDraw.Mesh
 ( Mesh
-, MeshOptions (MeshOptions)
+, MeshOptions
 , Color
 , meshes
 ) where
@@ -103,5 +103,6 @@ helpers =
     }
 
 
-meshes :: MeshData -> Array Mesh
-meshes = meshesImpl helpers
+meshes :: MeshOptions -> GD.GeometryData -> Array Mesh
+meshes meshOptions geometryData
+    = meshesImpl helpers $ meshData meshOptions geometryData

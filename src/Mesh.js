@@ -4,7 +4,7 @@
 const THREE = require('three');
 
 
-exports.meshes =
+exports.meshesImpl =
     ({
         atomElement,
         atomChemicalSymbol,

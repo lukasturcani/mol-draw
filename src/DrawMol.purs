@@ -7,6 +7,7 @@ module MolDraw.DrawMol
 import Prelude
 import Effect (Effect)
 import Effect.Class.Console (log)
+import Data.Either (Either(Left, Right))
 
 import MolDraw.Scene (Scene, SceneOptions, scene)
 import MolDraw.Mesh (MeshOptions, meshes)
@@ -17,7 +18,7 @@ import MolDraw.GeometryData (fromV3000Content)
 
 
 
-foreign import drawMolImp :: Scene -> Effect Unit
+foreign import drawMolImpl :: Scene -> Effect Unit
 
 
 
@@ -29,7 +30,7 @@ meshOptions =
     , atomHeightSegments: 7
     , bondRadialSegments: 10
     , bondHeightSegments: 1
-    , elementColors     : elementColors <<< Atom.chemicalSymbol
+    , elementColors     : elementColors
     }
 
 
@@ -37,7 +38,7 @@ meshOptions =
 
 eitherToEffect :: Either String Scene -> Effect Unit
 eitherToEffect (Left string) = log string
-eitherToEffect (Right scene) = drawImpl scene
+eitherToEffect (Right scene) = drawMolImpl scene
 
 
 maybeScene
@@ -56,11 +57,10 @@ drawMolWithOptions
     -> SceneOptions
     -> String
     -> Effect Unit
-drawMolWithOptions meshOptions' sceneOptions moleculeString = do
-    let maybeScene' =
-        maybeScene meshOptions' sceneOptions moleculeString
-
-    eitherToEffect maybeScene'
+drawMolWithOptions meshOptions' sceneOptions moleculeString
+    = eitherToEffect maybeScene'
+  where
+    maybeScene' = maybeScene meshOptions' sceneOptions moleculeString
 
 
 

@@ -1,5 +1,8 @@
 module MolDraw.Scene
 ( Scene
+, SceneOptions
+, Color
+, scene
 ) where
 
 
