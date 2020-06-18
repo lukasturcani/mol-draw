@@ -1,4 +1,4 @@
-"use struct";
+"use strict";
 
 
 
@@ -136,6 +136,7 @@ function render(scene)
         scene.userData.renderer.render(scene, scene.userData.camera);
         scene.userData.outline.render(scene, scene.userData.camera);
     }
+    return inner;
 }
 
 /**

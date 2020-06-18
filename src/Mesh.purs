@@ -17,7 +17,7 @@ import MolDraw.Position (Position)
 type Color = Int
 
 
-data MeshOptions = MeshOptions
+type MeshOptions =
     { atomSize           :: Atom.Atom -> Number
     , atomScale          :: Number
     , atomWidthSegments  :: Int
@@ -45,7 +45,7 @@ type MeshData =
 
 meshData :: MeshOptions -> GD.GeometryData -> MeshData
 meshData
-    (MeshOptions
+    (
         { atomSize
         , atomScale
         , atomWidthSegments
