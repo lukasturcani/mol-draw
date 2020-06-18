@@ -40,7 +40,7 @@ exports.meshes =
             atomGeometries[element] = new THREE.SphereGeometry(
                 atomSize(atom)*meshData.atomScale,
                 meshData.atomWidthSegments,
-                meshData.atomHeightSegments,
+                meshData.atomHeightSegments
             );
             materials[element] = new THREE.Material({
                 color:
@@ -61,7 +61,7 @@ exports.meshes =
             bondSegmentLength(bondSegment),
             meshData.bondRadialSegments,
             meshData.bondHeightSegments,
-            true,
+            true
         );
         geometry.rotateX(Math.PI/2);
 
@@ -76,14 +76,15 @@ exports.meshes =
         mesh.lookAt(alignmentX, alignmentY, alignmentZ);
         mesh.translateOnAxis(
             offsetAxis,
-            bondSegmentGapSize(bondSegment),
+            bondSegmentGapSize(bondSegment)
         );
         geometries[element].mergeMesh(mesh)
     }
 
     let meshes = [];
-    for (let [element, geometry] of Object.entries(geometries))
+    for (let entry of Object.entries(geometries))
     {
+        let [element, geometry] = entry;
         meshes.push(new THREE.Mesh(geometry, materials[element]));
     }
     return meshes;
