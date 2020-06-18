@@ -1,7 +1,7 @@
 "use strict";
 
 
-let THREE = require('three');
+const THREE = require('three');
 
 
 exports.meshes =
@@ -19,18 +19,18 @@ exports.meshes =
     })                              =>
     meshData                        =>
 {
-    let atomGeometries = {};
-    let geometries = {};
-    let materials = {};
-    let matrix = new THREE.Matrix4();
+    const atomGeometries = {};
+    const geometries = {};
+    const materials = {};
+    const matrix = new THREE.Matrix4();
 
-    for (let atom of meshData.atoms)
+    for (const atom of meshData.atoms)
     {
 
-        let { value0: { x, y, z } } = atomPosition(atom);
+        const { value0: { x, y, z } } = atomPosition(atom);
         matrix.makeTranslation(x, y, z);
 
-        let element = atomElement(atom);
+        const element = atomElement(atom);
         if (!geometries.hasOwnProperty(element))
         {
             geometries[element] = new THREE.Geometry();
@@ -51,11 +51,11 @@ exports.meshes =
         geometries[element].merge(atomGeometries[element], matrix);
     }
 
-    let offsetAxis = new THREE.Vector3(1, 0, 0);
-    for (let bondSegment of meshData.bondSegments)
+    const offsetAxis = new THREE.Vector3(1, 0, 0);
+    for (const bondSegment of meshData.bondSegments)
     {
-        let width = bondSegmentWidth(bondSegment);
-        let geometry = new THREE.CylinderGeometry(
+        const width = bondSegmentWidth(bondSegment);
+        const geometry = new THREE.CylinderGeometry(
             width,
             width,
             bondSegmentLength(bondSegment),
@@ -65,12 +65,12 @@ exports.meshes =
         );
         geometry.rotateX(Math.PI/2);
 
-        let element = bondSegmentElement(bondSegment);
-        let mesh = new THREE.Mesh(geometry, materials[element]);
-        let { x, y, z } = bondSegmentPosition(bondSegment).value0;
+        const element = bondSegmentElement(bondSegment);
+        const mesh = new THREE.Mesh(geometry, materials[element]);
+        const { x, y, z } = bondSegmentPosition(bondSegment).value0;
         mesh.position.set(x, y, z);
 
-        let { alignmentX, alignmentY, alignmentZ }
+        const { alignmentX, alignmentY, alignmentZ }
             = bondSegmentAlignmentPoint(bondSegment).value0;
 
         mesh.lookAt(alignmentX, alignmentY, alignmentZ);
@@ -81,10 +81,10 @@ exports.meshes =
         geometries[element].mergeMesh(mesh)
     }
 
-    let meshes = [];
-    for (let entry of Object.entries(geometries))
+    const meshes = [];
+    for (const entry of Object.entries(geometries))
     {
-        let [element, geometry] = entry;
+        const [element, geometry] = entry;
         meshes.push(new THREE.Mesh(geometry, materials[element]));
     }
     return meshes;
