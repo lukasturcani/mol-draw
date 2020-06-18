@@ -1,12 +1,18 @@
 module MolDraw.BondSegment
 ( BondSegment
+, chemicalSymbol
+, position
 , bondSegments
+, gapSize
+, alignmentPoint
 , length
+, width
 ) where
 
 import Prelude
 import Math (sqrt)
 import Data.List (List ( Nil ), (:))
+import Data.Int (toNumber)
 import MolDraw.Position (Position ( Position ))
 import MolDraw.Atom as Atom
 import MolDraw.ChemicalSymbol (ChemicalSymbol)
@@ -27,24 +33,54 @@ data BondSegment = BondSegment
 instance showBondSegment :: Show BondSegment where
     show
         (BondSegment
-            { position
-            , chemicalSymbol
-            , length
+            { position: position'
+            , chemicalSymbol: symbol
+            , length: length'
             , order
             , offset
             }
         )
         =  "(BondSegment { position: "
-        <> show position
+        <> show position'
         <> ", chemicalSymbol: "
-        <> show chemicalSymbol
+        <> show symbol
         <> ", length: "
-        <> show length
+        <> show length'
         <> ", order: "
         <> show order
         <> ", offset: "
         <> show offset
         <> " })"
+
+
+
+position :: BondSegment -> Position
+position (BondSegment { position: position' }) = position'
+
+
+
+chemicalSymbol :: BondSegment -> ChemicalSymbol
+chemicalSymbol (BondSegment { chemicalSymbol: symbol }) = symbol
+
+
+
+length :: BondSegment -> Number
+length (BondSegment { length: length' }) = length'
+
+
+
+alignmentPoint :: BondSegment -> Position
+alignmentPoint (BondSegment { alignmentPoint: point }) = point
+
+
+
+width :: BondSegment -> Number
+width (BondSegment { order }) = 0.1 / (toNumber order)
+
+
+
+gapSize :: BondSegment -> Number
+gapSize (BondSegment { offset }) = 0.2 * (toNumber offset)
 
 
 
@@ -73,7 +109,7 @@ bondSegments order atom1 atom2 = do
     (BondSegment
         { position:          segment1Position
         , chemicalSymbol:    Atom.chemicalSymbol atom1
-        , length:            length
+        , length:            length'
         , order:             order
         , offset:            offset
         , alignmentPoint:    atom1Position
@@ -81,7 +117,7 @@ bondSegments order atom1 atom2 = do
     ) : (BondSegment
             { position:          segment2Position
             , chemicalSymbol:    Atom.chemicalSymbol atom2
-            , length:            length
+            , length:            length'
             , order:             order
             , offset:            offset
             , alignmentPoint:    atom1Position
@@ -91,7 +127,7 @@ bondSegments order atom1 atom2 = do
     atom1Position@(Position x1 y1 z1) = Atom.position atom1
     (Position x2 y2 z2) = Atom.position atom2
     displacement = Position (x2-x1) (y2-y1) (z2-z1)
-    length = (sqrt $ selfDot displacement) / 2.0
+    length' = (sqrt $ selfDot displacement) / 2.0
     bx = (x1+x2) / 2.0
     by = (y1+y2) / 2.0
     bz = (z1+z2) / 2.0

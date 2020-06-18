@@ -5,13 +5,13 @@ module MolDraw.Mesh
 ) where
 
 
+import Prelude
 import Data.List (List)
-import Data.Map (Map)
 import MolDraw.ChemicalSymbol (ChemicalSymbol)
 import MolDraw.Atom as Atom
 import MolDraw.BondSegment as BondSegment
 import MolDraw.GeometryData as GD
-import MolDraw.Foreign.Mesh (mesh)
+import MolDraw.Position (Position)
 
 
 type Color = Int
@@ -55,8 +55,7 @@ meshData
         , elementColors
         }
     )
-    geometryData
-    = MeshData
+    geometryData =
         { atoms: GD.atoms geometryData
         , bondSegments: GD.bondSegments geometryData
         , atomSize: atomSize
@@ -67,6 +66,9 @@ meshData
         , bondHeightSegments
         , elementColors
         }
+
+
+data Mesh = Mesh
 
 
 type Helpers =
@@ -87,8 +89,16 @@ foreign import meshes :: Helpers -> MeshData -> Array Mesh
 
 helpers :: Helpers
 helpers =
-    { atomElement: show <<< Atom.chemicalSymbol
-    , atom
+    { atomElement               : show <<< Atom.chemicalSymbol
+    , atomChemicalSymbol        : Atom.chemicalSymbol
+    , atomPosition              : Atom.position
+    , atomSize                  : Atom.size
+    , bondSegmentElement        : show <<< BondSegment.chemicalSymbol
+    , bondSegmentPosition       : BondSegment.position
+    , bondSegmentWidth          : BondSegment.width
+    , bondSegmentLength         : BondSegment.length
+    , bondSegmentGapSize        : BondSegment.gapSize
+    , bondSegmentAlignmentPoint : BondSegment.alignmentPoint
     }
 
 
