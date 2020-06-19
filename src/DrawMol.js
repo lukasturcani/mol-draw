@@ -9,6 +9,7 @@ exports.drawMolImpl = scene =>
 {
     render(scene);
     window.addEventListener('resize', onWindowResize(scene), false);
+    animate(scene);
 };
 
 
@@ -32,6 +33,7 @@ function render(scene)
 
 
 function onWindowResize(scene) {
+    const renderScene = render(scene);
     function inner()
     {
         scene.userData.renderer.setSize(
@@ -44,7 +46,17 @@ function onWindowResize(scene) {
             scene.userData.container.clientHeight
         );
         scene.userData.camera.updateProjectionMatrix();
-        render(scene);
+        renderScene();
     }
+    return inner;
+}
+
+function animate(scene) {
+    function inner()
+    {
+        requestAnimationFrame(inner);
+        scene.userData.controls.update();
+    }
+    inner()
     return inner;
 }

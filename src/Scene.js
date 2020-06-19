@@ -4,11 +4,6 @@
 
 const THREE = require('three');
 const TrackballControls = require('three-trackballcontrols');
-TrackballControls.prototype = Object.create(
-    THREE.EventDispatcher.prototype
-);
-TrackballControls.prototype.constructor = TrackballControls;
-
 
 
 exports.scene = (sceneOptions) => (meshes) =>
@@ -18,7 +13,7 @@ exports.scene = (sceneOptions) => (meshes) =>
     const camera = getCamera(scene, container);
     addLight(scene, camera, getCentroid(meshes));
     const renderer = getRenderer(scene, container);
-    const controls = getControls(scene, container, camera);
+    const controls = getControls(scene, renderer.domElement, camera);
     addOutlineEffect(scene, renderer);
     addMeshes(scene, meshes);
     autoFitTo(getBoundingBox(meshes), camera, controls)
@@ -84,11 +79,10 @@ function getRenderer(scene, container)
 
 
 
-function getControls(scene, container, camera)
+function getControls(scene, domElement, camera)
 {
-
-    const controls = new TrackballControls(camera, container);
-    controls.rotateSpeed = 3.0;
+    const controls = new TrackballControls(camera, domElement);
+    controls.rotateSpeed = 3;
     controls.zoomSpeed = 3;
     controls.panSpeed = 2;
     controls.staticMoving = true;
