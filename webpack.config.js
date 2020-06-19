@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 
@@ -9,9 +10,10 @@ module.exports = {
         filename: 'molDraw.js',
     },
     plugins: [
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             title: 'molDraw',
-            template: './src/template.html',
+            template: './src/example/template.html',
         }),
     ],
     mode: 'development',
