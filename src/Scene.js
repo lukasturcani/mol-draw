@@ -3,6 +3,7 @@
 
 
 const THREE = require('three');
+const TrackballControls = require('three-trackballcontrols');
 
 
 
@@ -13,7 +14,7 @@ exports.scene = (sceneOptions) => (meshes) =>
     const camera = getCamera(scene, container);
     addLight(scene, camera, getCentroid(meshes));
     const renderer = getRenderer(scene, container);
-    const controls = getControls(scene, container);
+    const controls = getControls(scene, container, camera);
     addOutlineEffect(scene, renderer);
     addMeshes(scene, meshes);
     autoFitTo(getBoundingBox(meshes), camera, controls)
@@ -79,9 +80,9 @@ function getRenderer(scene, container)
 
 
 
-function getControls(scene, container)
+function getControls(scene, container, camera)
 {
-    const controls = new THREE.TrackballControls(camera, container);
+    const controls = new TrackballControls(camera, container);
     controls.rotateSpeed = 3.0;
     controls.zoomSpeed = 3;
     controls.panSpeed = 2;
@@ -116,7 +117,7 @@ function getCentroid(meshes)
     const centroid = new THREE.Vector3(0, 0, 0);
     for (const mesh of meshes)
     {
-        centroid.add(mesh.matrix.getWorldPosition());
+        centroid.add(mesh.getWorldPosition());
     }
     return centroid.divide(meshes.length);
 }
