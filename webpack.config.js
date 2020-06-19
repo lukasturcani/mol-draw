@@ -1,10 +1,12 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 
 module.exports = {
     entry: {
         molDraw: './output/MolDraw.DrawMol/index.js',
-        example: './src/example/example.js'
+        example: './test/example/example.js'
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -14,4 +16,11 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.json'],
     },
+    plugins: [
+        new CleanWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            title: 'molDraw',
+            template: './test/example/template.html',
+        }),
+    ],
 }
