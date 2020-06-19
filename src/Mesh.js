@@ -27,7 +27,11 @@ exports.meshesImpl =
     for (const atom of meshData.atoms)
     {
 
-        const { value0: { x, y, z } } = atomPosition(atom);
+        const {
+            value0: x,
+            value1: y,
+            value2: z
+        } = atomPosition(atom);
         matrix.makeTranslation(x, y, z);
 
         const element = atomElement(atom);
@@ -67,11 +71,18 @@ exports.meshesImpl =
 
         const element = bondSegmentElement(bondSegment);
         const mesh = new THREE.Mesh(geometry, materials[element]);
-        const { x, y, z } = bondSegmentPosition(bondSegment).value0;
+        const {
+            value0: x,
+            value1: y,
+            value2: z
+        } = bondSegmentPosition(bondSegment);
         mesh.position.set(x, y, z);
 
-        const { alignmentX, alignmentY, alignmentZ }
-            = bondSegmentAlignmentPoint(bondSegment).value0;
+        const {
+            value0: alignmentX,
+            value1: alignmentY,
+            value2: alignmentZ
+        } = bondSegmentAlignmentPoint(bondSegment);
 
         mesh.lookAt(alignmentX, alignmentY, alignmentZ);
         mesh.translateOnAxis(

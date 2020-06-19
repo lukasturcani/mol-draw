@@ -7,7 +7,7 @@ module MolDraw.Mesh
 
 
 import Prelude
-import Data.List (List)
+import Data.Array (fromFoldable)
 import MolDraw.ChemicalSymbol (ChemicalSymbol)
 import MolDraw.Atom as Atom
 import MolDraw.BondSegment as BondSegment
@@ -31,12 +31,12 @@ type MeshOptions =
 
 
 type MeshData =
-    { atoms              :: List Atom.Atom
+    { atoms              :: Array Atom.Atom
     , atomSize           :: Atom.Atom -> Number
     , atomScale          :: Number
     , atomWidthSegments  :: Int
     , atomHeightSegments :: Int
-    , bondSegments       :: List BondSegment.BondSegment
+    , bondSegments       :: Array BondSegment.BondSegment
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
     , elementColors      :: ChemicalSymbol -> Color
@@ -57,8 +57,8 @@ meshData
         }
     )
     geometryData =
-        { atoms: GD.atoms geometryData
-        , bondSegments: GD.bondSegments geometryData
+        { atoms: fromFoldable $ GD.atoms geometryData
+        , bondSegments: fromFoldable $ GD.bondSegments geometryData
         , atomSize: atomSize
         , atomScale: atomScale
         , atomWidthSegments

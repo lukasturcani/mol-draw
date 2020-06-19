@@ -4,7 +4,8 @@ You can edit this file as you like.
 -}
 { name = "molDraw"
 , dependencies =
-  [ "assert"
+  [ "arrays"
+  , "assert"
   , "console"
   , "effect"
   , "either"

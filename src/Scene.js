@@ -10,7 +10,7 @@ exports.scene = (sceneOptions) => (meshes) =>
 {
     const scene = getScene(sceneOptions.backgroundColor);
     const container = getContainer(scene, sceneOptions.containerId);
-    const camera = getCamera(scene, container)
+    const camera = getCamera(scene, container);
     addLight(scene, camera, getCentroid(meshes));
     const renderer = getRenderer(scene, container);
     const controls = getControls(scene, container);
@@ -113,7 +113,7 @@ function addMeshes(scene, meshes)
 
 function getCentroid(meshes)
 {
-    const centroid = THREE.Vector3(0, 0, 0);
+    const centroid = new THREE.Vector3(0, 0, 0);
     for (const mesh of meshes)
     {
         centroid.add(mesh.matrix.getWorldPosition());
