@@ -46,7 +46,7 @@ exports.meshesImpl =
                 meshData.atomWidthSegments,
                 meshData.atomHeightSegments
             );
-            materials[element] = new THREE.Material({
+            materials[element] = new THREE.MeshToonMaterial({
                 color:
                     meshData.elementColors(atomChemicalSymbol(atom)),
             });

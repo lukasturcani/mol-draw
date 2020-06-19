@@ -4,6 +4,10 @@
 
 const THREE = require('three');
 const TrackballControls = require('three-trackballcontrols');
+TrackballControls.prototype = Object.create(
+    THREE.EventDispatcher.prototype
+);
+TrackballControls.prototype.constructor = TrackballControls;
 
 
 
@@ -82,6 +86,7 @@ function getRenderer(scene, container)
 
 function getControls(scene, container, camera)
 {
+
     const controls = new TrackballControls(camera, container);
     controls.rotateSpeed = 3.0;
     controls.zoomSpeed = 3;
@@ -115,9 +120,11 @@ function addMeshes(scene, meshes)
 function getCentroid(meshes)
 {
     const centroid = new THREE.Vector3(0, 0, 0);
+    const worldPosition = new THREE.Vector3(0, 0, 0);
     for (const mesh of meshes)
     {
-        centroid.add(mesh.getWorldPosition());
+        mesh.getWorldPosition(worldPosition);
+        centroid.add(worldPosition);
     }
     return centroid.divide(meshes.length);
 }
