@@ -134,8 +134,8 @@ bondSegments order atom1 atom2 = do
     segment1Position = Position
         ((bx+x1) / 2.0)
         ((by+y1) / 2.0)
-        ((bz+y1) / 2.0)
+        ((bz+z1) / 2.0)
     segment2Position = Position
         ((bx+x2) / 2.0)
         ((by+y2) / 2.0)
-        ((bz+y2) / 2.0)
+        ((bz+z2) / 2.0)
