@@ -1,4 +1,4 @@
-module MolDraw.Scene
+module MolDraw.DrawMol.Scene
 ( Scene
 , SceneOptions
 , Color
@@ -12,10 +12,7 @@ import MolDraw.Mesh (Mesh)
 type Color = Int
 
 
-
 data Scene = Scene
-
-
 
 
 type SceneOptions =

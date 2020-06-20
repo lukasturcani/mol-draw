@@ -1,9 +1,10 @@
-module MolDraw.V3000Parser
+module MolDraw.Parsers.V3000
 ( parseV3000
 , V3000Content
 , atoms
 , bondSegments
 ) where
+
 
 import Prelude
 import Data.Int as I
@@ -22,16 +23,13 @@ import MolDraw.BondSegment as BS
 import MolDraw.ChemicalSymbol (chemicalSymbol)
 
 
-
 data V3000State = NotReading | ReadingAtoms | ReadingBonds
-
 
 
 instance showV3000State :: Show V3000State where
     show NotReading   = "NotReading"
     show ReadingAtoms = "ReadingAtoms"
     show ReadingBonds = "ReadingBonds"
-
 
 
 data V3000Content = V3000Content
@@ -41,9 +39,7 @@ data V3000Content = V3000Content
     }
 
 
-
 type Content = V3000Content
-
 
 
 instance showV3000Content :: Show V3000Content where
@@ -62,7 +58,6 @@ instance showV3000Content :: Show V3000Content where
         <> " })"
 
 
-
 emptyContent :: Content
 emptyContent = V3000Content
     { atoms:            empty
@@ -71,16 +66,12 @@ emptyContent = V3000Content
     }
 
 
-
 atoms :: Content -> List Atom
 atoms (V3000Content { atoms: atoms' }) = values atoms'
 
 
-
 bondSegments :: Content -> List BS.BondSegment
 bondSegments (V3000Content { bondSegments: segments }) = segments
-
-
 
 
 parseV3000 :: String -> Either String Content
@@ -170,21 +161,17 @@ v3000Parser
         | otherwise = Right content
 
 
-
 words' :: String -> List String
 words' = fromFoldable <<< filter ((<) 0 <<< length) <<< words
-
 
 
 parseAtom :: String -> Either String (Tuple Int Atom)
 parseAtom line = readAtom $ words' line
 
 
-
 maybeToEither :: forall a. String -> Maybe a -> Either String a
 maybeToEither errorMessage Nothing = Left errorMessage
 maybeToEither errorMessage (Just x) = Right x
-
 
 
 readAtom :: List String -> Either String (Tuple Int Atom)
@@ -203,7 +190,6 @@ readAtom (_:_:id:element:x:y:z:_) = do
 readAtom failed = Left (show failed)
 
 
-
 addAtom :: Content -> Int -> Atom -> Content
 addAtom
     (V3000Content
@@ -220,11 +206,9 @@ addAtom
         }
 
 
-
 parseBond ::
     Map Int Atom -> String -> Either String (List BS.BondSegment)
 parseBond atoms' line = readBond atoms' $ words' line
-
 
 
 readBond ::
@@ -242,7 +226,6 @@ readBond atoms' (_:_:_:order:atom1Id:atom2Id:_) = do
     Right $ BS.bondSegments order' atom1 atom2
 
 readBond atoms' failed = Left (show failed)
-
 
 
 addBondSegments :: Content -> List BS.BondSegment -> Content

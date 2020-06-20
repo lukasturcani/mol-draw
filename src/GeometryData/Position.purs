@@ -1,9 +1,9 @@
-module MolDraw.Position
+module MolDraw.GeometryData.Position
 ( Position ( Position )
 ) where
 
-import Prelude
 
+import Prelude
 
 
 data Position = Position Number Number Number

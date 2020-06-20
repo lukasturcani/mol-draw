@@ -1,4 +1,4 @@
-module MolDraw.BondSegment
+module MolDraw.GeometryData.BondSegment
 ( BondSegment
 , chemicalSymbol
 , position
@@ -9,14 +9,14 @@ module MolDraw.BondSegment
 , width
 ) where
 
+
 import Prelude
 import Math (sqrt)
 import Data.List (List ( Nil ), (:))
 import Data.Int (toNumber)
-import MolDraw.Position (Position ( Position ))
-import MolDraw.Atom as Atom
-import MolDraw.ChemicalSymbol (ChemicalSymbol)
-
+import MolDraw.GeometryData.Position (Position ( Position ))
+import MolDraw.GeometryData.Atom as Atom
+import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
 
 
 data BondSegment = BondSegment
@@ -27,7 +27,6 @@ data BondSegment = BondSegment
     , offset         :: Int
     , alignmentPoint :: Position
     }
-
 
 
 instance showBondSegment :: Show BondSegment where
@@ -53,40 +52,32 @@ instance showBondSegment :: Show BondSegment where
         <> " })"
 
 
-
 position :: BondSegment -> Position
 position (BondSegment { position: position' }) = position'
-
 
 
 chemicalSymbol :: BondSegment -> ChemicalSymbol
 chemicalSymbol (BondSegment { chemicalSymbol: symbol }) = symbol
 
 
-
 length :: BondSegment -> Number
 length (BondSegment { length: length' }) = length'
-
 
 
 alignmentPoint :: BondSegment -> Position
 alignmentPoint (BondSegment { alignmentPoint: point }) = point
 
 
-
 width :: BondSegment -> Number
 width (BondSegment { order }) = 0.1 / (toNumber order)
-
 
 
 gapSize :: BondSegment -> Number
 gapSize (BondSegment { offset }) = 0.2 * (toNumber offset)
 
 
-
 selfDot :: Position -> Number
 selfDot (Position x y z) = (x*x) + (y*y) + (z*z)
-
 
 
 biRange :: Int -> Int -> List Int
@@ -95,12 +86,10 @@ biRange start stop
     | otherwise    = Nil
 
 
-
 offsets :: Int -> List Int
 offsets order
     | order `mod` 2 == 0 = biRange 1 (order/2 + 1)
     | otherwise          = 0 : biRange 1 (order/2 + 1)
-
 
 
 bondSegments :: Int -> Atom.Atom -> Atom.Atom -> List BondSegment

@@ -1,4 +1,4 @@
-module MolDraw.Mesh
+module MolDraw.DrawMol.Mesh
 ( Mesh
 , MeshOptions
 , Color
@@ -8,11 +8,11 @@ module MolDraw.Mesh
 
 import Prelude
 import Data.Array (fromFoldable)
-import MolDraw.ChemicalSymbol (ChemicalSymbol)
-import MolDraw.Atom as Atom
-import MolDraw.BondSegment as BondSegment
-import MolDraw.GeometryData as GD
-import MolDraw.Position (Position)
+import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
+import MolDraw.GeometryData.Atom as Atom
+import MolDraw.GeometryData.BondSegment as BondSegment
+import MolDraw.GeometryData.GeometryData as GD
+import MolDraw.GeometryData.Position (Position)
 
 
 type Color = Int

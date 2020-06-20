@@ -1,11 +1,10 @@
-module MolDraw.ChemicalSymbol
+module MolDraw.GeometryData.ChemicalSymbol
 ( ChemicalSymbol (..)
-, chemicalSymbol
 ) where
+
 
 import Prelude
 import Data.Maybe (Maybe (..))
-
 
 
 data ChemicalSymbol

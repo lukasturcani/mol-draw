@@ -1,4 +1,4 @@
-module MolDraw.GeometryData
+module MolDraw.GeometryData.GeometryData
 ( GeometryData
 , atoms
 , bondSegments
@@ -7,10 +7,9 @@ module MolDraw.GeometryData
 
 
 import Data.List (List)
-import MolDraw.Atom (Atom)
-import MolDraw.BondSegment (BondSegment)
-import MolDraw.V3000Parser as V3P
-
+import MolDraw.GeometryData.Atom (Atom)
+import MolDraw.GeometryData.BondSegment (BondSegment)
+import MolDraw.Parsers.V3000 as V3P
 
 
 data GeometryData = GeometryData

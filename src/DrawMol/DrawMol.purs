@@ -8,32 +8,28 @@ import Prelude
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Data.Either (Either(Left, Right))
-
-import MolDraw.Scene (Scene, SceneOptions, scene)
-import MolDraw.Mesh (MeshOptions, meshes)
-import MolDraw.Atom as Atom
-import MolDraw.ElementColors (elementColors)
-import MolDraw.V3000Parser (parseV3000)
-import MolDraw.GeometryData (fromV3000Content)
-
+import MolDraw.DrawMol.Scene (Scene, SceneOptions, scene)
+import MolDraw.DrawMol.Mesh (MeshOptions, meshes)
+import MolDraw.GeometryData.Atom as Atom
+import MolDraw.GeometryData.GeometryData (fromV3000Content)
+import MolDraw.Utils.ElementColors (color)
+import MolDraw.Utils.ElementSizes (size)
+import MolDraw.Parsers.V3000 (parseV3000)
 
 
 foreign import drawMolImpl :: Scene -> Effect Unit
 
 
-
 meshOptions :: MeshOptions
 meshOptions =
-    { atomSize          : Atom.size
+    { atomSize          : size <<< Atom.chemicalSymbol
     , atomScale         : 0.5
     , atomWidthSegments : 8
     , atomHeightSegments: 7
     , bondRadialSegments: 10
     , bondHeightSegments: 1
-    , elementColors     : elementColors
+    , elementColors     : color
     }
-
-
 
 
 eitherToEffect :: Either String Scene -> Effect Unit
@@ -51,7 +47,6 @@ maybeScene meshOptions' sceneOptions moleculeString = do
     pure scene'
 
 
-
 drawMolWithOptions
     :: MeshOptions
     -> SceneOptions
@@ -61,7 +56,6 @@ drawMolWithOptions meshOptions' sceneOptions moleculeString
     = eitherToEffect maybeScene'
   where
     maybeScene' = maybeScene meshOptions' sceneOptions moleculeString
-
 
 
 drawMol :: SceneOptions -> String -> Effect Unit
