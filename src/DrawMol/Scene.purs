@@ -6,7 +6,7 @@ module MolDraw.DrawMol.Scene
 ) where
 
 
-import MolDraw.Mesh (Mesh)
+import MolDraw.DrawMol.Mesh (Mesh)
 
 
 type Color = Int

@@ -8,7 +8,7 @@ module MolDraw.GeometryData.Atom
 
 import Prelude
 import MolDraw.GeometryData.Position (Position)
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol (..))
+import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
 
 
 data Atom = Atom

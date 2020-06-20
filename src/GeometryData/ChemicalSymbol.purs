@@ -1,5 +1,6 @@
 module MolDraw.GeometryData.ChemicalSymbol
 ( ChemicalSymbol (..)
+, chemicalSymbol
 ) where
 
 

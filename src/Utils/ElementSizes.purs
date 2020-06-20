@@ -1,5 +1,5 @@
 module MolDraw.Utils.ElementSizes
-( elementSize
+( size
 ) where
 
 

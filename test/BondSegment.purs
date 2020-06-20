@@ -6,10 +6,10 @@ import Prelude
 import Effect (Effect)
 import Effect.Class.Console (log)
 
-import MolDraw.BondSegment (bondSegments)
-import MolDraw.Atom (atom)
-import MolDraw.ChemicalSymbol (ChemicalSymbol (..))
-import MolDraw.Position (Position (Position))
+import MolDraw.GeometryData.BondSegment (bondSegments)
+import MolDraw.GeometryData.Atom (atom)
+import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol (..))
+import MolDraw.GeometryData.Position (Position (Position))
 
 main :: Effect Unit
 main = do

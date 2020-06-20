@@ -13,6 +13,7 @@ import MolDraw.GeometryData.Atom as Atom
 import MolDraw.GeometryData.BondSegment as BondSegment
 import MolDraw.GeometryData.GeometryData as GD
 import MolDraw.GeometryData.Position (Position)
+import MolDraw.Utils.ElementSizes (size)
 
 
 type Color = Int
@@ -93,7 +94,7 @@ helpers =
     { atomElement               : show <<< Atom.chemicalSymbol
     , atomChemicalSymbol        : Atom.chemicalSymbol
     , atomPosition              : Atom.position
-    , atomSize                  : Atom.size
+    , atomSize                  : size <<< Atom.chemicalSymbol
     , bondSegmentElement        : show <<< BondSegment.chemicalSymbol
     , bondSegmentPosition       : BondSegment.position
     , bondSegmentWidth          : BondSegment.width

@@ -9,7 +9,7 @@ import Data.Array (filter)
 import Data.String (length)
 import Data.String.Utils (lines)
 
-import MolDraw.V3000Parser (parseV3000)
+import MolDraw.Parsers.V3000 (parseV3000)
 
 content :: String
 content = """

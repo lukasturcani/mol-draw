@@ -17,10 +17,10 @@ import Data.Maybe (Maybe (Just, Nothing))
 import Data.Array (filter, foldl)
 import Data.String (length)
 import Data.String.Utils (lines, words, includes)
-import MolDraw.Atom (Atom, atom)
-import MolDraw.Position (Position(Position))
-import MolDraw.BondSegment as BS
-import MolDraw.ChemicalSymbol (chemicalSymbol)
+import MolDraw.GeometryData.Atom (Atom, atom)
+import MolDraw.GeometryData.Position (Position(Position))
+import MolDraw.GeometryData.BondSegment as BS
+import MolDraw.GeometryData.ChemicalSymbol (chemicalSymbol)
 
 
 data V3000State = NotReading | ReadingAtoms | ReadingBonds
