@@ -108,13 +108,15 @@ Using Options
         // atomColor is a function, which takes a molDraw.Atom instance
         // and returns the desired color for that atom.
         atomColor: atom => {
-            if (molDraw.)
+            // Make the atom with id of 8 red.
+            if (molDraw.id(atom) === 8)
             {
-                return;
+                return 0xFF0000;
             }
-            if (molDraw.)
+            // Make carbon atoms purple.
+            if (molDraw.show(molDraw.chemicalSymbol(atom)) === 'C')
             {
-                return;
+                return 0x800080;
             }
             // Use the default element colors for everything else.
             return molDraw.color(molDraw.chemicalSymbol(atom));
