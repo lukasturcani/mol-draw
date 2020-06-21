@@ -9,7 +9,7 @@ Live example
 
 
 .. contents::
-    :maxdepth: 2
+    :depth: 2
 
 
 ============
