@@ -175,36 +175,21 @@ You can create molecules programmatically too
 
 .. code-block:: javascript
 
-    import * as molDraw from 'molDraw';
+    import * as md from 'molDraw';
 
     const molecule = molDraw.molecule(
         [
-            molDraw.atom(
-                molDraw.C(),
-                molDraw.position(-0.06)(-0.17)(0)
-            ),
-            molDraw.atom(
-                molDraw.Cl(),
-                molDraw.position(-1.35)(1.04)(-0.04)
-            ),
-            molDraw.atom(
-                molDraw.H(),
-                molDraw.position(1.65)(0.73)(-0.06)
-            ),
-            molDraw.atom(
-                molDraw.H(),
-                molDraw.position(-0.15)(-0.88)(-0.87)
-            ),
-            molDraw.atom(
-                molDraw.Br(),
-                molDraw.position(-0.09)(-0.72)(0.97)
-            )
+            molDraw.atom(md.C())(md.position(-0.06)(-0.17)(0)),
+            molDraw.atom(md.Cl())(md.position(-1.35)(1.04)(-0.04)),
+            molDraw.atom(md.H())(md.position(1.65)(0.73)(-0.06)),
+            molDraw.atom(md.H())(md.position(-0.15)(-0.88)(-0.87)),
+            molDraw.atom(md.Br())(md.position(-0.09)(-0.72)(0.97))
         ],
         [
-            // The arguments are: molDraw.bond(order)(atom1Id)(atom2Id)
-            molDraw.bond(1)(0)(1),
-            molDraw.bond(1)(0)(2),
-            molDraw.bond(1)(0)(3),
-            molDraw.bond(1)(0)(4)
+            // The arguments are: md.bond(order)(atom1Id)(atom2Id)
+            md.bond(1)(0)(1),
+            md.bond(1)(0)(2),
+            md.bond(1)(0)(3),
+            md.bond(1)(0)(4)
         ]
     );
