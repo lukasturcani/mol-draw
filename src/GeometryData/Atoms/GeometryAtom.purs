@@ -3,6 +3,7 @@ module MolDraw.GeometryData.Atom
 , position
 , chemicalSymbol
 , atom
+, id
 ) where
 
 
@@ -12,14 +13,17 @@ import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
 
 
 data Atom = Atom
-    { chemicalSymbol :: ChemicalSymbol
+    { id             :: Int
+    , chemicalSymbol :: ChemicalSymbol
     , position       :: Position
     }
 
 
 instance showAtom :: Show Atom where
-    show (Atom { chemicalSymbol: symbol, position: pos })
-        =  "(Atom { chemicalSymbol: "
+    show (Atom { id: id', chemicalSymbol: symbol, position: pos })
+        =  "(Atom { id: "
+        <> show id'
+        <> ", chemicalSymbol: "
         <> show symbol
         <> ", position: "
         <> show pos
@@ -34,3 +38,6 @@ chemicalSymbol (Atom { chemicalSymbol: symbol }) = symbol
 
 atom :: ChemicalSymbol -> Position -> Atom
 atom symbol pos = Atom  { chemicalSymbol: symbol, position: pos }
+
+id :: Atom -> Int
+id (Atom { id: id' }) = id'

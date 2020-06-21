@@ -1,5 +1,6 @@
 module MolDraw.GeometryData.Position
 ( Position ( Position )
+, position
 ) where
 
 
@@ -18,3 +19,7 @@ instance showPosition :: Show Position where
         <> " "
         <> show z
         <> ")"
+
+
+position :: Number -> Number -> Number -> Position
+position x y z = Position x y z

@@ -125,7 +125,7 @@ Using Options
         atomWidthSegments: 8,
         atomHeightSegments: 7,
         bondRadialSegments: 10,
-        bondHeightSegments: 1,
+        bondHeightSegments: 1
     })({
         backgroundColor: 0xFFFFFF,
         containerId: 'someDivId'

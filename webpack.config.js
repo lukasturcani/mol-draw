@@ -5,7 +5,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        molDraw: './output/MolDraw.DrawMol/index.js',
+        molDraw: './output/MolDraw/index.js',
         example: './test/example/example.js'
     },
     output: {
