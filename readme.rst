@@ -8,8 +8,9 @@ by both JavaScript and PureScript applications.
 Live example
 
 
-.. toctree::
+.. contents::
     :maxdepth: 2
+
 
 ============
 Installation
