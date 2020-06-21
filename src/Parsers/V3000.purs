@@ -20,7 +20,7 @@ import Data.String.Utils (lines, words, includes)
 import MolDraw.GeometryData.Atom (Atom, atom)
 import MolDraw.GeometryData.Position (Position(Position))
 import MolDraw.GeometryData.BondSegment as BS
-import MolDraw.GeometryData.ChemicalSymbol (chemicalSymbol)
+import MolDraw.Parsers.ChemicalSymbol (chemicalSymbol)
 
 
 data V3000State = NotReading | ReadingAtoms | ReadingBonds
@@ -43,18 +43,13 @@ type Content = V3000Content
 
 
 instance showV3000Content :: Show V3000Content where
-    show (V3000Content
-        { atoms: atoms'
-        , bondSegments: bondSegments'
-        , state
-        }
-    )
+    show content
         =  "(V30000Content { atoms: "
-        <> show atoms'
+        <> (show $ atoms content)
         <> ", bondSegments: "
-        <> show bondSegments'
+        <> (show $ bondSegments content)
         <> ", state: "
-        <> show state
+        <> (show $ state content)
         <> " })"
 
 
@@ -67,7 +62,15 @@ emptyContent = V3000Content
 
 
 atoms :: Content -> List Atom
-atoms (V3000Content { atoms: atoms' }) = values atoms'
+atoms (V3000Content { atoms: a }) = values a
+
+
+atoms' :: Content -> Map Int Atom
+atoms' (V3000Content { atoms: a }) = a
+
+
+state :: Content -> V3000State
+state (V3000Content { state: state' }) = state'
 
 
 bondSegments :: Content -> List BS.BondSegment
@@ -80,108 +83,96 @@ parseV3000 = foldl parser (Right emptyContent) <<< validLines
     validLines = filter ((<) 0 <<< length) <<< lines
 
     parser :: Either String Content -> String -> Either String Content
-    parser econtent line = do
-       content <- econtent
+    parser maybeContent line = do
+       content <- maybeContent
        v3000Parser line content
 
 
 v3000Parser :: String -> Content -> Either String Content
-v3000Parser
-    line
-    content@(V3000Content
-        { atoms: atoms'
-        , bondSegments: bondSegments'
-        , state: ReadingAtoms
+v3000Parser line content@(V3000Content { state: ReadingAtoms })
+    | includes "M  V30 END ATOM" line = Right
+        (V3000Content
+            { atoms: atoms' content
+            , bondSegments: bondSegments content
+            , state: NotReading
+            }
+        )
+
+    | otherwise = addAtom content line
+
+
+v3000Parser line content@(V3000Content { state: ReadingBonds })
+    | includes "M  V30 END BOND" line = Right
+        (V3000Content
+            { atoms: atoms' content
+            , bondSegments: bondSegments content
+            , state: NotReading
+            }
+        )
+
+    | otherwise = addBond content line
+
+
+v3000Parser line content@(V3000Content { state: NotReading })
+    | includes "M  V30 BEGIN ATOM" line = Right
+        (V3000Content
+            { atoms: atoms' content
+            , bondSegments: bondSegments content
+            , state: ReadingAtoms
+            }
+        )
+
+    | includes "M  V30 BEGIN BOND" line = Right
+        (V3000Content
+            { atoms: atoms' content
+            , bondSegments: bondSegments content
+            , state: ReadingBonds
+            }
+        )
+
+    | otherwise = Right content
+
+
+addAtom :: Content -> String -> Either String Content
+addAtom content line = do
+    (Tuple id atom) <- readAtom $ validWords line
+    pure (V3000Content
+        { atoms: insert id atom (atoms' content)
+        , bondSegments: bondSegments content
+        , state: state content
         }
     )
-        | includes "M  V30 END ATOM" line =
-            Right
-                (V3000Content
-                    { atoms: atoms'
-                    , bondSegments: bondSegments'
-                    , state: NotReading
-                    }
-                )
-
-        | otherwise = case parseAtom line of
-            Right (Tuple id atom) -> Right (addAtom content id atom)
-            (Left errorMessage) -> Left errorMessage
 
 
-v3000Parser
-    line
-    content@(V3000Content
-        { atoms: atoms'
-        , bondSegments: bondSegments'
-        , state: ReadingBonds
-        }
-    )
-        | includes "M  V30 END BOND" line =
-            Right
-                (V3000Content
-                    { atoms: atoms'
-                    , bondSegments: bondSegments'
-                    , state: NotReading
-                    }
-                )
-
-        | otherwise = case parseBond atoms' line of
-            (Right bondSegments'') ->
-                Right (addBondSegments content bondSegments'')
-            (Left errorMessage) -> Left errorMessage
-
-
-v3000Parser
-    line
-    content@(V3000Content
-        { atoms: atoms'
-        , bondSegments: bondSegments'
-        , state: NotReading
+addBond :: Content -> String -> Either String Content
+addBond content line = do
+    newSegments <- readBond (atoms' content) $ validWords line
+    pure (V3000Content
+        { atoms: atoms' content
+        , bondSegments: newSegments <> bondSegments content
+        , state: state content
         }
     )
 
-        | includes "M  V30 BEGIN ATOM" line =
-            Right
-                (V3000Content
-                    { atoms: atoms'
-                    , bondSegments: bondSegments'
-                    , state: ReadingAtoms
-                    }
-                )
 
-        | includes "M  V30 BEGIN BOND" line =
-            Right
-                (V3000Content
-                    { atoms: atoms'
-                    , bondSegments: bondSegments'
-                    , state: ReadingBonds
-                    }
-                )
-
-        | otherwise = Right content
+validWords :: String -> List String
+validWords = fromFoldable <<< filter ((<) 0 <<< length) <<< words
 
 
-words' :: String -> List String
-words' = fromFoldable <<< filter ((<) 0 <<< length) <<< words
-
-
-parseAtom :: String -> Either String (Tuple Int Atom)
-parseAtom line = readAtom $ words' line
-
-
-maybeToEither :: forall a. String -> Maybe a -> Either String a
-maybeToEither errorMessage Nothing = Left errorMessage
-maybeToEither errorMessage (Just x) = Right x
+toEither :: forall a. String -> Maybe a -> Either String a
+toEither errorMessage Nothing = Left errorMessage
+toEither errorMessage (Just x) = Right x
 
 
 readAtom :: List String -> Either String (Tuple Int Atom)
 readAtom (_:_:id:element:x:y:z:_) = do
-    symbol <- maybeToEither "Failed to parse element." $
-        chemicalSymbol element
-    id'    <- maybeToEither "Failed to parse id."     $ I.fromString id
-    x'     <- maybeToEither "Failed to parse x."      $ N.fromString x
-    y'     <- maybeToEither "Failed to parse y."      $ N.fromString y
-    z'     <- maybeToEither "Failed to parse z."      $ N.fromString z
+
+    symbol
+        <- toEither "Failed to parse element." $ chemicalSymbol element
+    id' <- toEither "Failed to parse id."      $ I.fromString id
+    x'  <- toEither "Failed to parse x."       $ N.fromString x
+    y'  <- toEither "Failed to parse y."       $ N.fromString y
+    z'  <- toEither "Failed to parse z."       $ N.fromString z
 
     let atom' = atom symbol (Position x' y' z')
 
@@ -190,55 +181,24 @@ readAtom (_:_:id:element:x:y:z:_) = do
 readAtom failed = Left (show failed)
 
 
-addAtom :: Content -> Int -> Atom -> Content
-addAtom
-    (V3000Content
-        { atoms:            atoms'
-        , bondSegments:      bondSegments'
-        , state
-        }
-    )
-    id
-    atom = V3000Content
-        { atoms: insert id atom atoms'
-        , bondSegments: bondSegments'
-        , state: state
-        }
+readBond
+    :: Map Int Atom
+    -> List String
+    -> Either String (List BS.BondSegment)
 
+readBond atoms'' (_:_:_:order:atom1Id:atom2Id:_) = do
 
-parseBond ::
-    Map Int Atom -> String -> Either String (List BS.BondSegment)
-parseBond atoms' line = readBond atoms' $ words' line
-
-
-readBond ::
-    Map Int Atom -> List String -> Either String (List BS.BondSegment)
-readBond atoms' (_:_:_:order:atom1Id:atom2Id:_) = do
-    order' <- maybeToEither "Failed to parse order." $
-        I.fromString order
-    atom1Id' <- maybeToEither "Failed to parse atom1 id." $
-        I.fromString atom1Id
-    atom2Id' <- maybeToEither "Failed to parse atom2 id." $
-        I.fromString atom2Id
-    atom1 <- maybeToEither "Atom 1 not found." $ lookup atom1Id' atoms'
-    atom2 <- maybeToEither "Atom 2 not found." $ lookup atom2Id' atoms'
+    order'
+        <- toEither "Failed to parse order." $ I.fromString order
+    atom1Id'
+        <- toEither "Failed to parse atom1 id." $ I.fromString atom1Id
+    atom2Id'
+        <- toEither "Failed to parse atom2 id." $ I.fromString atom2Id
+    atom1
+        <- toEither "Atom 1 not found." $ lookup atom1Id' atoms''
+    atom2
+        <- toEither "Atom 2 not found." $ lookup atom2Id' atoms''
 
     Right $ BS.bondSegments order' atom1 atom2
 
-readBond atoms' failed = Left (show failed)
-
-
-addBondSegments :: Content -> List BS.BondSegment -> Content
-addBondSegments
-    (V3000Content
-        { atoms: atoms'
-        , bondSegments: oldSegments
-        , state
-        }
-    )
-    newSegments
-        = V3000Content
-            { atoms: atoms'
-            , bondSegments: newSegments <> oldSegments
-            , state: state
-            }
+readBond _ failed = Left (show failed)
