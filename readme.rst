@@ -7,15 +7,6 @@ by both JavaScript and PureScript applications.
 
 Live example
 
-========
-Contents
-========
-
-.. contents::
-    :depth: 4
-    :backlinks: none
-
-
 ============
 Installation
 ============
@@ -31,9 +22,14 @@ or npm::
 
     $ npm install molDraw
 
-=====
-Usage
-=====
+==============
+Usage Examples
+==============
+
+.. contents::
+    :local:
+    :depth: 4
+    :backlinks: none
 
 Apart from the usage examples here, you can see all exported
 functions at
