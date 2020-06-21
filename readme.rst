@@ -7,9 +7,13 @@ by both JavaScript and PureScript applications.
 
 Live example
 
+========
+Contents
+========
 
 .. contents::
-    :depth: 2
+    :depth: 4
+    :backlinks: none
 
 
 ============
