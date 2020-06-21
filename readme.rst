@@ -201,9 +201,10 @@ You can create molecules programmatically too
             )
         ],
         [
-            molDraw.bond(0)(1),
-            molDraw.bond(0)(2),
-            molDraw.bond(0)(3),
-            molDraw.bond(0)(4)
+            // The arguments are: molDraw.bond(order)(atom1Id)(atom2Id)
+            molDraw.bond(1)(0)(1),
+            molDraw.bond(1)(0)(2),
+            molDraw.bond(1)(0)(3),
+            molDraw.bond(1)(0)(4)
         ]
     );
