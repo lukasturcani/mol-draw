@@ -5,7 +5,7 @@ web pages and web apps, with support for React. It is intended for use
 by both JavaScript and PureScript applications.
 
 
-Live example:
+Live example
 
 
 .. toctree::
@@ -33,7 +33,8 @@ Usage
 Apart from the usage examples here, you can see all exported
 functions at
 
-These functions are the same for both JavaScript and PureScript users.
+The exported functions are identical for both JavaScript and PureScript
+users.
 
 
 JavaScript
@@ -77,7 +78,7 @@ Simple Case
         containerId: 'someDivId'
     })(molecule);
 
-Live result:
+Live result
 
 Using Options
 ~~~~~~~~~~~~~
@@ -128,7 +129,7 @@ Using Options
     })(molecule);
 
 
-Live Result:
+Live Result
 
 
 Loading Molecules
