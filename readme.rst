@@ -102,38 +102,39 @@ Using Options
 
     // If you want to customize the drawing you can add an options
     // object.
-    molDraw.drawMolWithOptions({
+
+    md.drawMolWithOptions({
         // atomSize is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired size (before scaling).
         atomSize: atom => {
-            // Make the atom with an id of 10 really big.
-            if (molDraw.id(atom) === 10)
+            // Make the atom with an id of 1 really big.
+            if (md.id(atom) === 1)
             {
-                return 5;
+                return 3;
             }
             // Make hydrogen atoms really small.
-            if (molDraw.show(molDraw.chemicalSymbol(atom)) === 'H')
+            if (md.show(md.chemicalSymbol(atom)) === 'H')
             {
-                return 0.1;
+                return 0.15;
             }
             // Use the default element sizes for everything else.
-            return molDraw.size(molDraw.chemicalSymbol(atom));
+            return md.size(md.chemicalSymbol(atom));
         },
         // atomColor is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired color for that atom.
         atomColor: atom => {
             // Make the atom with id of 8 red.
-            if (molDraw.id(atom) === 8)
+            if (md.id(atom) === 3)
             {
                 return 0xFF0000;
             }
             // Make carbon atoms purple.
-            if (molDraw.show(molDraw.chemicalSymbol(atom)) === 'C')
+            if (md.show(md.chemicalSymbol(atom)) === 'C')
             {
                 return 0x800080;
             }
             // Use the default element colors for everything else.
-            return molDraw.color(molDraw.chemicalSymbol(atom));
+            return md.color(md.chemicalSymbol(atom));
         },
         atomScale: 0.5,
         atomWidthSegments: 8,
@@ -142,7 +143,7 @@ Using Options
         bondHeightSegments: 1
     })({
         backgroundColor: 0xFFFFFF,
-        containerId: 'someDivId'
+        containerId: 'container4'
     })(molecule);
 
 

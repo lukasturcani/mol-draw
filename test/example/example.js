@@ -96,7 +96,7 @@ else
             // Make hydrogen atoms really small.
             if (md.show(md.chemicalSymbol(atom)) === 'H')
             {
-                return 0.1;
+                return 0.15;
             }
             // Use the default element sizes for everything else.
             return md.size(md.chemicalSymbol(atom));
