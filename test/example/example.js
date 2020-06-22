@@ -39,7 +39,8 @@ else
 // readme.rst example 1.
 
 // You can load molecules by parsing them from V3000 MDL .mol
-// file contents.
+// file contents. Don't worry though, you can also create molecules
+// programmatically, as shown in a later example.
 const eg1 = md.maybeParseV3000(`
   0  0  0  0  0  0  0  0  0  0999 V3000
 M  V30 BEGIN CTAB
