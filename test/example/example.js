@@ -50,7 +50,7 @@ M  V30 1 C -0.06 -0.17 0 0
 M  V30 2 Cl -1.35 1.04 -0.04 0 CHG=1
 M  V30 3 H 1.65 0.73 -0.06 0
 M  V30 4 H -0.15 -0.88 -0.87 0
-M  V30 5 In -0.09 -0.72 0.97 0
+M  V30 5 Br -0.09 -0.72 0.97 0
 M  V30 END ATOM
 M  V30 BEGIN BOND
 M  V30 1 1 1 2
@@ -94,7 +94,7 @@ else
             // Make the atom with an id of 1 really big.
             if (md.id(atom) === 1)
             {
-                return 3;
+                return 2.5;
             }
             // Make hydrogen atoms really small.
             if (md.show(md.chemicalSymbol(atom)) === 'H')
@@ -121,6 +121,8 @@ else
             return md.color(md.chemicalSymbol(atom));
         },
         atomScale: 0.5,
+        // You can change the quality of the atoms and bonds by
+        // changing the number of segments.
         atomWidthSegments: 25,
         atomHeightSegments: 25,
         bondRadialSegments: 10,
