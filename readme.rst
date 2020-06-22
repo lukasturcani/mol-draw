@@ -153,6 +153,9 @@ Using Options
         atomHeightSegments: 25,
         bondRadialSegments: 10,
         bondHeightSegments: 1,
+        // You can change the material of the rendered molecule.
+        // See the Three.js documentation for a complete list of
+        // possible materials.
         material: (color) => new THREE.MeshPhongMaterial({
             color: color
         })
