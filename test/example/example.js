@@ -141,11 +141,11 @@ else
 const atoms = [
     md.atom ( md.c  ) ( md.position(-0.06)(-0.17)(0)     ),
     md.atom ( md.cl ) ( md.position(-1.35)(1.04)(-0.04)  ),
-    md.atom ( md.h  ) ( md.position(1.65)(0.73)(-0.06)   ),
-    md.atom ( md.h  ) ( md.position(-0.15)(-0.88)(-0.87) ),
     // Note that indium has a little underscore to avoid conflicts
     // with the "in" keyword.
-    md.atom ( md.in_ ) ( md.position(-0.09)(-0.72)(0.97)  )
+    md.atom ( md.in_) ( md.position(1.65)(0.73)(-0.06)   ),
+    md.atom ( md.h  ) ( md.position(-0.15)(-0.88)(-0.87) ),
+    md.atom ( md.h  ) ( md.position(-0.09)(-0.72)(0.97)  )
 ];
 
 // Then the bonds.
