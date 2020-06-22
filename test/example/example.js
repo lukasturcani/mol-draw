@@ -143,7 +143,6 @@ const atoms = [
     md.atom ( md.in_ ) ( md.position(-0.09)(-0.72)(0.97)  )
 ];
 
-
 // Then the bonds.
 const bonds = [
     // The arguments are: md.bond(order)(atom1Id)(atom2Id)
@@ -154,10 +153,8 @@ const bonds = [
     md.bond(1)(0)(4)
 ];
 
-
 // Then you can try to make the molecule itself.
 const eg3 = md.maybeMolecule(atoms)(bonds);
-
 
 // If creating the molecule fails - md.isLeft(eg3) will return True.
 // You can then handle the error gracefully.
