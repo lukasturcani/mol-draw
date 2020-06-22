@@ -94,7 +94,9 @@ exports.meshesImpl =
     for (const entry of Object.entries(geometries))
     {
         const [color, geometry] = entry;
-        const material = new THREE.MeshToonMaterial({ color: color });
+        const material = new THREE.MeshToonMaterial({
+            color: parseInt(color)
+        });
         meshes.push(new THREE.Mesh(geometry, material));
     }
     return meshes;
