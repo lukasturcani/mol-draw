@@ -37,6 +37,9 @@ else
 
 
 // readme.rst example 1.
+
+// You can load molecules by parsing them from V3000 MDL .mol
+// file contents.
 const eg1 = md.maybeParseV3000(`
   0  0  0  0  0  0  0  0  0  0999 V3000
 M  V30 BEGIN CTAB
@@ -56,17 +59,22 @@ M  V30 END CTAB
 M  END
 `);
 
+// if isLeft(eg1) returns True - it means parsing the molecule
+// failed, allowing you to gracefully handle the error.
 if (md.isLeft(eg1))
 {
     console.log('There was an issue with your V3000 file content.');
+    // You can use md.fromLeft()(eg1) to extract the error message.
     console.log(md.fromLeft()(eg1));
 }
 else
 {
+    // If the parse was successful, you can use
+    // md.fromRight()(eg1) to extract the molecule.
+    const molecule = md.fromRight()(eg1);
     md.drawMol({
         backgroundColor: 0xFFFFFF,
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'
-    })(md.fromRight()(eg1));
+    })(molecule);
 }
-
