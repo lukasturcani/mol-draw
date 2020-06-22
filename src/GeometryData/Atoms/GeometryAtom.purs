@@ -4,12 +4,14 @@ module MolDraw.GeometryAtom
 , position
 , chemicalSymbol
 , atom
+, fromAtom
 ) where
 
 
 import Prelude
 import MolDraw.Position (Position)
 import MolDraw.ChemicalSymbol (ChemicalSymbol)
+import MolDraw.Atom as Atom
 
 
 data GeometryAtom = GeometryAtom
@@ -44,4 +46,12 @@ atom chemicalSymbol' position' id' = GeometryAtom
     { _id: id'
     , _chemicalSymbol: chemicalSymbol'
     , _position: position'
+    }
+
+
+fromAtom :: Atom.Atom -> Int -> GeometryAtom
+fromAtom atom' id' = GeometryAtom
+    { _id: id'
+    , _chemicalSymbol: Atom.chemicalSymbol atom'
+    , _position: Atom.position atom'
     }

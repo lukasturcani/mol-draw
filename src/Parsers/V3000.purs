@@ -13,7 +13,6 @@ import Data.Map (Map, insert, empty, lookup, values)
 import Data.List (List (Nil), (:), fromFoldable)
 import Data.Tuple (Tuple(Tuple))
 import Data.Either (Either(Left, Right))
-import Data.Maybe (Maybe (Just, Nothing))
 import Data.Array (filter, foldl)
 import Data.String (length)
 import Data.String.Utils (lines, words, includes)
@@ -21,6 +20,7 @@ import MolDraw.GeometryAtom (GeometryAtom, atom)
 import MolDraw.Position (Position(Position))
 import MolDraw.BondSegment as BS
 import MolDraw.Parsers.ChemicalSymbol (chemicalSymbol)
+import MolDraw.Utils (toEither)
 
 
 data V3000State = NotReading | ReadingAtoms | ReadingBonds
@@ -157,11 +157,6 @@ addBond content line = do
 
 validWords :: String -> List String
 validWords = fromFoldable <<< filter ((<) 0 <<< length) <<< words
-
-
-toEither :: forall a. String -> Maybe a -> Either String a
-toEither errorMessage Nothing = Left errorMessage
-toEither errorMessage (Just x) = Right x
 
 
 readAtom :: List String -> Either String (Tuple Int GeometryAtom)
