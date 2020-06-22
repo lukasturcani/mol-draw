@@ -50,7 +50,7 @@ Simple Case
 
 .. code-block:: javascript
 
-    import * as molDraw from 'molDraw';
+    import * as md from 'molDraw';
 
     // You can load molecules by parsing them from V3000 MDL .mol
     // file contents.
@@ -61,8 +61,8 @@ Simple Case
     M  V30 BEGIN ATOM
     M  V30 1 Br -0.0328 1.8852 0.0012 0
     M  V30 2 C 0.0054 -0.0185 -0.0002 0 CHG=1
-    M  V30 3 Br 1.6829 -0.9147 -0.0823 0
-    M  V30 4 Br -1.6555 -0.9520 0.0814 0
+    M  V30 3 H 1.6829 -0.9147 -0.0823 0
+    M  V30 4 H -1.6555 -0.9520 0.0814 0
     M  V30 END ATOM
     M  V30 BEGIN BOND
     M  V30 1 1 1 2

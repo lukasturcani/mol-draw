@@ -47,8 +47,8 @@ M  V30 COUNTS 4 3 0 0 0
 M  V30 BEGIN ATOM
 M  V30 1 Br -0.0328 1.8852 0.0012 0
 M  V30 2 C 0.0054 -0.0185 -0.0002 0 CHG=1
-M  V30 3 Br 1.6829 -0.9147 -0.0823 0
-M  V30 4 Br -1.6555 -0.9520 0.0814 0
+M  V30 3 H 1.6829 -0.9147 -0.0823 0
+M  V30 4 H -1.6555 -0.9520 0.0814 0
 M  V30 END ATOM
 M  V30 BEGIN BOND
 M  V30 1 1 1 2
@@ -77,4 +77,55 @@ else
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'
     })(molecule);
+
+
+    // readme.rst example 2.
+
+    // If you want to customize the drawing you can add an options
+    // object.
+
+    md.drawMolWithOptions({
+        // atomSize is a function, which takes a molDraw.GeometryAtom
+        // instance and returns the desired size (before scaling).
+        atomSize: atom => {
+            // Make the atom with an id of 1 really big.
+            if (md.id(atom) === 1)
+            {
+                return 3;
+            }
+            // Make hydrogen atoms really small.
+            if (md.show(md.chemicalSymbol(atom)) === 'H')
+            {
+                return 0.1;
+            }
+            // Use the default element sizes for everything else.
+            return md.size(md.chemicalSymbol(atom));
+        },
+        // atomColor is a function, which takes a molDraw.GeometryAtom
+        // instance and returns the desired color for that atom.
+        atomColor: atom => {
+            // Make the atom with id of 8 red.
+            if (md.id(atom) === 3)
+            {
+                return 0xFF0000;
+            }
+            // Make carbon atoms purple.
+            if (md.show(md.chemicalSymbol(atom)) === 'C')
+            {
+                return 0x800080;
+            }
+            // Use the default element colors for everything else.
+            return md.color(md.chemicalSymbol(atom));
+        },
+        atomScale: 0.5,
+        atomWidthSegments: 8,
+        atomHeightSegments: 7,
+        bondRadialSegments: 10,
+        bondHeightSegments: 1
+    })({
+        backgroundColor: 0xFFFFFF,
+        containerId: 'container4'
+    })(molecule);
 }
+
+
