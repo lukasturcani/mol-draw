@@ -6,15 +6,17 @@ module MolDraw.DrawMol
 
 import Prelude
 import Effect (Effect)
-import Effect.Class.Console (log)
 import MolDraw.DrawMol.Scene (Scene, SceneOptions, scene)
-import MolDraw.DrawMol.Mesh (MeshOptions, meshes)
+import MolDraw.DrawMol.Mesh (MeshOptions, Material, meshes)
 import MolDraw.GeometryAtom as GA
 import MolDraw.GeometryData (GeometryData)
 import MolDraw.Utils.ElementColors (color)
 import MolDraw.Utils.ElementSizes (size)
 
 
+type Color = Int
+
+foreign import toonMaterial :: Color -> Material
 foreign import drawMolImpl :: Scene -> Effect Unit
 
 
@@ -27,6 +29,7 @@ meshOptions =
     , atomHeightSegments: 14
     , bondRadialSegments: 10
     , bondHeightSegments: 1
+    , material          : toonMaterial
     }
 
 

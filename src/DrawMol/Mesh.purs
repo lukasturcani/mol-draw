@@ -2,6 +2,7 @@ module MolDraw.DrawMol.Mesh
 ( Mesh
 , MeshOptions
 , Color
+, Material
 , meshes
 ) where
 
@@ -15,6 +16,7 @@ import MolDraw.Position (Position)
 
 
 type Color = Int
+data Material = Material
 
 
 type MeshOptions =
@@ -25,6 +27,7 @@ type MeshOptions =
     , atomHeightSegments :: Int
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
+    , material           :: Color -> Material
     }
 
 

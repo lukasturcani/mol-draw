@@ -23,7 +23,8 @@ exports.meshesImpl =
         atomHeightSegments,
         bondSegments,
         bondRadialSegments,
-        bondHeightSegments
+        bondHeightSegments,
+        material
     })                              =>
 {
     const geometries = {};
@@ -94,10 +95,9 @@ exports.meshesImpl =
     for (const entry of Object.entries(geometries))
     {
         const [color, geometry] = entry;
-        const material = new THREE.MeshToonMaterial({
-            color: parseInt(color)
-        });
-        meshes.push(new THREE.Mesh(geometry, material));
+        meshes.push(
+            new THREE.Mesh(geometry, material(parseInt(color)))
+        );
     }
     return meshes;
 };
