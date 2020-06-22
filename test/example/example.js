@@ -6,15 +6,34 @@ import * as md from '../../output/MolDraw';
 
 
 // Live preview molecules.
-md.drawMol({
-    backgroundColor: 0xFFFFFF,
-    containerId: 'container1',
-})(molecule1);
+const maybeMolecule1 = md.maybeParseV3000(molecule1);
+if (md.isLeft(maybeMolecule1))
+{
+    console.log('Issue with preview molecule 1.');
+    console.log(md.fromLeft()(maybeMolecule1));
+}
+else
+{
+    md.drawMol({
+        backgroundColor: 0xFFFFFF,
+        containerId: 'container1',
+    })(md.fromRight()(maybeMolecule1));
+}
 
-md.drawMol({
-    backgroundColor: 0xFFFFFF,
-    containerId: 'container2',
-})(molecule2);
+const maybeMolecule2 = md.maybeParseV3000(molecule2);
+if (md.isLeft(maybeMolecule2))
+{
+    console.log('Issue with preview molecule 2.');
+    console.log(md.fromLeft()(maybeMolecule2));
+}
+else
+{
+    md.drawMol({
+        backgroundColor: 0xFFFFFF,
+        containerId: 'container2',
+    })(md.fromRight()(maybeMolecule2));
+}
+
 
 
 // readme.rst example 1.
@@ -40,7 +59,7 @@ M  END
 if (md.isLeft(eg1))
 {
     console.log('There was an issue with your V3000 file content.');
-    console.log(md.fromLeft(eg1));
+    console.log(md.fromLeft()(eg1));
 }
 else
 {
@@ -48,6 +67,6 @@ else
         backgroundColor: 0xFFFFFF,
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'
-    })(md.fromRight(eg1));
+    })(md.fromRight()(eg1));
 }
 
