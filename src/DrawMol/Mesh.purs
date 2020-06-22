@@ -42,6 +42,7 @@ type MeshData =
     , bondSegments       :: Array BondSegment.BondSegment
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
+    , material           :: Color -> Material
     }
 
 
@@ -56,6 +57,7 @@ meshData
         , atomHeightSegments
         , bondRadialSegments
         , bondHeightSegments
+        , material
         }
     )
     geometryData =
@@ -68,6 +70,7 @@ meshData
         , atomHeightSegments
         , bondRadialSegments
         , bondHeightSegments
+        , material
         }
 
 
