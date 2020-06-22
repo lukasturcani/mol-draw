@@ -3,6 +3,7 @@ import { molecule2 } from './molecule2';
 
 
 import * as md from '../../output/MolDraw';
+import * as THREE from 'three';
 
 
 // Live preview molecules.
@@ -126,7 +127,11 @@ else
         atomWidthSegments: 25,
         atomHeightSegments: 25,
         bondRadialSegments: 10,
-        bondHeightSegments: 1
+        bondHeightSegments: 1,
+        material: (color) => new THREE.MeshPhongMaterial({
+            color: color
+        })
+
     })({
         backgroundColor: 0xFFFFFF,
         containerId: 'container4'

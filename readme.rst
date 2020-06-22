@@ -111,6 +111,8 @@ Using Options
     // If you want to customize the drawing you can add an options
     // object.
 
+    import * as THREE from 'three';
+
     md.drawMolWithOptions({
         // atomSize is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired size (before scaling).
@@ -150,7 +152,11 @@ Using Options
         atomWidthSegments: 25,
         atomHeightSegments: 25,
         bondRadialSegments: 10,
-        bondHeightSegments: 1
+        bondHeightSegments: 1,
+        material: (color) => new THREE.MeshPhongMaterial({
+            color: color
+        })
+
     })({
         backgroundColor: 0xFFFFFF,
         containerId: 'container4'
