@@ -55,6 +55,7 @@ Simple Case
 
     import * as md from 'molDraw';
 
+
     // You can load molecules by parsing them from V3000 MDL .mol
     // file contents. Don't worry though, you can also create molecules
     // programmatically, as shown in a later example.
@@ -63,15 +64,17 @@ Simple Case
     M  V30 BEGIN CTAB
     M  V30 COUNTS 4 3 0 0 0
     M  V30 BEGIN ATOM
-    M  V30 1 Br -0.0328 1.8852 0.0012 0
-    M  V30 2 C 0.0054 -0.0185 -0.0002 0 CHG=1
-    M  V30 3 H 1.6829 -0.9147 -0.0823 0
-    M  V30 4 H -1.6555 -0.9520 0.0814 0
+    M  V30 1 C -0.06 -0.17 0 0
+    M  V30 2 Cl -1.35 1.04 -0.04 0 CHG=1
+    M  V30 3 H 1.65 0.73 -0.06 0
+    M  V30 4 H -0.15 -0.88 -0.87 0
+    M  V30 5 In -0.09 -0.72 0.97 0
     M  V30 END ATOM
     M  V30 BEGIN BOND
     M  V30 1 1 1 2
-    M  V30 2 1 2 3
-    M  V30 3 1 2 4
+    M  V30 2 1 1 3
+    M  V30 3 1 1 4
+    M  V30 4 1 1 5
     M  V30 END BOND
     M  V30 END CTAB
     M  END
@@ -96,6 +99,7 @@ Simple Case
             containerId: 'container3'
         })(molecule);
     }
+
 
 Live result
 
@@ -160,7 +164,7 @@ Loading Molecules
 Direct Creation
 ~~~~~~~~~~~~~~~
 
-You can create molecules programmatically too
+You can create molecules programmatically
 
 .. code-block:: javascript
 
