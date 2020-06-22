@@ -23,8 +23,8 @@ meshOptions =
     { atomSize          : size  <<< GA.chemicalSymbol
     , atomColor         : color <<< GA.chemicalSymbol
     , atomScale         : 0.5
-    , atomWidthSegments : 8
-    , atomHeightSegments: 7
+    , atomWidthSegments : 16
+    , atomHeightSegments: 14
     , bondRadialSegments: 10
     , bondHeightSegments: 1
     }
