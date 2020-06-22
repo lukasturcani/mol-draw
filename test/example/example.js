@@ -118,8 +118,8 @@ else
             return md.color(md.chemicalSymbol(atom));
         },
         atomScale: 0.5,
-        atomWidthSegments: 8,
-        atomHeightSegments: 7,
+        atomWidthSegments: 25,
+        atomHeightSegments: 25,
         bondRadialSegments: 10,
         bondHeightSegments: 1
     })({
@@ -128,4 +128,54 @@ else
     })(molecule);
 }
 
+
+// readme.rst example 3.
+
+
+// Try to load a molecule.
+
+// First the atoms of the molecule.
+const atoms = [
+    md.atom ( md.c  ) ( md.position(-0.06)(-0.17)(0)     ),
+    md.atom ( md.cl ) ( md.position(-1.35)(1.04)(-0.04)  ),
+    md.atom ( md.h  ) ( md.position(1.65)(0.73)(-0.06)   ),
+    md.atom ( md.h  ) ( md.position(-0.15)(-0.88)(-0.87) ),
+    // Note that indium has a little underscore to avoid conflicts
+    // with the "in" keyword.
+    md.atom ( md.in_ ) ( md.position(-0.09)(-0.72)(0.97)  )
+];
+
+
+// Then the bonds.
+const bonds = [
+    // The arguments are: md.bond(order)(atom1Id)(atom2Id)
+    md.bond(1)(0)(1),
+    md.bond(1)(0)(2),
+    md.bond(1)(0)(3),
+    md.bond(1)(0)(4)
+];
+
+
+// Then you can try to make the molecule itself.
+const eg3 = md.maybeMolecule(atoms)(bonds);
+
+
+// If creating the molecule fails - md.isLeft(eg3) will return True.
+// You can then handle the error gracefully.
+if (md.isLeft(eg3))
+{
+    console.log('There was an issue with your molecule.');
+    // You can call md.fromLeft()(eg3) to get the error message.
+    console.log(md.fromLeft()(eg3));
+}
+else
+{
+    // If creation of the molecule was successful, you can extract
+    // the molecule with md.fromRight()(eg3).
+    const molecule = md.fromRight()(eg3);
+    md.drawMol({
+        backgroundColor: 0xFFFFFF,
+        containerId: 'container5',
+    })(molecule);
+}
 

@@ -51,8 +51,8 @@ id :: GeometryAtom.GeometryAtom -> Int
 id = GeometryAtom.id
 
 
-position :: GeometryAtom.GeometryAtom -> Position.Position
-position = GeometryAtom.position
+position :: Number -> Number -> Number -> Position.Position
+position = Position.position
 
 
 chemicalSymbol
