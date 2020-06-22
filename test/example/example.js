@@ -130,7 +130,10 @@ else
         bondHeightSegments: 1,
         // You can change the material of the rendered molecule.
         // See the Three.js documentation for a complete list of
-        // possible materials.
+        // possible materials and their options.
+        // Some materials include MeshPhysicalMaterial,
+        // MeshStandardMaterial, MeshNormalMaterial,
+        // MeshLambertMaterial etc ...
         material: (color) => new THREE.MeshPhongMaterial({
             color: color
         })
