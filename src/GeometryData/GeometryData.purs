@@ -51,8 +51,8 @@ maybeMolecule :: Array Atom -> Array Bond -> Either String GeometryData
 maybeMolecule atoms' bonds = do
     bondSegments' <- foldM (addSegments atoms') Nil bonds
     Right $ GeometryData
-        { _atoms: fromFoldable $
-            zipWith fromAtom atoms' (0 .. (length atoms' - 1))
+        { _atoms: fromFoldable
+            $ zipWith fromAtom atoms' (0 .. (length atoms' - 1))
         , _bondSegments: bondSegments'
         }
 
