@@ -6,25 +6,30 @@ const THREE = require('three');
 
 exports.meshesImpl =
     ({
-        atomElement,
-        atomChemicalSymbol,
         atomPosition,
-        atomSize,
-        bondSegmentElement,
         bondSegmentPosition,
+        bondSegmentAtom,
         bondSegmentWidth,
         bondSegmentLength,
         bondSegmentGapSize,
-        bondSegmentAlignmentPoint,
+        bondSegmentAlignmentPoint
     })                              =>
-    meshData                        =>
+    ({
+        atoms,
+        atomSize,
+        atomColor,
+        atomScale,
+        atomWidthSegments,
+        atomHeightSegments,
+        bondSegments,
+        bondRadialSegments,
+        bondHeightSegments
+    })                              =>
 {
-    const atomGeometries = {};
     const geometries = {};
-    const materials = {};
     const matrix = new THREE.Matrix4();
 
-    for (const atom of meshData.atoms)
+    for (const atom of atoms)
     {
 
         const {
@@ -34,43 +39,36 @@ exports.meshesImpl =
         } = atomPosition(atom);
         matrix.makeTranslation(x, y, z);
 
-        const element = atomElement(atom);
-        if (!geometries.hasOwnProperty(element))
+        const color = atomColor(atom);
+        if (!geometries.hasOwnProperty(color))
         {
-            geometries[element] = new THREE.Geometry();
-        }
-        if (!atomGeometries.hasOwnProperty(element))
-        {
-            atomGeometries[element] = new THREE.SphereGeometry(
-                atomSize(atom)*meshData.atomScale,
-                meshData.atomWidthSegments,
-                meshData.atomHeightSegments
-            );
-            materials[element] = new THREE.MeshToonMaterial({
-                color:
-                    meshData.elementColors(atomChemicalSymbol(atom)),
-            });
+            geometries[color] = new THREE.Geometry();
         }
 
-        geometries[element].merge(atomGeometries[element], matrix);
+        const geometry = new THREE.SphereGeometry(
+            atomSize(atom)*atomScale,
+            atomWidthSegments,
+            atomHeightSegments
+        );
+        geometries[color].merge(geometry, matrix);
     }
 
     const offsetAxis = new THREE.Vector3(1, 0, 0);
-    for (const bondSegment of meshData.bondSegments)
+    for (const bondSegment of bondSegments)
     {
         const width = bondSegmentWidth(bondSegment);
         const geometry = new THREE.CylinderGeometry(
             width,
             width,
             bondSegmentLength(bondSegment),
-            meshData.bondRadialSegments,
-            meshData.bondHeightSegments,
+            bondRadialSegments,
+            bondHeightSegments,
             true
         );
         geometry.rotateX(Math.PI/2);
 
-        const element = bondSegmentElement(bondSegment);
-        const mesh = new THREE.Mesh(geometry, materials[element]);
+        const color = atomColor(bondSegmentAtom(bondSegment));
+        const mesh = new THREE.Mesh(geometry, new THREE.Material());
         const {
             value0: x,
             value1: y,
@@ -89,14 +87,15 @@ exports.meshesImpl =
             offsetAxis,
             bondSegmentGapSize(bondSegment)
         );
-        geometries[element].mergeMesh(mesh)
+        geometries[color].mergeMesh(mesh)
     }
 
     const meshes = [];
     for (const entry of Object.entries(geometries))
     {
-        const [element, geometry] = entry;
-        meshes.push(new THREE.Mesh(geometry, materials[element]));
+        const [color, geometry] = entry;
+        const material = new THREE.MeshToonMaterial({ color: color });
+        meshes.push(new THREE.Mesh(geometry, material));
     }
     return meshes;
 };

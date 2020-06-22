@@ -8,39 +8,37 @@ module MolDraw.DrawMol.Mesh
 
 import Prelude
 import Data.Array (fromFoldable)
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
-import MolDraw.GeometryData.Atom as Atom
-import MolDraw.GeometryData.BondSegment as BondSegment
-import MolDraw.GeometryData.GeometryData as GD
-import MolDraw.GeometryData.Position (Position)
-import MolDraw.Utils.ElementSizes (size)
+import MolDraw.GeometryAtom as GA
+import MolDraw.BondSegment as BondSegment
+import MolDraw.GeometryData as GD
+import MolDraw.Position (Position)
 
 
 type Color = Int
 
 
 type MeshOptions =
-    { atomSize           :: Atom.Atom -> Number
+    { atomSize           :: GA.GeometryAtom -> Number
+    , atomColor          :: GA.GeometryAtom -> Color
     , atomScale          :: Number
     , atomWidthSegments  :: Int
     , atomHeightSegments :: Int
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
-    , elementColors      :: ChemicalSymbol -> Color
     }
 
 
 
 type MeshData =
-    { atoms              :: Array Atom.Atom
-    , atomSize           :: Atom.Atom -> Number
+    { atoms              :: Array GA.GeometryAtom
+    , atomSize           :: GA.GeometryAtom -> Number
+    , atomColor          :: GA.GeometryAtom -> Color
     , atomScale          :: Number
     , atomWidthSegments  :: Int
     , atomHeightSegments :: Int
     , bondSegments       :: Array BondSegment.BondSegment
     , bondRadialSegments :: Int
     , bondHeightSegments :: Int
-    , elementColors      :: ChemicalSymbol -> Color
     }
 
 
@@ -49,24 +47,24 @@ meshData :: MeshOptions -> GD.GeometryData -> MeshData
 meshData
     (
         { atomSize
+        , atomColor
         , atomScale
         , atomWidthSegments
         , atomHeightSegments
         , bondRadialSegments
         , bondHeightSegments
-        , elementColors
         }
     )
     geometryData =
         { atoms: fromFoldable $ GD.atoms geometryData
         , bondSegments: fromFoldable $ GD.bondSegments geometryData
         , atomSize: atomSize
+        , atomColor: atomColor
         , atomScale: atomScale
         , atomWidthSegments
         , atomHeightSegments
         , bondRadialSegments
         , bondHeightSegments
-        , elementColors
         }
 
 
@@ -74,29 +72,24 @@ data Mesh = Mesh
 
 
 type Helpers =
-    { atomElement                :: Atom.Atom        -> String
-    , atomChemicalSymbol         :: Atom.Atom        -> ChemicalSymbol
-    , atomPosition               :: Atom.Atom        -> Position
-    , atomSize                   :: Atom.Atom        -> Number
-    , bondSegmentElement         :: BondSegment.BondSegment -> String
-    , bondSegmentPosition        :: BondSegment.BondSegment -> Position
-    , bondSegmentWidth           :: BondSegment.BondSegment -> Number
-    , bondSegmentLength          :: BondSegment.BondSegment -> Number
-    , bondSegmentGapSize         :: BondSegment.BondSegment -> Number
-    , bondSegmentAlignmentPoint  :: BondSegment.BondSegment -> Position
+    { atomPosition        :: GA.GeometryAtom         -> Position
+    , bondSegmentPosition :: BondSegment.BondSegment -> Position
+    , bondSegmentAtom     :: BondSegment.BondSegment -> GA.GeometryAtom
+    , bondSegmentWidth    :: BondSegment.BondSegment -> Number
+    , bondSegmentLength   :: BondSegment.BondSegment -> Number
+    , bondSegmentGapSize  :: BondSegment.BondSegment -> Number
+    , bondSegmentAlignmentPoint :: BondSegment.BondSegment -> Position
     }
+
 
 foreign import meshesImpl :: Helpers -> MeshData -> Array Mesh
 
 
 helpers :: Helpers
 helpers =
-    { atomElement               : show <<< Atom.chemicalSymbol
-    , atomChemicalSymbol        : Atom.chemicalSymbol
-    , atomPosition              : Atom.position
-    , atomSize                  : size <<< Atom.chemicalSymbol
-    , bondSegmentElement        : show <<< BondSegment.chemicalSymbol
+    { atomPosition              : GA.position
     , bondSegmentPosition       : BondSegment.position
+    , bondSegmentAtom           : BondSegment.atom
     , bondSegmentWidth          : BondSegment.width
     , bondSegmentLength         : BondSegment.length
     , bondSegmentGapSize        : BondSegment.gapSize

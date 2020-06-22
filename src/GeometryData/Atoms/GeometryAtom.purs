@@ -1,43 +1,47 @@
-module MolDraw.GeometryData.Atom
-( Atom
+module MolDraw.GeometryAtom
+( GeometryAtom
+, id
 , position
 , chemicalSymbol
 , atom
-, id
 ) where
 
 
 import Prelude
-import MolDraw.GeometryData.Position (Position)
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
+import MolDraw.Position (Position)
+import MolDraw.ChemicalSymbol (ChemicalSymbol)
 
 
-data Atom = Atom
-    { id             :: Int
-    , chemicalSymbol :: ChemicalSymbol
-    , position       :: Position
+data GeometryAtom = GeometryAtom
+    { _id             :: Int
+    , _chemicalSymbol :: ChemicalSymbol
+    , _position       :: Position
     }
 
 
-instance showAtom :: Show Atom where
-    show (Atom { id: id', chemicalSymbol: symbol, position: pos })
-        =  "(Atom { id: "
-        <> show id'
-        <> ", chemicalSymbol: "
-        <> show symbol
-        <> ", position: "
-        <> show pos
-        <> " })"
+instance showGeometryAtom :: Show GeometryAtom where
+    show atom'
+        =  "(GeometryAtom "
+        <> show (id atom')
+        <> " "
+        <> show (chemicalSymbol atom')
+        <> " "
+        <> show (position atom')
+        <> ")"
 
 
-position :: Atom -> Position
-position (Atom { position: pos }) = pos
+id :: GeometryAtom -> Int
+id (GeometryAtom { _id } ) = _id
 
-chemicalSymbol :: Atom -> ChemicalSymbol
-chemicalSymbol (Atom { chemicalSymbol: symbol }) = symbol
+position :: GeometryAtom -> Position
+position (GeometryAtom { _position } ) = _position
 
-atom :: ChemicalSymbol -> Position -> Atom
-atom symbol pos = Atom  { chemicalSymbol: symbol, position: pos }
+chemicalSymbol :: GeometryAtom -> ChemicalSymbol
+chemicalSymbol (GeometryAtom { _chemicalSymbol } ) = _chemicalSymbol
 
-id :: Atom -> Int
-id (Atom { id: id' }) = id'
+atom :: ChemicalSymbol -> Position -> Int -> GeometryAtom
+atom chemicalSymbol' position' id' = GeometryAtom
+    { _id: id'
+    , _chemicalSymbol: chemicalSymbol'
+    , _position: position'
+    }

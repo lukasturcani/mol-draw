@@ -1,4 +1,4 @@
-module MolDraw.GeometryData.ChemicalSymbol
+module MolDraw.ChemicalSymbol
 ( ChemicalSymbol (..)
 ) where
 

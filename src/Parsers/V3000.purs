@@ -17,9 +17,9 @@ import Data.Maybe (Maybe (Just, Nothing))
 import Data.Array (filter, foldl)
 import Data.String (length)
 import Data.String.Utils (lines, words, includes)
-import MolDraw.GeometryData.Atom (Atom, atom)
-import MolDraw.GeometryData.Position (Position(Position))
-import MolDraw.GeometryData.BondSegment as BS
+import MolDraw.GeometryAtom (GeometryAtom, atom)
+import MolDraw.Position (Position(Position))
+import MolDraw.BondSegment as BS
 import MolDraw.Parsers.ChemicalSymbol (chemicalSymbol)
 
 
@@ -33,9 +33,9 @@ instance showV3000State :: Show V3000State where
 
 
 data V3000Content = V3000Content
-    { atoms        :: Map Int Atom
-    , bondSegments :: List BS.BondSegment
-    , state        :: V3000State
+    { _atoms        :: Map Int GeometryAtom
+    , _bondSegments :: List BS.BondSegment
+    , _state        :: V3000State
     }
 
 
@@ -55,26 +55,26 @@ instance showV3000Content :: Show V3000Content where
 
 emptyContent :: Content
 emptyContent = V3000Content
-    { atoms:            empty
-    , bondSegments:     Nil
-    , state:            NotReading
+    { _atoms:            empty
+    , _bondSegments:     Nil
+    , _state:            NotReading
     }
 
 
-atoms :: Content -> List Atom
-atoms (V3000Content { atoms: a }) = values a
+atoms :: Content -> List GeometryAtom
+atoms (V3000Content { _atoms }) = values _atoms
 
 
-atoms' :: Content -> Map Int Atom
-atoms' (V3000Content { atoms: a }) = a
+atoms' :: Content -> Map Int GeometryAtom
+atoms' (V3000Content { _atoms }) = _atoms
 
 
 state :: Content -> V3000State
-state (V3000Content { state: state' }) = state'
+state (V3000Content { _state }) = _state
 
 
 bondSegments :: Content -> List BS.BondSegment
-bondSegments (V3000Content { bondSegments: segments }) = segments
+bondSegments (V3000Content { _bondSegments }) = _bondSegments
 
 
 parseV3000 :: String -> Either String Content
@@ -89,44 +89,44 @@ parseV3000 = foldl parser (Right emptyContent) <<< validLines
 
 
 v3000Parser :: String -> Content -> Either String Content
-v3000Parser line content@(V3000Content { state: ReadingAtoms })
+v3000Parser line content@(V3000Content { _state: ReadingAtoms })
     | includes "M  V30 END ATOM" line = Right
         (V3000Content
-            { atoms: atoms' content
-            , bondSegments: bondSegments content
-            , state: NotReading
+            { _atoms: atoms' content
+            , _bondSegments: bondSegments content
+            , _state: NotReading
             }
         )
 
     | otherwise = addAtom content line
 
 
-v3000Parser line content@(V3000Content { state: ReadingBonds })
+v3000Parser line content@(V3000Content { _state: ReadingBonds })
     | includes "M  V30 END BOND" line = Right
         (V3000Content
-            { atoms: atoms' content
-            , bondSegments: bondSegments content
-            , state: NotReading
+            { _atoms: atoms' content
+            , _bondSegments: bondSegments content
+            , _state: NotReading
             }
         )
 
     | otherwise = addBond content line
 
 
-v3000Parser line content@(V3000Content { state: NotReading })
+v3000Parser line content@(V3000Content { _state: NotReading })
     | includes "M  V30 BEGIN ATOM" line = Right
         (V3000Content
-            { atoms: atoms' content
-            , bondSegments: bondSegments content
-            , state: ReadingAtoms
+            { _atoms: atoms' content
+            , _bondSegments: bondSegments content
+            , _state: ReadingAtoms
             }
         )
 
     | includes "M  V30 BEGIN BOND" line = Right
         (V3000Content
-            { atoms: atoms' content
-            , bondSegments: bondSegments content
-            , state: ReadingBonds
+            { _atoms: atoms' content
+            , _bondSegments: bondSegments content
+            , _state: ReadingBonds
             }
         )
 
@@ -137,9 +137,9 @@ addAtom :: Content -> String -> Either String Content
 addAtom content line = do
     (Tuple id atom) <- readAtom $ validWords line
     pure (V3000Content
-        { atoms: insert id atom (atoms' content)
-        , bondSegments: bondSegments content
-        , state: state content
+        { _atoms: insert id atom (atoms' content)
+        , _bondSegments: bondSegments content
+        , _state: state content
         }
     )
 
@@ -148,9 +148,9 @@ addBond :: Content -> String -> Either String Content
 addBond content line = do
     newSegments <- readBond (atoms' content) $ validWords line
     pure (V3000Content
-        { atoms: atoms' content
-        , bondSegments: newSegments <> bondSegments content
-        , state: state content
+        { _atoms: atoms' content
+        , _bondSegments: newSegments <> bondSegments content
+        , _state: state content
         }
     )
 
@@ -164,7 +164,7 @@ toEither errorMessage Nothing = Left errorMessage
 toEither errorMessage (Just x) = Right x
 
 
-readAtom :: List String -> Either String (Tuple Int Atom)
+readAtom :: List String -> Either String (Tuple Int GeometryAtom)
 readAtom (_:_:id:element:x:y:z:_) = do
 
     symbol
@@ -174,7 +174,7 @@ readAtom (_:_:id:element:x:y:z:_) = do
     y'  <- toEither "Failed to parse y."       $ N.fromString y
     z'  <- toEither "Failed to parse z."       $ N.fromString z
 
-    let atom' = atom symbol (Position x' y' z')
+    let atom' = atom symbol (Position x' y' z') id'
 
     Right (Tuple id' atom')
 
@@ -182,7 +182,7 @@ readAtom failed = Left (show failed)
 
 
 readBond
-    :: Map Int Atom
+    :: Map Int GeometryAtom
     -> List String
     -> Either String (List BS.BondSegment)
 

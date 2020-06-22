@@ -3,7 +3,7 @@ module MolDraw.Utils.ElementSizes
 ) where
 
 
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol(..))
+import MolDraw.ChemicalSymbol (ChemicalSymbol(..))
 
 
 size :: ChemicalSymbol -> Number

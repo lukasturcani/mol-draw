@@ -1,4 +1,4 @@
-module MolDraw.GeometryData.Position
+module MolDraw.Position
 ( Position ( Position )
 , position
 ) where

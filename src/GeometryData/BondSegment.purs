@@ -1,6 +1,6 @@
-module MolDraw.GeometryData.BondSegment
+module MolDraw.BondSegment
 ( BondSegment
-, chemicalSymbol
+, atom
 , position
 , bondSegments
 , gapSize
@@ -14,66 +14,108 @@ import Prelude
 import Math (sqrt)
 import Data.List (List ( Nil ), (:))
 import Data.Int (toNumber)
-import MolDraw.GeometryData.Position (Position ( Position ))
-import MolDraw.GeometryData.Atom as Atom
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol)
+import MolDraw.Position (Position ( Position ))
+import MolDraw.GeometryAtom as GA
 
 
 data BondSegment = BondSegment
-    { position       :: Position
-    , chemicalSymbol :: ChemicalSymbol
-    , length         :: Number
-    , order          :: Int
-    , offset         :: Int
-    , alignmentPoint :: Position
+    { _position       :: Position
+    , _atom           :: GA.GeometryAtom
+    , _length         :: Number
+    , _order          :: Int
+    , _offset         :: Int
+    , _alignmentPoint :: Position
     }
 
 
 instance showBondSegment :: Show BondSegment where
-    show
-        (BondSegment
-            { position: position'
-            , chemicalSymbol: symbol
-            , length: length'
-            , order
-            , offset
-            }
-        )
+    show segment
         =  "(BondSegment { position: "
-        <> show position'
-        <> ", chemicalSymbol: "
-        <> show symbol
+        <> show (position segment)
+        <> ", atom: "
+        <> show (atom segment)
         <> ", length: "
-        <> show length'
+        <> show (length segment)
         <> ", order: "
-        <> show order
+        <> show (order segment)
         <> ", offset: "
-        <> show offset
+        <> show (offset segment)
         <> " })"
 
 
 position :: BondSegment -> Position
-position (BondSegment { position: position' }) = position'
+position (BondSegment { _position }) = _position
 
 
-chemicalSymbol :: BondSegment -> ChemicalSymbol
-chemicalSymbol (BondSegment { chemicalSymbol: symbol }) = symbol
+atom :: BondSegment -> GA.GeometryAtom
+atom (BondSegment { _atom }) = _atom
 
 
 length :: BondSegment -> Number
-length (BondSegment { length: length' }) = length'
+length (BondSegment { _length }) = _length
 
 
 alignmentPoint :: BondSegment -> Position
-alignmentPoint (BondSegment { alignmentPoint: point }) = point
+alignmentPoint (BondSegment { _alignmentPoint }) = _alignmentPoint
+
+
+order :: BondSegment -> Int
+order (BondSegment { _order }) = _order
+
+
+offset :: BondSegment -> Int
+offset (BondSegment { _offset }) = _offset
 
 
 width :: BondSegment -> Number
-width (BondSegment { order }) = 0.1 / (toNumber order)
+width segment = 0.1 / (toNumber $ order segment)
 
 
 gapSize :: BondSegment -> Number
-gapSize (BondSegment { offset }) = 0.2 * (toNumber offset)
+gapSize segment = 0.2 * (toNumber $ offset segment)
+
+
+bondSegments
+    :: Int
+    -> GA.GeometryAtom
+    -> GA.GeometryAtom
+    -> List BondSegment
+
+bondSegments order' atom1 atom2 = do
+    offset' <- offsets order'
+    (BondSegment
+        { _position:          segment1Position
+        , _atom:              atom1
+        , _length:            segmentLength
+        , _order:             order'
+        , _offset:            offset'
+        , _alignmentPoint:    atom1Position
+        }
+    ) : (BondSegment
+            { _position:          segment2Position
+            , _atom:              atom2
+            , _length:            segmentLength
+            , _order:             order'
+            , _offset:            offset'
+            , _alignmentPoint:    atom1Position
+            }
+        ) : Nil
+  where
+    atom1Position@(Position x1 y1 z1) = GA.position atom1
+    (Position x2 y2 z2) = GA.position atom2
+    displacement = Position (x2-x1) (y2-y1) (z2-z1)
+    segmentLength = (sqrt $ selfDot displacement) / 2.0
+    bx = (x1+x2) / 2.0
+    by = (y1+y2) / 2.0
+    bz = (z1+z2) / 2.0
+    segment1Position = Position
+        ((bx+x1) / 2.0)
+        ((by+y1) / 2.0)
+        ((bz+z1) / 2.0)
+    segment2Position = Position
+        ((bx+x2) / 2.0)
+        ((by+y2) / 2.0)
+        ((bz+z2) / 2.0)
 
 
 selfDot :: Position -> Number
@@ -87,44 +129,6 @@ biRange start stop
 
 
 offsets :: Int -> List Int
-offsets order
-    | order `mod` 2 == 0 = biRange 1 (order/2 + 1)
-    | otherwise          = 0 : biRange 1 (order/2 + 1)
-
-
-bondSegments :: Int -> Atom.Atom -> Atom.Atom -> List BondSegment
-bondSegments order atom1 atom2 = do
-    offset <- offsets order
-    (BondSegment
-        { position:          segment1Position
-        , chemicalSymbol:    Atom.chemicalSymbol atom1
-        , length:            length'
-        , order:             order
-        , offset:            offset
-        , alignmentPoint:    atom1Position
-        }
-    ) : (BondSegment
-            { position:          segment2Position
-            , chemicalSymbol:    Atom.chemicalSymbol atom2
-            , length:            length'
-            , order:             order
-            , offset:            offset
-            , alignmentPoint:    atom1Position
-            }
-        ) : Nil
-  where
-    atom1Position@(Position x1 y1 z1) = Atom.position atom1
-    (Position x2 y2 z2) = Atom.position atom2
-    displacement = Position (x2-x1) (y2-y1) (z2-z1)
-    length' = (sqrt $ selfDot displacement) / 2.0
-    bx = (x1+x2) / 2.0
-    by = (y1+y2) / 2.0
-    bz = (z1+z2) / 2.0
-    segment1Position = Position
-        ((bx+x1) / 2.0)
-        ((by+y1) / 2.0)
-        ((bz+z1) / 2.0)
-    segment2Position = Position
-        ((bx+x2) / 2.0)
-        ((by+y2) / 2.0)
-        ((bz+z2) / 2.0)
+offsets order'
+    | order' `mod` 2 == 0 = biRange 1 (order'/2 + 1)
+    | otherwise          = 0 : biRange 1 (order'/2 + 1)

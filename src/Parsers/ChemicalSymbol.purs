@@ -4,7 +4,7 @@ module MolDraw.Parsers.ChemicalSymbol
 
 
 import Data.Maybe (Maybe (..))
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol(..))
+import MolDraw.ChemicalSymbol (ChemicalSymbol(..))
 
 
 chemicalSymbol :: String -> Maybe ChemicalSymbol

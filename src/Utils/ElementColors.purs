@@ -3,7 +3,7 @@ module MolDraw.Utils.ElementColors
 ) where
 
 
-import MolDraw.GeometryData.ChemicalSymbol (ChemicalSymbol(..))
+import MolDraw.ChemicalSymbol (ChemicalSymbol(..))
 
 
 
