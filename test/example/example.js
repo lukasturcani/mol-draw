@@ -132,9 +132,7 @@ else
 // readme.rst example 3.
 
 
-// Try to load a molecule.
-
-// First the atoms of the molecule.
+// First create the atoms of the molecule.
 const atoms = [
     md.atom ( md.c  ) ( md.position(-0.06)(-0.17)(0)     ),
     md.atom ( md.cl ) ( md.position(-1.35)(1.04)(-0.04)  ),
@@ -149,6 +147,7 @@ const atoms = [
 // Then the bonds.
 const bonds = [
     // The arguments are: md.bond(order)(atom1Id)(atom2Id)
+    // The id is equal to the index of the atom.
     md.bond(1)(0)(1),
     md.bond(1)(0)(2),
     md.bond(1)(0)(3),
