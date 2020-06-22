@@ -4,7 +4,7 @@ module MolDraw
 
 
 import Prelude (show) as Exports
-import MolDraw.Parsers.V3000 (parseV3000) as Exports
+import MolDraw.GeometryData (maybeParseV3000) as Exports
 import MolDraw.Utils.ElementColors (color) as Exports
 import MolDraw.Utils.ElementSizes (size) as Exports
 import MolDraw.ChemicalSymbol (ChemicalSymbol(..)) as Exports

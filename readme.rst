@@ -89,8 +89,8 @@ Using Options
     // If you want to customize the drawing you can add an options
     // object.
     molDraw.drawMolWithOptions({
-        // atomSize is a function, which takes a molDraw.Atom instance
-        // and returns the desired size (before scaling).
+        // atomSize is a function, which takes a molDraw.GeometryAtom
+        // instance and returns the desired size (before scaling).
         atomSize: atom => {
             // Make the atom with an id of 10 really big.
             if (molDraw.id(atom) === 10)
@@ -105,8 +105,8 @@ Using Options
             // Use the default element sizes for everything else.
             return molDraw.size(molDraw.chemicalSymbol(atom));
         },
-        // atomColor is a function, which takes a molDraw.Atom instance
-        // and returns the desired color for that atom.
+        // atomColor is a function, which takes a molDraw.GeometryAtom
+        // instance and returns the desired color for that atom.
         atomColor: atom => {
             // Make the atom with id of 8 red.
             if (molDraw.id(atom) === 8)

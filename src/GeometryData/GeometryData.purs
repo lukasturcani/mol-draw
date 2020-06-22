@@ -3,6 +3,7 @@ module MolDraw.GeometryData
 , atoms
 , bondSegments
 , fromV3000Content
+, maybeParseV3000
 ) where
 
 import Prelude
