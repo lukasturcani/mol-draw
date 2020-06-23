@@ -1,5 +1,5 @@
 {
-  "name": "molDraw",
+  "name": "mol-draw",
   "version": "1.0.0",
   "description": "Lightweight 3D molecular viewer.",
   "main": "dist/molDraw.js",

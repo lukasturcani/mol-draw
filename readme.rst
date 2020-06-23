@@ -16,11 +16,11 @@ JavaScript
 
 You can install with either yarn::
 
-    $ yarn add molDraw
+    $ yarn add mol-draw
 
 or npm::
 
-    $ npm install molDraw
+    $ npm install mol-draw
 
 ==============
 Usage Examples
