@@ -74,6 +74,8 @@ else
     // If the parse was successful, you can use
     // md.fromRight()(eg1) to extract the molecule.
     const molecule = md.fromRight()(eg1);
+    // Note that while options are optional, the options object is
+    // is not. You have to at least provide an empty "{}".
     md.drawMol({})({
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'

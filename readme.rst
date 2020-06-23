@@ -55,7 +55,6 @@ Simple Case
 
     import * as md from 'molDraw';
 
-
     // You can load molecules by parsing them from V3000 MDL .mol
     // file contents. Don't worry though, you can also create molecules
     // programmatically, as shown in a later example.
@@ -93,8 +92,9 @@ Simple Case
         // If the parse was successful, you can use
         // md.fromRight()(eg1) to extract the molecule.
         const molecule = md.fromRight()(eg1);
-        md.drawMol({
-            backgroundColor: 0xFFFFFF,
+        // Note that while options are optional, the options object is
+        // is not. You have to at least provide an empty "{}".
+        md.drawMol({})({
             // Id of the div, in which the molecule should be rendered.
             containerId: 'container3'
         })(molecule);
@@ -113,7 +113,10 @@ Using Options
 
     import * as THREE from 'three';
 
-    md.drawMolWithOptions({
+    // If you want to customize the drawing you can add an options
+    // object.
+
+    md.drawMol({
         // atomSize is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired size (before scaling).
         atomSize: atom => {
@@ -164,7 +167,8 @@ Using Options
         })
 
     })({
-        backgroundColor: 0xFFFFFF,
+        backgroundColor: 0xFF00FF,
+        outline: false,
         containerId: 'container4'
     })(molecule);
 
@@ -221,11 +225,11 @@ You can create molecules programmatically
         // If creation of the molecule was successful, you can extract
         // the molecule with md.fromRight()(eg3).
         const molecule = md.fromRight()(eg3);
-        md.drawMol({
-            backgroundColor: 0xFFFFFF,
+        md.drawMol({})({
             containerId: 'container5',
         })(molecule);
     }
+
 
 V3000 File Content
 ~~~~~~~~~~~~~~~~~~
@@ -238,8 +242,7 @@ to create a molecule.
     import * as md from 'molDraw';
 
     // You can load molecules by parsing them from V3000 MDL .mol
-    // file contents. Don't worry though, you can also create molecules
-    // programmatically, as shown in a later example.
+    // file contents.
     const eg1 = md.maybeParseV3000(`
       0  0  0  0  0  0  0  0  0  0999 V3000
     M  V30 BEGIN CTAB
@@ -274,8 +277,7 @@ to create a molecule.
         // If the parse was successful, you can use
         // md.fromRight()(eg1) to extract the molecule.
         const molecule = md.fromRight()(eg1);
-        md.drawMol({
-            backgroundColor: 0xFFFFFF,
+        md.drawMol({})({
             // Id of the div, in which the molecule should be rendered.
             containerId: 'container3'
         })(molecule);
