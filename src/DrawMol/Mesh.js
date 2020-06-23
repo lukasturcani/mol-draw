@@ -36,7 +36,6 @@ exports.meshesImpl =
         defaultAtomColor
     );
 
-
     const geometries = {};
     const matrix = new THREE.Matrix4();
 
@@ -119,7 +118,7 @@ function meshDataWithDefaults(
     defaultAtomColor
 )
 {
-    return Object.assign(meshData, {
+    const obj =  Object.assign({
         atomSize: defaultAtomSize,
         atomColor: defaultAtomColor,
         atomScale: 0.5,
@@ -130,5 +129,6 @@ function meshDataWithDefaults(
         material: (color) => new THREE.MeshToonMaterial({
             color: color
         })
-    });
+    }, meshData);
+    return obj;
 }
