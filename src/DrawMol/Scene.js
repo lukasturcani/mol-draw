@@ -13,10 +13,10 @@ exports.scene = (sceneOptions) => (meshes) =>
         backgroundColor,
         containerId,
         outline
-    } = Object.assign(sceneOptions, {
+    } = Object.assign({
         backgroundColor: 0xFFFFFF,
         outline: true
-    });
+    }, sceneOptions);
 
     const scene = getScene(backgroundColor);
     const container = getContainer(scene, containerId);
