@@ -10,6 +10,11 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
     },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+    },
     mode: 'production',
     resolve: {
         extensions: ['.js', '.json'],
