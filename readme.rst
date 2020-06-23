@@ -53,7 +53,7 @@ Simple Case
 
 .. code-block:: javascript
 
-    import * as md from 'molDraw';
+    import * as md from 'mol-draw';
 
     // You can load molecules by parsing them from V3000 MDL .mol
     // file contents. Don't worry though, you can also create molecules
@@ -184,7 +184,7 @@ You can create molecules programmatically
 
 .. code-block:: javascript
 
-    import * as md from 'molDraw';
+    import * as md from 'mol-draw';
 
     // First create the atoms of the molecule.
     const atoms = [
@@ -237,7 +237,7 @@ to create a molecule.
 
 .. code-block:: javascript
 
-    import * as md from 'molDraw';
+    import * as md from 'mol-draw';
 
     // You can load molecules by parsing them from V3000 MDL .mol
     // file contents.
