@@ -164,6 +164,7 @@ Using Options
         })
 
     })({
+        // Scene options.
         backgroundColor: 0xFF00FF,
         outline: false,
         containerId: 'container4'
