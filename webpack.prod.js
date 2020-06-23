@@ -8,8 +8,8 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: '[name].js',
-        library: '[name]',
+        filename: 'molDraw.js',
+        library: 'molDraw',
     },
     externals: {
         three: {
