@@ -2,7 +2,7 @@
   "name": "molDraw",
   "version": "1.0.0",
   "description": "Lightweight 3D molecular viewer.",
-  "main": "dist/index.js",
+  "main": "dist/molDraw.js",
   "repository": "https://github.com/lukasturcani/molDraw",
   "author": "Lukas Turcani <lukasturcani93@gmail.com>",
   "license": "MIT",
