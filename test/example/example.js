@@ -139,7 +139,8 @@ else
         })
 
     })({
-        backgroundColor: 0xFFFFFF,
+        backgroundColor: 0xFF00FF,
+        outline: false,
         containerId: 'container4'
     })(molecule);
 }

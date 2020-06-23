@@ -24,10 +24,7 @@ exports.scene = (sceneOptions) => (meshes) =>
     addLight(scene, camera, getCentroid(meshes));
     const renderer = getRenderer(scene, container);
     const controls = getControls(scene, renderer.domElement, camera);
-    if (outline)
-    {
-        addOutlineEffect(scene, renderer);
-    }
+    addOutlineEffect(scene, renderer, outline);
     addMeshes(scene, meshes);
     autoFitTo(getBoundingBox(meshes), camera, controls)
     return scene;
@@ -106,10 +103,14 @@ function getControls(scene, domElement, camera)
 
 
 
-function addOutlineEffect(scene, renderer)
+function addOutlineEffect(scene, renderer, outline)
 {
-    const outline = new OutlineEffect(renderer);
-    scene.userData.outline = outline;
+    scene.userData.hasOutline = outline;
+    if (outline)
+    {
+        const outline = new OutlineEffect(renderer);
+        scene.userData.outline = outline;
+    }
 }
 
 
@@ -149,7 +150,10 @@ function render(scene)
         scene.userData.light.position.x *= 5;
         scene.userData.light.position.normalize();
         scene.userData.renderer.render(scene, scene.userData.camera);
-        scene.userData.outline.render(scene, scene.userData.camera);
+        if (scene.userData.hasOutline)
+        {
+            scene.userData.outline.render(scene, scene.userData.camera);
+        }
     }
     return inner;
 }
