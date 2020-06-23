@@ -79,7 +79,7 @@ Simple Case
     M  END
     `);
 
-    // if isLeft(eg1) returns True - it means parsing the molecule
+    // If isLeft(eg1) returns True - it means parsing the molecule
     // failed, allowing you to gracefully handle the error.
     if (md.isLeft(eg1))
     {
@@ -264,7 +264,7 @@ to create a molecule.
     M  END
     `);
 
-    // if isLeft(eg1) returns True - it means parsing the molecule
+    // If isLeft(eg1) returns True - it means parsing the molecule
     // failed, allowing you to gracefully handle the error.
     if (md.isLeft(eg1))
     {
