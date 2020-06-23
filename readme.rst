@@ -108,9 +108,6 @@ Using Options
 
 .. code-block:: javascript
 
-    // If you want to customize the drawing you can add an options
-    // object.
-
     import * as THREE from 'three';
 
     // If you want to customize the drawing you can add an options
