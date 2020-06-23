@@ -9,10 +9,20 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'dist'),
         filename: '[name].js',
+        library: '[name]',
     },
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
+    externals: {
+        three: {
+            commonjs: 'three',
+            commonjs2: 'three',
+            amd: 'three',
+            root: 'THREE',
+        },
+        'three-trackballcontrols': {
+            commonjs: 'three-trackballcontrols',
+            commonjs2: 'three-trackballcontrols',
+            amd: 'three-trackballcontrols',
+            root: 'TrackballControls',
         },
     },
     mode: 'production',
