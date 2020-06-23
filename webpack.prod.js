@@ -10,6 +10,7 @@ module.exports = {
         path: path.join(__dirname, 'dist'),
         filename: 'molDraw.js',
         library: 'molDraw',
+        libraryTarget: 'umd',
     },
     externals: {
         three: {
