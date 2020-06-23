@@ -118,7 +118,7 @@ function meshDataWithDefaults(
     defaultAtomColor
 )
 {
-    const obj =  Object.assign({
+    const obj =  assignDefined({
         atomSize: defaultAtomSize,
         atomColor: defaultAtomColor,
         atomScale: 0.5,
@@ -131,4 +131,18 @@ function meshDataWithDefaults(
         })
     }, meshData);
     return obj;
+}
+
+
+function assignDefined(target, source)
+{
+    for (const entry of Object.entries(source))
+    {
+        const [key, value] = entry;
+        if (value !== undefined)
+        {
+            target[key] = value;
+        }
+    }
+    return target;
 }

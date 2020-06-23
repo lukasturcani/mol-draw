@@ -15,7 +15,7 @@ if (md.isLeft(maybeMolecule1))
 }
 else
 {
-    md.drawMol({
+    md.drawMol({})({
         containerId: 'container1',
     })(md.fromRight()(maybeMolecule1));
 }
@@ -28,7 +28,7 @@ if (md.isLeft(maybeMolecule2))
 }
 else
 {
-    md.drawMol({
+    md.drawMol({})({
         containerId: 'container2',
     })(md.fromRight()(maybeMolecule2));
 }
@@ -74,7 +74,7 @@ else
     // If the parse was successful, you can use
     // md.fromRight()(eg1) to extract the molecule.
     const molecule = md.fromRight()(eg1);
-    md.drawMol({
+    md.drawMol()({
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'
     })(molecule);
@@ -85,7 +85,7 @@ else
     // If you want to customize the drawing you can add an options
     // object.
 
-    md.drawMolWithOptions({
+    md.drawMol({
         // atomSize is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired size (before scaling).
         atomSize: atom => {
@@ -183,7 +183,7 @@ else
     // If creation of the molecule was successful, you can extract
     // the molecule with md.fromRight()(eg3).
     const molecule = md.fromRight()(eg3);
-    md.drawMol({
+    md.drawMol({})({
         containerId: 'container5',
     })(molecule);
 }

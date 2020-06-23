@@ -10,7 +10,7 @@ import MolDraw.GeometryData as GeometryData
 import MolDraw.Utils.ElementColors as ElementColors
 import MolDraw.Utils.ElementSizes as ElementSizes
 import MolDraw.ChemicalSymbol as ChemicalSymbol
-import MolDraw.DrawMol (drawMol, drawMolWithOptions) as DrawMol
+import MolDraw.DrawMol (drawMol) as DrawMol
 import MolDraw.DrawMol.Scene (SceneOptions) as DrawMol
 import MolDraw.DrawMol.Mesh (MeshOptions) as DrawMol
 import MolDraw.Atom as Atom
@@ -33,18 +33,11 @@ maybeMolecule = GeometryData.maybeMolecule
 
 
 drawMol
-    :: DrawMol.SceneOptions
-    -> GeometryData.GeometryData
-    -> Effect Prelude.Unit
-drawMol = DrawMol.drawMol
-
-
-drawMolWithOptions
     :: DrawMol.MeshOptions
     -> DrawMol.SceneOptions
     -> GeometryData.GeometryData
     -> Effect Prelude.Unit
-drawMolWithOptions = DrawMol.drawMolWithOptions
+drawMol = DrawMol.drawMol
 
 
 id :: GeometryAtom.GeometryAtom -> Int
