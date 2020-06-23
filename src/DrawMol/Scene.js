@@ -8,13 +8,26 @@ const TrackballControls = require('three-trackballcontrols');
 
 exports.scene = (sceneOptions) => (meshes) =>
 {
-    const scene = getScene(sceneOptions.backgroundColor);
-    const container = getContainer(scene, sceneOptions.containerId);
+    // Assign default values.
+    const {
+        backgroundColor,
+        containerId,
+        outline
+    } = Object.assign(sceneOptions, {
+        backgroundColor: 0xFFFFFF,
+        outline: true
+    });
+
+    const scene = getScene(backgroundColor);
+    const container = getContainer(scene, containerId);
     const camera = getCamera(scene, container);
     addLight(scene, camera, getCentroid(meshes));
     const renderer = getRenderer(scene, container);
     const controls = getControls(scene, renderer.domElement, camera);
-    addOutlineEffect(scene, renderer);
+    if (outline)
+    {
+        addOutlineEffect(scene, renderer);
+    }
     addMeshes(scene, meshes);
     autoFitTo(getBoundingBox(meshes), camera, controls)
     return scene;

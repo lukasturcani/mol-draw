@@ -18,6 +18,7 @@ data Scene = Scene
 type SceneOptions =
     { backgroundColor:: Color
     , containerId    :: String
+    , outline        :: Boolean
     }
 
 

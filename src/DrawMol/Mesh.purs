@@ -13,6 +13,8 @@ import MolDraw.GeometryAtom as GA
 import MolDraw.BondSegment as BondSegment
 import MolDraw.GeometryData as GD
 import MolDraw.Position (Position)
+import MolDraw.Utils.ElementSizes (size)
+import MolDraw.Utils.ElementColors (color)
 
 
 type Color = Int
@@ -79,6 +81,8 @@ data Mesh = Mesh
 
 type Helpers =
     { atomPosition        :: GA.GeometryAtom         -> Position
+    , defaultAtomSize     :: GA.GeometryAtom         -> Number
+    , defaultAtomColor    :: GA.GeometryAtom         -> Color
     , bondSegmentPosition :: BondSegment.BondSegment -> Position
     , bondSegmentAtom     :: BondSegment.BondSegment -> GA.GeometryAtom
     , bondSegmentWidth    :: BondSegment.BondSegment -> Number
@@ -94,6 +98,8 @@ foreign import meshesImpl :: Helpers -> MeshData -> Array Mesh
 helpers :: Helpers
 helpers =
     { atomPosition              : GA.position
+    , defaultAtomSize           : size  <<< GA.chemicalSymbol
+    , defaultAtomColor          : color <<< GA.chemicalSymbol
     , bondSegmentPosition       : BondSegment.position
     , bondSegmentAtom           : BondSegment.atom
     , bondSegmentWidth          : BondSegment.width

@@ -7,6 +7,8 @@ const THREE = require('three');
 exports.meshesImpl =
     ({
         atomPosition,
+        defaultAtomSize,
+        defaultAtomColor,
         bondSegmentPosition,
         bondSegmentAtom,
         bondSegmentWidth,
@@ -14,7 +16,10 @@ exports.meshesImpl =
         bondSegmentGapSize,
         bondSegmentAlignmentPoint
     })                              =>
-    ({
+    (meshData)                      =>
+{
+
+    const {
         atoms,
         atomSize,
         atomColor,
@@ -25,8 +30,13 @@ exports.meshesImpl =
         bondRadialSegments,
         bondHeightSegments,
         material
-    })                              =>
-{
+    } = meshDataWithDefaults(
+        meshData,
+        defaultAtomSize,
+        defaultAtomColor
+    );
+
+
     const geometries = {};
     const matrix = new THREE.Matrix4();
 
@@ -101,3 +111,24 @@ exports.meshesImpl =
     }
     return meshes;
 };
+
+
+function meshDataWithDefaults(
+    meshData,
+    defaultAtomSize,
+    defaultAtomColor
+)
+{
+    return Object.assign(meshData, {
+        atomSize: defaultAtomSize,
+        atomColor: defaultAtomColor,
+        atomScale: 0.5,
+        atomWidthSegments: 16,
+        atomHeightSegments: 14,
+        bondRadialSegments: 10,
+        bondHeightSegments: 1,
+        material: (color) => new THREE.MeshToonMaterial({
+            color: color
+        })
+    });
+}
