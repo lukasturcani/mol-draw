@@ -74,7 +74,7 @@ else
     // If the parse was successful, you can use
     // md.fromRight()(eg1) to extract the molecule.
     const molecule = md.fromRight()(eg1);
-    md.drawMol()({
+    md.drawMol({})({
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'
     })(molecule);
