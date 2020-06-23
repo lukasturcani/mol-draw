@@ -16,7 +16,6 @@ if (md.isLeft(maybeMolecule1))
 else
 {
     md.drawMol({
-        backgroundColor: 0xFFFFFF,
         containerId: 'container1',
     })(md.fromRight()(maybeMolecule1));
 }
@@ -30,7 +29,6 @@ if (md.isLeft(maybeMolecule2))
 else
 {
     md.drawMol({
-        backgroundColor: 0xFFFFFF,
         containerId: 'container2',
     })(md.fromRight()(maybeMolecule2));
 }
@@ -77,7 +75,6 @@ else
     // md.fromRight()(eg1) to extract the molecule.
     const molecule = md.fromRight()(eg1);
     md.drawMol({
-        backgroundColor: 0xFFFFFF,
         // Id of the div, in which the molecule should be rendered.
         containerId: 'container3'
     })(molecule);
@@ -187,7 +184,6 @@ else
     // the molecule with md.fromRight()(eg3).
     const molecule = md.fromRight()(eg3);
     md.drawMol({
-        backgroundColor: 0xFFFFFF,
         containerId: 'container5',
     })(molecule);
 }
