@@ -19,12 +19,6 @@ module.exports = {
             amd: 'three',
             root: 'THREE',
         },
-        'three-trackballcontrols': {
-            commonjs: 'three-trackballcontrols',
-            commonjs2: 'three-trackballcontrols',
-            amd: 'three-trackballcontrols',
-            root: 'TrackballControls',
-        },
     },
     mode: 'production',
     resolve: {
