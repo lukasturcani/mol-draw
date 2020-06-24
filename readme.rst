@@ -105,6 +105,8 @@ Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
 Using Options
 ~~~~~~~~~~~~~
 
+Live Example: https://codepen.io/lukasturcani/pen/PoZmMRP
+
 .. code-block:: javascript
 
     import * as THREE from 'three';
@@ -145,7 +147,7 @@ Using Options
             // Use the default element colors for everything else.
             return md.color(md.chemicalSymbol(atom));
         },
-        atomScale: 0.5,
+        atomScale: 1,
         // You can change the quality of the atoms and bonds by
         // changing the number of segments.
         atomWidthSegments: 25,
@@ -164,13 +166,10 @@ Using Options
 
     })({
         // Scene options.
-        backgroundColor: 0xFF00FF,
+        backgroundColor: 0xA14411,
         outline: false,
-        containerId: 'container4'
+        containerId: 'container1'
     })(molecule);
-
-
-Live Result
 
 
 Loading Molecules
@@ -180,6 +179,9 @@ Direct Creation
 ~~~~~~~~~~~~~~~
 
 You can create molecules programmatically
+
+
+Live Example:
 
 .. code-block:: javascript
 
