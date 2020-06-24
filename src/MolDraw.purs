@@ -1,4 +1,6 @@
 -- | A lightweight, 3D molecular viewer.
+-- |
+-- | For usage examples, see: https://github.com/lukasturcani/molDraw
 
 module MolDraw
 ( module MolDraw
@@ -46,7 +48,7 @@ drawMol = DrawMol.drawMol
 
 
 -- | Get the id of an atom.
-id :: GeometryAtom.GeometryAtom -> Int
+id :: GeometryAtom.GeometryAtom -> GeometryAtom.AtomId
 id = GeometryAtom.id
 
 
@@ -63,9 +65,7 @@ chemicalSymbol = GeometryAtom.chemicalSymbol
 
 
 -- | Create a bond.
--- |
--- | The arguments are `bondOrder`, `atom1Id`, `atom2Id`.
-bond :: Int -> Int -> Int -> Bond.Bond
+bond :: Bond.BondOrder -> Bond.AtomId -> Bond.AtomId -> Bond.Bond
 bond = Bond.bond
 
 

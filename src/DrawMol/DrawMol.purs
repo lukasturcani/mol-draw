@@ -16,6 +16,7 @@ foreign import toonMaterial :: Color -> Material
 foreign import drawMolImpl :: Scene -> Effect Unit
 
 
+-- | Draw a molecule in a HTML container.
 drawMol
     :: MeshOptions
     -> SceneOptions
