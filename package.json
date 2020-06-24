@@ -1,6 +1,6 @@
 {
   "name": "mol-draw",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Lightweight 3D molecular viewer.",
   "main": "dist/molDraw.js",
   "repository": "https://github.com/lukasturcani/molDraw",
