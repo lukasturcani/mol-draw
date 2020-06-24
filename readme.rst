@@ -5,7 +5,7 @@ web pages and web apps, with support for React. It is intended for use
 by both JavaScript and PureScript applications.
 
 
-Live example
+Live Preview: https://codepen.io/lukasturcani/pen/zYrwgem
 
 ============
 Installation
