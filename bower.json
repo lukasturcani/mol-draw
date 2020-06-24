@@ -9,19 +9,5 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/lukasturcani/molDraw"
-    },
-    "dependencies": {
-        "purescript-arrays": "^1.0.0",
-        "purescript-assert": "^1.0.0",
-        "purescript-console": "^1.0.0",
-        "purescript-effect": "^1.0.0",
-        "purescript-either": "^1.0.0",
-        "purescript-integers": "^1.0.0",
-        "purescript-math": "^1.0.0",
-        "purescript-numbers": "^1.0.0",
-        "purescript-ordered-collections": "^1.0.0",
-        "purescript-psci-support": "^1.0.0",
-        "purescript-strings": "^1.0.0",
-        "purescript-stringutils": "^1.0.0"
     }
 }
