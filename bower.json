@@ -1,4 +1,8 @@
 {
     "name": "mol-draw",
-    "license": "MIT"
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lukasturcani/molDraw"
+    }
 }
