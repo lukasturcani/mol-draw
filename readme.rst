@@ -50,6 +50,7 @@ Drawing Molecules in Divs
 Simple Case
 ~~~~~~~~~~~
 
+Live Example: https://codepen.io/lukasturcani/pen/qBb
 
 .. code-block:: javascript
 
@@ -100,8 +101,6 @@ Simple Case
         })(molecule);
     }
 
-
-Live result
 
 Using Options
 ~~~~~~~~~~~~~
