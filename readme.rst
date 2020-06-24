@@ -28,9 +28,9 @@ or npm::
 
     $ npm install mol-draw
 
-==============
+--------------
 Usage Examples
-==============
+--------------
 
 .. contents::
     :local:
