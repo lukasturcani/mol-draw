@@ -236,6 +236,8 @@ V3000 File Content
 If you have the contents of a V3000 MDL .mol file, you can use it
 to create a molecule.
 
+Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
+
 .. code-block:: javascript
 
     import * as md from 'mol-draw';
@@ -278,6 +280,6 @@ to create a molecule.
         const molecule = md.fromRight()(eg1);
         md.drawMol({})({
             // Id of the div, in which the molecule should be rendered.
-            containerId: 'container3'
+            containerId: 'container1'
         })(molecule);
     }
