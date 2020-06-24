@@ -1,6 +1,8 @@
+-- | Deals with parsing of V3000 MDL file content.
+
 module MolDraw.Parsers.V3000
 ( parseV3000
-, V3000Content
+, Content
 , atoms
 , bondSegments
 ) where
@@ -23,26 +25,28 @@ import MolDraw.Parsers.ChemicalSymbol (chemicalSymbol)
 import MolDraw.Utils (toEither)
 
 
-data V3000State = NotReading | ReadingAtoms | ReadingBonds
+-- | The current state of the parser.
+data State = NotReading | ReadingAtoms | ReadingBonds
 
 
-instance showV3000State :: Show V3000State where
+instance showState :: Show State where
     show NotReading   = "NotReading"
     show ReadingAtoms = "ReadingAtoms"
     show ReadingBonds = "ReadingBonds"
 
 
-data V3000Content = V3000Content
+-- | The content parsed from the file content.
+data Content = Content
     { _atoms        :: Map Int GeometryAtom
     , _bondSegments :: List BS.BondSegment
-    , _state        :: V3000State
+    , _state        :: State
     }
 
 
-type Content = V3000Content
+type AtomId = Int
 
 
-instance showV3000Content :: Show V3000Content where
+instance showContent :: Show Content where
     show content
         =  "(V30000Content { atoms: "
         <> (show $ atoms content)
@@ -54,29 +58,29 @@ instance showV3000Content :: Show V3000Content where
 
 
 emptyContent :: Content
-emptyContent = V3000Content
+emptyContent = Content
     { _atoms:            empty
     , _bondSegments:     Nil
     , _state:            NotReading
     }
 
-
+-- | Get the atoms defined in the file contents.
 atoms :: Content -> List GeometryAtom
-atoms (V3000Content { _atoms }) = values _atoms
+atoms (Content { _atoms }) = values _atoms
 
+-- | Get the atoms defined in the file contents.
+atoms' :: Content -> Map AtomId GeometryAtom
+atoms' (Content { _atoms }) = _atoms
 
-atoms' :: Content -> Map Int GeometryAtom
-atoms' (V3000Content { _atoms }) = _atoms
+-- | Get the current state of the parser.
+state :: Content -> State
+state (Content { _state }) = _state
 
-
-state :: Content -> V3000State
-state (V3000Content { _state }) = _state
-
-
+-- | Get the bond segments defined in the file contents.
 bondSegments :: Content -> List BS.BondSegment
-bondSegments (V3000Content { _bondSegments }) = _bondSegments
+bondSegments (Content { _bondSegments }) = _bondSegments
 
-
+-- | Parse the contents of a V3000 MDL file.
 parseV3000 :: String -> Either String Content
 parseV3000 = foldl parser (Right emptyContent) <<< validLines
   where
@@ -89,9 +93,9 @@ parseV3000 = foldl parser (Right emptyContent) <<< validLines
 
 
 v3000Parser :: String -> Content -> Either String Content
-v3000Parser line content@(V3000Content { _state: ReadingAtoms })
+v3000Parser line content@(Content { _state: ReadingAtoms })
     | includes "M  V30 END ATOM" line = Right
-        (V3000Content
+        (Content
             { _atoms: atoms' content
             , _bondSegments: bondSegments content
             , _state: NotReading
@@ -101,9 +105,9 @@ v3000Parser line content@(V3000Content { _state: ReadingAtoms })
     | otherwise = addAtom content line
 
 
-v3000Parser line content@(V3000Content { _state: ReadingBonds })
+v3000Parser line content@(Content { _state: ReadingBonds })
     | includes "M  V30 END BOND" line = Right
-        (V3000Content
+        (Content
             { _atoms: atoms' content
             , _bondSegments: bondSegments content
             , _state: NotReading
@@ -113,9 +117,9 @@ v3000Parser line content@(V3000Content { _state: ReadingBonds })
     | otherwise = addBond content line
 
 
-v3000Parser line content@(V3000Content { _state: NotReading })
+v3000Parser line content@(Content { _state: NotReading })
     | includes "M  V30 BEGIN ATOM" line = Right
-        (V3000Content
+        (Content
             { _atoms: atoms' content
             , _bondSegments: bondSegments content
             , _state: ReadingAtoms
@@ -123,7 +127,7 @@ v3000Parser line content@(V3000Content { _state: NotReading })
         )
 
     | includes "M  V30 BEGIN BOND" line = Right
-        (V3000Content
+        (Content
             { _atoms: atoms' content
             , _bondSegments: bondSegments content
             , _state: ReadingBonds
@@ -136,7 +140,7 @@ v3000Parser line content@(V3000Content { _state: NotReading })
 addAtom :: Content -> String -> Either String Content
 addAtom content line = do
     (Tuple id atom) <- readAtom $ validWords line
-    pure (V3000Content
+    pure (Content
         { _atoms: insert id atom (atoms' content)
         , _bondSegments: bondSegments content
         , _state: state content
@@ -147,7 +151,7 @@ addAtom content line = do
 addBond :: Content -> String -> Either String Content
 addBond content line = do
     newSegments <- readBond (atoms' content) $ validWords line
-    pure (V3000Content
+    pure (Content
         { _atoms: atoms' content
         , _bondSegments: newSegments <> bondSegments content
         , _state: state content

@@ -1,3 +1,5 @@
+-- | Parsers for creating `ChemicalSymbol` instances.
+
 module MolDraw.Parsers.ChemicalSymbol
 ( chemicalSymbol
 ) where
@@ -6,7 +8,7 @@ module MolDraw.Parsers.ChemicalSymbol
 import Data.Maybe (Maybe (..))
 import MolDraw.ChemicalSymbol (ChemicalSymbol(..))
 
-
+-- | Try to parse a string to see if it matches a `ChemicalSymbol`.
 chemicalSymbol :: String -> Maybe ChemicalSymbol
 chemicalSymbol "H"  = Just H
 chemicalSymbol "He" = Just He

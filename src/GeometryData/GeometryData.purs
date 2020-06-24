@@ -37,7 +37,7 @@ bondSegments :: GeometryData -> List BS.BondSegment
 bondSegments (GeometryData { _bondSegments }) = _bondSegments
 
 -- | Create `GeometryData` from V3000 MDL file content.
-fromV3000Content :: V3P.V3000Content -> GeometryData
+fromV3000Content :: V3P.Content -> GeometryData
 fromV3000Content content = GeometryData
     { _atoms: V3P.atoms content
     , _bondSegments: V3P.bondSegments content
