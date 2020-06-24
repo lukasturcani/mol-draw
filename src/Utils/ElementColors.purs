@@ -1,3 +1,5 @@
+-- | Defines default element colors.
+
 module MolDraw.Utils.ElementColors
 ( color
 ) where
@@ -9,7 +11,7 @@ import MolDraw.ChemicalSymbol (ChemicalSymbol(..))
 
 type Color = Int
 
-
+-- | Get the default color of an element.
 color :: ChemicalSymbol -> Color
 color H  = 0xFFFFFF
 color He = 0xD9FFFF

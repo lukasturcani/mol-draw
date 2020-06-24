@@ -1,3 +1,5 @@
+-- | Defines default element sizes.
+
 module MolDraw.Utils.ElementSizes
 ( size
 ) where
@@ -6,6 +8,7 @@ module MolDraw.Utils.ElementSizes
 import MolDraw.ChemicalSymbol (ChemicalSymbol(..))
 
 
+-- | Get the default size of an element.
 size :: ChemicalSymbol -> Number
 size H  = 0.53
 size He = 0.31
