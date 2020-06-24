@@ -29,7 +29,13 @@ function render(scene)
         scene.userData.light.position.x *= 5;
         scene.userData.light.position.normalize();
         scene.userData.renderer.render(scene, scene.userData.camera);
-        scene.userData.outline.render(scene, scene.userData.camera);
+        if (scene.userData.hasOutline)
+        {
+            scene.userData.outline.render(
+                scene,
+                scene.userData.camera
+            );
+        }
     }
     return inner;
 }
