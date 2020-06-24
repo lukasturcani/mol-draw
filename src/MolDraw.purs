@@ -1,3 +1,5 @@
+-- | A lightweight, 3D molecular viewer.
+
 module MolDraw
 ( module MolDraw
 ) where
@@ -19,12 +21,14 @@ import MolDraw.GeometryAtom as GeometryAtom
 import MolDraw.Position as Position
 
 
+-- | Try to parse the content of V3000 MDL .mol file.
 maybeParseV3000
     :: String
     -> Either.Either String GeometryData.GeometryData
 maybeParseV3000 = GeometryData.maybeParseV3000
 
 
+-- | Try to get molecular data from atoms and bonds.
 maybeMolecule
     :: Array Atom.Atom
     -> Array Bond.Bond
@@ -32,6 +36,7 @@ maybeMolecule
 maybeMolecule = GeometryData.maybeMolecule
 
 
+-- | Draw a molecule in a HTML container.
 drawMol
     :: DrawMol.MeshOptions
     -> DrawMol.SceneOptions
@@ -40,48 +45,61 @@ drawMol
 drawMol = DrawMol.drawMol
 
 
+-- | Get the id of an atom.
 id :: GeometryAtom.GeometryAtom -> Int
 id = GeometryAtom.id
 
 
+-- | Create a position vector.
 position :: Number -> Number -> Number -> Position.Position
 position = Position.position
 
 
+-- | Get the chemical symbol of an atom.
 chemicalSymbol
     :: GeometryAtom.GeometryAtom
     -> ChemicalSymbol.ChemicalSymbol
 chemicalSymbol = GeometryAtom.chemicalSymbol
 
 
+-- | Create a bond.
+-- |
+-- | The arguments are `bondOrder`, `atom1Id`, `atom2Id`.
 bond :: Int -> Int -> Int -> Bond.Bond
 bond = Bond.bond
 
 
+-- | Create an atom.
 atom :: ChemicalSymbol.ChemicalSymbol -> Position.Position -> Atom.Atom
 atom = Atom.atom
 
 
+-- | Get the default color of an element.
 color :: ChemicalSymbol.ChemicalSymbol -> Int
 color = ElementColors.color
 
 
+-- | Get the default size of an element.
 size :: ChemicalSymbol.ChemicalSymbol -> Number
 size = ElementSizes.size
 
 
+-- | Check if you have an error valued result.
 isLeft :: forall a b. Either.Either a b -> Boolean
 isLeft = Either.isLeft
 
 
+-- | Check if you have a valid result.
 isRight :: forall a b. Either.Either a b -> Boolean
 isRight = Either.isRight
 
 
+-- | Extract an error result.
 fromLeft :: forall a b. Partial => Either.Either a b -> a
 fromLeft = Either.fromLeft
 
 
+-- | Extract a valid result.
 fromRight :: forall a b. Partial => Either.Either a b -> b
 fromRight = Either.fromRight
 
@@ -197,6 +215,7 @@ no = ChemicalSymbol.No :: ChemicalSymbol.ChemicalSymbol
 lr = ChemicalSymbol.Lr :: ChemicalSymbol.ChemicalSymbol
 
 
+-- | Get the chemical symbol as a string.
 show :: ChemicalSymbol.ChemicalSymbol -> String
 show ChemicalSymbol.H  = "H"
 show ChemicalSymbol.He = "He"
