@@ -1,9 +1,13 @@
 -- | Defines and deals with bond segments.
 -- |
--- | To draw a molecule, each bond of the molecule is split in half,
--- | creating two bond segments. This is necessary, because each half
--- | of the bond has a different color, the same as that of the atom it
--- | is connected to.
+-- | To draw a bond, it must be divided into segments. A bond
+-- | segment is always one color. A single bond will have two bond
+-- | segments, because the color of each half of the bond must match
+-- | the color of the atom it is connected to. A double bond will have
+-- | 4 bond segments. This because you need two sticks to represent a
+-- | double bond, and those sticks need to be split in half so that
+-- | each half can have a different color. Triple bonds have 6 bond
+-- | segments and so on.
 
 module MolDraw.BondSegment
 ( BondSegment
@@ -30,6 +34,7 @@ type BondOrder = Int
 -- | Represents a segment of a bond, of a single color.
 data BondSegment = BondSegment
     { _position       :: Position
+    -- The atom the bond segment is connected to.
     , _atom           :: GA.GeometryAtom
     , _length         :: Number
     , _order          :: BondOrder
@@ -67,23 +72,28 @@ length (BondSegment { _length }) = _length
 order :: BondSegment -> BondOrder
 order (BondSegment { _order }) = _order
 
--- | Get the offset used for positining the segment.
+-- | Get the offset used for positioning the segment.
 -- |
--- |
+-- | When you have double or triple bonds, some segments must be offset
+-- | from the center, since you use multiple sticks to represent the
+-- | increased bond order.
 offset :: BondSegment -> Int
 offset (BondSegment { _offset }) = _offset
 
 
+-- | Get the width of the segment.
 width :: BondSegment -> Number
 width segment = 0.1 / (toNumber $ order segment)
 
 
+-- | Get the gap between the `BondSegment` and the bond center.
 gapSize :: BondSegment -> Number
 gapSize segment = 0.2 * (toNumber $ offset segment)
 
 
+-- | Create bond segments from a bond between two atoms.
 bondSegments
-    :: Int
+    :: BondOrder
     -> GA.GeometryAtom
     -> GA.GeometryAtom
     -> List BondSegment
