@@ -5,7 +5,6 @@
         "Lukas Turcani <lukasturcani93@gmail.com"
     ],
     "description": "A lightweight, 3D molecular viewer.",
-    "private": false,
     "license": "MIT",
     "repository": {
         "type": "git",
