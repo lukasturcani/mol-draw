@@ -47,7 +47,7 @@ List of Exported Functions
 
 Apart from the usage examples here, you can see all exported
 functions at
-https://pursuit.purescript.org/packages/purescript-mol-draw
+https://pursuit.purescript.org/packages/purescript-mol-draw/docs/MolDraw
 
 The exported functions are identical for both JavaScript and PureScript
 users.
