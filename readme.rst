@@ -1,5 +1,5 @@
 :author: Lukas Turcani
-:documentation: https://pursuit.purescript.org/packages/purescript-mol-draw
+:Documentation: https://pursuit.purescript.org/packages/purescript-mol-draw
 
 .. image:: banner.png
 
