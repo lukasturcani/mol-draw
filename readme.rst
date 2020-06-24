@@ -97,7 +97,7 @@ Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
         // is not. You have to at least provide an empty "{}".
         md.drawMol({})({
             // Id of the div, in which the molecule should be rendered.
-            containerId: 'container3'
+            containerId: 'container1'
         })(molecule);
     }
 
@@ -181,7 +181,7 @@ Direct Creation
 You can create molecules programmatically
 
 
-Live Example:
+Live Example: https://codepen.io/lukasturcani/pen/wvMdVEz
 
 .. code-block:: javascript
 
@@ -225,7 +225,7 @@ Live Example:
         // the molecule with md.fromRight()(eg3).
         const molecule = md.fromRight()(eg3);
         md.drawMol({})({
-            containerId: 'container5',
+            containerId: 'container1',
         })(molecule);
     }
 
