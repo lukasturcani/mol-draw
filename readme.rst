@@ -6,7 +6,7 @@
 molDraw
 =======
 
-A lightweight molecular viewer for embedding molecules into
+A lightweight, 3D molecular viewer for embedding molecules into
 web pages and web apps, with support for React. It is intended for use
 by both JavaScript and PureScript applications.
 
