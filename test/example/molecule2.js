@@ -1,4 +1,4 @@
-molStr = `
+export const molecule2 = `
  OpenBabel01301908503D
 
   0  0  0     0  0            999 V3000
@@ -360,5 +360,3 @@ M  V30 END CTAB
 M  END
 
 `;
-
-MOL.drawMol(molStr, 'container2');

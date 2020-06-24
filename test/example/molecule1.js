@@ -1,4 +1,4 @@
-molStr = `
+export const molecule1 = `
 6f
                     3D
  Structure written by MMmdl.
@@ -187,5 +187,3 @@ M  V30 END CTAB
 M  END
 
 `;
-
-MOL.drawMol(molStr, 'container1');

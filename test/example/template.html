@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        div {
+            display: inline-block;
+        }
+
+        .outer {
+            background-color: dimgray;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .inner {
+            width: 50%;
+            height: 50%;
+            padding: 2%;
+            float: left;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            border-radius: 12em;
+            overflow: hidden;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+
+        <div class="inner">
+            <div id="container1" class="container">
+            </div>
+        </div>
+
+        <div class="inner">
+            <div id="container2" class="container">
+            </div>
+        </div>
+
+        <div class="inner">
+            <div id="container3" class="container">
+            </div>
+        </div>
+
+        <div class="inner">
+            <div id="container4" class="container">
+            </div>
+        </div>
+
+        <div class="inner">
+            <div id="container5" class="container">
+            </div>
+        </div>
+
+    </div>
+</html>
