@@ -1,0 +1,14 @@
+{
+    "name": "mol-draw",
+    "homepage": "https://github.com/lukasturcani/molDraw",
+    "authors": [
+        "Lukas Turcani <lukasturcani93@gmail.com"
+    ],
+    "description": "A lightweight, 3D molecular viewer.",
+    "private": false,
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lukasturcani/molDraw"
+    }
+}
