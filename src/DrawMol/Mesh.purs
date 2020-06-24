@@ -116,7 +116,6 @@ type Helpers =
     , bondSegmentWidth    :: BondSegment.BondSegment -> Number
     , bondSegmentLength   :: BondSegment.BondSegment -> Number
     , bondSegmentGapSize  :: BondSegment.BondSegment -> Number
-    , bondSegmentAlignmentPoint :: BondSegment.BondSegment -> Position
     }
 
 
@@ -133,7 +132,6 @@ helpers =
     , bondSegmentWidth          : BondSegment.width
     , bondSegmentLength         : BondSegment.length
     , bondSegmentGapSize        : BondSegment.gapSize
-    , bondSegmentAlignmentPoint : BondSegment.alignmentPoint
     }
 
 

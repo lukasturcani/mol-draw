@@ -1,10 +1,16 @@
+-- | Defines and deals with bond segments.
+-- |
+-- | To draw a molecule, each bond of the molecule is split in half,
+-- | creating two bond segments. This is necessary, because each half
+-- | of the bond has a different color, the same as that of the atom it
+-- | is connected to.
+
 module MolDraw.BondSegment
 ( BondSegment
 , atom
 , position
 , bondSegments
 , gapSize
-, alignmentPoint
 , length
 , width
 ) where
@@ -18,13 +24,16 @@ import MolDraw.Position (Position ( Position ))
 import MolDraw.GeometryAtom as GA
 
 
+type BondOrder = Int
+
+
+-- | Represents a segment of a bond, of a single color.
 data BondSegment = BondSegment
     { _position       :: Position
     , _atom           :: GA.GeometryAtom
     , _length         :: Number
-    , _order          :: Int
+    , _order          :: BondOrder
     , _offset         :: Int
-    , _alignmentPoint :: Position
     }
 
 
@@ -42,27 +51,25 @@ instance showBondSegment :: Show BondSegment where
         <> show (offset segment)
         <> " })"
 
-
+-- | Get the position of a `BondSegment`.
 position :: BondSegment -> Position
 position (BondSegment { _position }) = _position
 
-
+-- | Get the atom to which the segment is attached.
 atom :: BondSegment -> GA.GeometryAtom
 atom (BondSegment { _atom }) = _atom
 
-
+-- | Get the length of the segment.
 length :: BondSegment -> Number
 length (BondSegment { _length }) = _length
 
-
-alignmentPoint :: BondSegment -> Position
-alignmentPoint (BondSegment { _alignmentPoint }) = _alignmentPoint
-
-
-order :: BondSegment -> Int
+-- | Get the bond order of the segment.
+order :: BondSegment -> BondOrder
 order (BondSegment { _order }) = _order
 
-
+-- | Get the offset used for positining the segment.
+-- |
+-- |
 offset :: BondSegment -> Int
 offset (BondSegment { _offset }) = _offset
 
@@ -89,7 +96,6 @@ bondSegments order' atom1 atom2 = do
         , _length:            segmentLength
         , _order:             order'
         , _offset:            offset'
-        , _alignmentPoint:    atom1Position
         }
     ) : (BondSegment
             { _position:          segment2Position
@@ -97,7 +103,6 @@ bondSegments order' atom1 atom2 = do
             , _length:            segmentLength
             , _order:             order'
             , _offset:            offset'
-            , _alignmentPoint:    atom1Position
             }
         ) : Nil
   where

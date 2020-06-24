@@ -14,7 +14,6 @@ exports.meshesImpl =
         bondSegmentWidth,
         bondSegmentLength,
         bondSegmentGapSize,
-        bondSegmentAlignmentPoint
     })                              =>
     (meshData)                      =>
 {
@@ -90,7 +89,7 @@ exports.meshesImpl =
             value0: alignmentX,
             value1: alignmentY,
             value2: alignmentZ
-        } = bondSegmentAlignmentPoint(bondSegment);
+        } = atomPosition(bondSegmentAtom(bondSegment));
 
         mesh.lookAt(alignmentX, alignmentY, alignmentZ);
         mesh.translateOnAxis(
