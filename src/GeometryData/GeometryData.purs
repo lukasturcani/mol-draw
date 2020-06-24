@@ -1,3 +1,5 @@
+-- | Deals with the geometry which you want to draw.
+
 module MolDraw.GeometryData
 ( GeometryData
 , atoms
@@ -20,34 +22,39 @@ import MolDraw.Parsers.V3000 as V3P
 import MolDraw.Utils (toEither)
 
 
+-- | Contains the atoms and bond segments which should be drawn.
 data GeometryData = GeometryData
     { _atoms        :: List GeometryAtom
     , _bondSegments :: List BS.BondSegment
     }
 
-
+-- | Get the atoms which should be drawn.
 atoms :: GeometryData -> List GeometryAtom
 atoms (GeometryData { _atoms }) = _atoms
 
-
+-- | Get the bond segments which should be drawn.
 bondSegments :: GeometryData -> List BS.BondSegment
 bondSegments (GeometryData { _bondSegments }) = _bondSegments
 
-
+-- | Create `GeometryData` from V3000 MDL file content.
 fromV3000Content :: V3P.V3000Content -> GeometryData
 fromV3000Content content = GeometryData
     { _atoms: V3P.atoms content
     , _bondSegments: V3P.bondSegments content
     }
 
-
+-- | Create `GeometryData` by trying to parse V3000 MDL file content.
 maybeParseV3000 :: String -> Either String GeometryData
 maybeParseV3000 string = do
     content <- V3P.parseV3000 string
     Right $ fromV3000Content content
 
-
-
+-- | Create `GeometryData` from explicit atoms and bonds.
+-- |
+-- | The reason this returns an `Either`, is that the provided bonds
+-- | maybe be invalid. For example, if you have 3 atoms, but
+-- | also a bond, which says its connected to an atom with id 50.
+-- | This is clearly invalid input.
 maybeMolecule :: Array Atom -> Array Bond -> Either String GeometryData
 maybeMolecule atoms' bonds = do
     bondSegments' <- foldM (addSegments atoms') Nil bonds

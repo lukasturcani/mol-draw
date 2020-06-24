@@ -1,3 +1,5 @@
+-- | Defines `Position`.
+
 module MolDraw.Position
 ( Position ( Position )
 , position
@@ -7,6 +9,7 @@ module MolDraw.Position
 import Prelude
 
 
+-- | Represents a position vector.
 data Position = Position Number Number Number
 
 
@@ -21,5 +24,6 @@ instance showPosition :: Show Position where
         <> ")"
 
 
+-- | Create a position vector.
 position :: Number -> Number -> Number -> Position
 position x y z = Position x y z

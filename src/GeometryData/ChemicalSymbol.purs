@@ -1,3 +1,5 @@
+-- | Defines chemical symbols.
+
 module MolDraw.ChemicalSymbol
 ( ChemicalSymbol (..)
 ) where

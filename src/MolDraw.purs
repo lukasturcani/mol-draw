@@ -30,7 +30,12 @@ maybeParseV3000
 maybeParseV3000 = GeometryData.maybeParseV3000
 
 
--- | Try to get molecular data from atoms and bonds.
+-- | Create `GeometryData` from explicit atoms and bonds.
+-- |
+-- | The reason this returns an `Either`, is that the provided bonds
+-- | maybe be invalid. For example, if you have 3 atoms, but
+-- | also a bond, which says its connected to an atom with id 50.
+-- | This is clearly invalid input.
 maybeMolecule
     :: Array Atom.Atom
     -> Array Bond.Bond
