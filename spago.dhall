@@ -5,7 +5,6 @@ You can edit this file as you like.
 { name = "mol-draw"
 , dependencies =
   [ "arrays"
-  , "assert"
   , "console"
   , "effect"
   , "either"
@@ -13,7 +12,6 @@ You can edit this file as you like.
   , "math"
   , "numbers"
   , "ordered-collections"
-  , "psci-support"
   , "strings"
   , "stringutils"
   ]

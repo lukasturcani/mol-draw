@@ -42,7 +42,6 @@ Add the following to your spago_ ``packages.dhall`` file
         { molDraw =
             { dependencies =
                 [ "arrays"
-                , "assert"
                 , "console"
                 , "effect"
                 , "either"
@@ -50,7 +49,6 @@ Add the following to your spago_ ``packages.dhall`` file
                 , "math"
                 , "numbers"
                 , "ordered-collections"
-                , "psci-support"
                 , "strings"
                 , "stringutils"
                 ]
