@@ -36,30 +36,30 @@ Add the following to your spago_ ``packages.dhall`` file
 
 .. _spago: https://github.com/purescript/spago#add-a-package-to-the-package-set
 
-.. code-block:: javascript
+.. code-block:: dhall
 
-let additions =
-    { molDraw =
-        { dependencies =
-            [ "arrays"
-            , "assert"
-            , "console"
-            , "effect"
-            , "either"
-            , "integers"
-            , "math"
-            , "numbers"
-            , "ordered-collections"
-            , "psci-support"
-            , "strings"
-            , "stringutils"
-            ]
-        , repo =
-            "https://github.com/lukasturcani/molDraw"
-        , version =
-            "v1.0.6"
+    let additions =
+        { molDraw =
+            { dependencies =
+                [ "arrays"
+                , "assert"
+                , "console"
+                , "effect"
+                , "either"
+                , "integers"
+                , "math"
+                , "numbers"
+                , "ordered-collections"
+                , "psci-support"
+                , "strings"
+                , "stringutils"
+                ]
+            , repo =
+                "https://github.com/lukasturcani/molDraw"
+            , version =
+                "v1.0.6"
+            }
         }
-    }
 
 --------------
 Usage Examples
