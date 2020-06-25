@@ -36,7 +36,7 @@ Add the following to your spago_ ``packages.dhall`` file
 
 .. _spago: https://github.com/purescript/spago#override-a-package-in-the-package-set-with-a-local-one
 
-.. code-block:: dhall
+.. code-block:: haskell
 
 let additions =
     { molDraw =
