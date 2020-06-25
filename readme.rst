@@ -59,6 +59,10 @@ Add the following to your spago_ ``packages.dhall`` file
             }
         }
 
+Then run::
+
+    $ spago install molDraw
+
 --------------
 Usage Examples
 --------------
