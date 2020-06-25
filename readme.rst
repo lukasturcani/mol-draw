@@ -29,6 +29,38 @@ or npm::
 
     $ npm install mol-draw
 
+PureScript
+==========
+
+Add the following to your spago_ ``packages.dhall`` file
+
+.. _spago: https://github.com/purescript/spago#override-a-package-in-the-package-set-with-a-local-one
+
+.. code-block:: dhall
+
+let additions =
+    { molDraw =
+        { dependencies =
+            [ "arrays"
+            , "assert"
+            , "console"
+            , "effect"
+            , "either"
+            , "integers"
+            , "math"
+            , "numbers"
+            , "ordered-collections"
+            , "psci-support"
+            , "strings"
+            , "stringutils"
+            ]
+        , repo =
+            "https://github.com/lukasturcani/molDraw"
+        , version =
+            "v1.0.6"
+        }
+    }
+
 --------------
 Usage Examples
 --------------
