@@ -34,9 +34,9 @@ PureScript
 
 Add the following to your spago_ ``packages.dhall`` file
 
-.. _spago: https://github.com/purescript/spago#override-a-package-in-the-package-set-with-a-local-one
+.. _spago: https://github.com/purescript/spago#add-a-package-to-the-package-set
 
-.. code-block:: haskell
+.. code-block:: javascript
 
 let additions =
     { molDraw =
