@@ -63,6 +63,8 @@ exports.meshesImpl =
     }
 
     const offsetAxis = new THREE.Vector3(1, 0, 0);
+    // A throwaway material used to create a mesh.
+    const throwawayMaterial = new THREE.Material();
     for (const bondSegment of bondSegments)
     {
         const width = bondSegmentWidth(bondSegment);
@@ -77,7 +79,7 @@ exports.meshesImpl =
         geometry.rotateX(Math.PI/2);
 
         const color = atomColor(bondSegmentAtom(bondSegment));
-        const mesh = new THREE.Mesh(geometry, new THREE.Material());
+        const mesh = new THREE.Mesh(geometry, throwawayMaterial);
         const {
             value0: x,
             value1: y,
