@@ -327,7 +327,7 @@ Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
         // md.fromRight()(eg1) to extract the molecule.
         const molecule = md.fromRight()(eg1);
         // Note that while most scene options are optional, the
-        // conatinerId option is not.
+        // containerId option is not.
         let scene = md.scene({ containerId: 'container1' });
         // For md.meshes(), the options are optional, but the options
         // object is not, you must provide at least an empty "{}".
