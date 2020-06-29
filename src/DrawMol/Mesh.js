@@ -105,7 +105,6 @@ exports.meshesImpl =
         );
         geometries[color].mergeMesh(mesh)
 
-        mesh.dispose()
         geometry.dispose()
     }
 
