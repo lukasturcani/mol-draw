@@ -143,7 +143,7 @@ else
             color: color
         })
     });
-    scene(meshes(molecule));
+    md.drawMol(scene(meshes(molecule)));
 }
 
 

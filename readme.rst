@@ -135,12 +135,13 @@ Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
         // If the parse was successful, you can use
         // md.fromRight()(eg1) to extract the molecule.
         const molecule = md.fromRight()(eg1);
-        // Note that while options are optional, the options object is
-        // is not. You have to at least provide an empty "{}".
-        md.drawMol({})({
-            // Id of the div, in which the molecule should be rendered.
-            containerId: 'container1'
-        })(molecule);
+        // Note that while most scene options are optional, the
+        // conatinerId option is not.
+        let scene = md.scene({ containerId: 'container1' });
+        // For md.meshes(), the options are optional, but the options
+        // object is not, you must provide at least an empty "{}".
+        let meshes = md.meshes({})(molecule);
+        md.drawMol(scene(meshes));
     }
 
 
@@ -153,10 +154,16 @@ Live Example: https://codepen.io/lukasturcani/pen/PoZmMRP
 
     import * as THREE from 'three';
 
-    // If you want to customize the drawing you can add an options
-    // object.
+    // If you want to customize the drawing you can use an options
+    // object with scene() and meshes().
 
-    md.drawMol({
+    const scene = md.scene({
+        backgroundColor: 0xA14411,
+        outline: false,
+        containerId: 'container1'
+    });
+
+    const meshes = md.meshes({
         // atomSize is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired size (before scaling).
         atomSize: atom => {
@@ -206,12 +213,9 @@ Live Example: https://codepen.io/lukasturcani/pen/PoZmMRP
             color: color
         })
 
-    })({
-        // Scene options.
-        backgroundColor: 0xA14411,
-        outline: false,
-        containerId: 'container1'
-    })(molecule);
+    })
+    md.drawMol(scene(meshes(molecule)));
+
 
 
 Loading Molecules
@@ -266,9 +270,10 @@ Live Example: https://codepen.io/lukasturcani/pen/wvMdVEz
         // If creation of the molecule was successful, you can extract
         // the molecule with md.fromRight()(eg3).
         const molecule = md.fromRight()(eg3);
-        md.drawMol({})({
-            containerId: 'container1',
-        })(molecule);
+
+        const scene = md.scene({ containerId: 'container1' });
+        const meshes = md.meshes({})(molecule);
+        md.drawMol(scene(meshes));
     }
 
 
@@ -285,7 +290,8 @@ Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
     import * as md from 'mol-draw';
 
     // You can load molecules by parsing them from V3000 MDL .mol
-    // file contents.
+    // file contents. Don't worry though, you can also create molecules
+    // programmatically, as shown in a later example.
     const eg1 = md.maybeParseV3000(`
       0  0  0  0  0  0  0  0  0  0999 V3000
     M  V30 BEGIN CTAB
@@ -320,8 +326,11 @@ Live Example: https://codepen.io/lukasturcani/pen/qBbmKeq
         // If the parse was successful, you can use
         // md.fromRight()(eg1) to extract the molecule.
         const molecule = md.fromRight()(eg1);
-        md.drawMol({})({
-            // Id of the div, in which the molecule should be rendered.
-            containerId: 'container1'
-        })(molecule);
+        // Note that while most scene options are optional, the
+        // conatinerId option is not.
+        let scene = md.scene({ containerId: 'container1' });
+        // For md.meshes(), the options are optional, but the options
+        // object is not, you must provide at least an empty "{}".
+        let meshes = md.meshes({})(molecule);
+        md.drawMol(scene(meshes));
     }
