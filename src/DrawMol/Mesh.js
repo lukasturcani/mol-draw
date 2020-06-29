@@ -3,6 +3,14 @@
 
 const THREE = require('three');
 
+// Assets that can be reused in stead of being re-created.
+// This should imporve performance and reduce chance of memory leaks by
+// three.js.
+const matrix = new THREE.Matrix4();
+const offsetAxis = new THREE.Vector3(1, 0, 0);
+// A throwaway material used to create throwaway meshes.
+const throwawayMaterial = new THREE.Material();
+
 
 exports.meshesImpl =
     ({
@@ -36,7 +44,6 @@ exports.meshesImpl =
     );
 
     const geometries = {};
-    const matrix = new THREE.Matrix4();
 
     for (const atom of atoms)
     {
@@ -60,11 +67,9 @@ exports.meshesImpl =
             atomHeightSegments
         );
         geometries[color].merge(geometry, matrix);
+        geometry.dispose();
     }
 
-    const offsetAxis = new THREE.Vector3(1, 0, 0);
-    // A throwaway material used to create a mesh.
-    const throwawayMaterial = new THREE.Material();
     for (const bondSegment of bondSegments)
     {
         const width = bondSegmentWidth(bondSegment);
@@ -99,6 +104,9 @@ exports.meshesImpl =
             bondSegmentGapSize(bondSegment)
         );
         geometries[color].mergeMesh(mesh)
+
+        mesh.dispose()
+        geometry.dispose()
     }
 
     const meshes = [];
@@ -109,6 +117,7 @@ exports.meshesImpl =
             new THREE.Mesh(geometry, material(parseInt(color)))
         );
     }
+
     return meshes;
 };
 
