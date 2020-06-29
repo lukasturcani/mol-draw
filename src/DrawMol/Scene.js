@@ -4,9 +4,15 @@
 
 const THREE = require('three');
 const TrackballControls = require('three-trackballcontrols');
+// Assets that can be reused instead of being re-created.
+// Should imporove performance and reduce chance of memory leaks by
+// three.js.
+const boundingSphere = new THREE.Sphere();
+const centroid = new THREE.Vector3(0, 0, 0);
+const worldPosition = new THREE.Vector3(0, 0, 0);
 
 
-exports.scene = (sceneOptions) => (meshes) =>
+exports.scene = (sceneOptions) =>
 {
     // Assign default values.
     const {
@@ -21,20 +27,27 @@ exports.scene = (sceneOptions) => (meshes) =>
     const scene = getScene(backgroundColor);
     const container = getContainer(scene, containerId);
     const camera = getCamera(scene, container);
-    addLight(scene, camera, getCentroid(meshes));
     const renderer = getRenderer(scene, container);
+    const light = getLight(scene, camera)
     const controls = getControls(scene, renderer.domElement, camera);
     addOutlineEffect(scene, renderer, outline);
-    addMeshes(scene, meshes);
-    autoFitTo(getBoundingBox(meshes), camera, controls)
-    return scene;
-}
+
+    return (meshes) =>
+    {
+
+        light.target.position.copy(getCentroid(meshes));
+        addMeshes(scene, meshes);
+        autoFitTo(getBoundingBox(meshes), camera, controls)
+        return scene;
+    };
+};
 
 
 function getScene(backgroundColor)
 {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(backgroundColor);
+    scene.userData.meshes = [];
     return scene;
 }
 
@@ -60,19 +73,17 @@ function getCamera(scene, container)
 }
 
 
-
-function addLight(scene, camera, target)
+function getLight(scene, camera)
 {
     const light = new THREE.DirectionalLight(0xFFFFFF);
+    scene.add(light);
+    scene.userData.light = light;
     light.position.copy(camera.position.clone().normalize());
     light.position.z *= 2;
     light.position.x *= 5;
     light.position.normalize();
-    light.target.position.copy(target);
-    scene.add(light);
-    scene.userData.light = light;
+    return light;
 }
-
 
 
 function getRenderer(scene, container)
@@ -117,9 +128,19 @@ function addOutlineEffect(scene, renderer, outline)
 
 function addMeshes(scene, meshes)
 {
+    // Destroy previous meshes first.
+    for (const mesh of scene.userData.meshes)
+    {
+        scene.remove(mesh);
+        mesh.geometry.dispose();
+        mesh.material.dispose();
+    }
+
+    scene.userData.meshes = [];
     for (const mesh of meshes)
     {
         scene.add(mesh);
+        scene.userData.meshes.push(mesh);
     }
 }
 
@@ -127,8 +148,7 @@ function addMeshes(scene, meshes)
 
 function getCentroid(meshes)
 {
-    const centroid = new THREE.Vector3(0, 0, 0);
-    const worldPosition = new THREE.Vector3(0, 0, 0);
+    centroid.set(0, 0, 0);
     for (const mesh of meshes)
     {
         mesh.getWorldPosition(worldPosition);
@@ -165,7 +185,6 @@ function render(scene)
  * https://github.com/mrdoob/three.js/issues/6784
  */
 function autoFitTo(boundingBox, camera, controls) {
-    const boundingSphere = new THREE.Sphere();
     boundingBox.getBoundingSphere(boundingSphere);
     const scale = 2.5; // object size / display size
     const objectAngularSize = (camera.fov * Math.PI / 180) * scale;

@@ -3,8 +3,8 @@
 
 const THREE = require('three');
 
-// Assets that can be reused in stead of being re-created.
-// This should imporve performance and reduce chance of memory leaks by
+// Assets that can be reused instead of being re-created.
+// This should improve performance and reduce chance of memory leaks by
 // three.js.
 const matrix = new THREE.Matrix4();
 const offsetAxis = new THREE.Vector3(1, 0, 0);
