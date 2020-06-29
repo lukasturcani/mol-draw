@@ -15,9 +15,9 @@ if (md.isLeft(maybeMolecule1))
 }
 else
 {
-    md.drawMol({})({
-        containerId: 'container1',
-    })(md.fromRight()(maybeMolecule1));
+    const scene = md.scene({ containerId: 'container1' });
+    const meshes = md.meshes({})(md.fromRight()(maybeMolecule1));
+    md.drawMol(scene(meshes));
 }
 
 const maybeMolecule2 = md.maybeParseV3000(molecule2);
@@ -28,9 +28,9 @@ if (md.isLeft(maybeMolecule2))
 }
 else
 {
-    md.drawMol({})({
-        containerId: 'container2',
-    })(md.fromRight()(maybeMolecule2));
+    const scene = md.scene({ containerId: 'container2' });
+    const meshes = md.meshes({})(md.fromRight()(maybeMolecule2));
+    md.drawMol(scene(meshes));
 }
 
 
@@ -74,20 +74,26 @@ else
     // If the parse was successful, you can use
     // md.fromRight()(eg1) to extract the molecule.
     const molecule = md.fromRight()(eg1);
-    // Note that while options are optional, the options object is
-    // is not. You have to at least provide an empty "{}".
-    md.drawMol({})({
-        // Id of the div, in which the molecule should be rendered.
-        containerId: 'container3'
-    })(molecule);
+    // Note that while most scene options are optional, the conatinerId
+    // option is not.
+    let scene = md.scene({ containerId: 'container3' });
+    // For md.meshes(), the options are optional, but the options
+    // object is not, you must provide at least an empty "{}".
+    let meshes = md.meshes({})(molecule);
+    md.drawMol(scene(meshes));
 
 
     // readme.rst example 2.
 
-    // If you want to customize the drawing you can add an options
-    // object.
+    // If you want to customize the drawing you can use an options
+    // object with scene() and meshes().
 
-    md.drawMol({
+    scene = md.scene({
+        backgroundColor: 0xFF00FF,
+        outline: false,
+        containerId: 'container4'
+    });
+    meshes = md.meshes({
         // atomSize is a function, which takes a molDraw.GeometryAtom
         // instance and returns the desired size (before scaling).
         atomSize: atom => {
@@ -136,13 +142,8 @@ else
         material: (color) => new THREE.MeshPhongMaterial({
             color: color
         })
-
-    })({
-        // Scene options.
-        backgroundColor: 0xFF00FF,
-        outline: false,
-        containerId: 'container4'
-    })(molecule);
+    });
+    scene(meshes(molecule));
 }
 
 
@@ -186,8 +187,8 @@ else
     // If creation of the molecule was successful, you can extract
     // the molecule with md.fromRight()(eg3).
     const molecule = md.fromRight()(eg3);
-    md.drawMol({})({
-        containerId: 'container5',
-    })(molecule);
+    const scene = md.scene({ containerId: 'container5' });
+    const meshes = md.meshes({})(molecule);
+    md.drawMol(scene(meshes));
 }
 
