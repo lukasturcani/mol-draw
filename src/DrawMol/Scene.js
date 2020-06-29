@@ -5,7 +5,7 @@
 const THREE = require('three');
 const TrackballControls = require('three-trackballcontrols');
 // Assets that can be reused instead of being re-created.
-// Should imporove performance and reduce chance of memory leaks by
+// Should improve performance and reduce chance of memory leaks by
 // three.js.
 const boundingSphere = new THREE.Sphere();
 const centroid = new THREE.Vector3(0, 0, 0);

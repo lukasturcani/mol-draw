@@ -15,8 +15,8 @@ import MolDraw.Utils.ElementColors as ElementColors
 import MolDraw.Utils.ElementSizes as ElementSizes
 import MolDraw.ChemicalSymbol as ChemicalSymbol
 import MolDraw.DrawMol (drawMol) as DrawMol
-import MolDraw.DrawMol.Scene (SceneOptions) as DrawMol
-import MolDraw.DrawMol.Mesh (MeshOptions) as DrawMol
+import MolDraw.DrawMol.Scene (Scene, SceneOptions, scene) as DrawMol
+import MolDraw.DrawMol.Mesh (Mesh, MeshOptions, meshes) as DrawMol
 import MolDraw.Atom as Atom
 import MolDraw.Bond as Bond
 import MolDraw.GeometryAtom as GeometryAtom
@@ -43,13 +43,22 @@ maybeMolecule
 maybeMolecule = GeometryData.maybeMolecule
 
 
--- | Draw a molecule in a HTML container.
-drawMol
-    :: DrawMol.MeshOptions
-    -> DrawMol.SceneOptions
-    -> GeometryData.GeometryData
-    -> Effect Prelude.Unit
+-- | Draw a scene in a HTML container.
+drawMol :: DrawMol.Scene -> Effect Prelude.Unit
 drawMol = DrawMol.drawMol
+
+
+-- | Create the meshes which compose a molecule.
+meshes
+    :: DrawMol.MeshOptions
+    -> GeometryData.GeometryData
+    -> Array DrawMol.Mesh
+meshes = DrawMol.meshes
+
+
+-- | Create a three.js scene.
+scene :: DrawMol.SceneOptions -> Array DrawMol.Mesh -> DrawMol.Scene
+scene = DrawMol.scene
 
 
 -- | Get the id of an atom.

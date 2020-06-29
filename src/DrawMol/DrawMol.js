@@ -4,11 +4,6 @@
 const THREE = require('three');
 
 
-exports.toonMaterial = color => new THREE.MeshToonMaterial({
-    color: color
-});
-
-
 exports.drawMolImpl = scene =>
 {
     render(scene);
