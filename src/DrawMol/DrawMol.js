@@ -6,7 +6,7 @@ const THREE = require('three');
 
 exports.drawMolImpl = scene =>
 {
-    render(scene);
+    render(scene)();
     window.addEventListener('resize', onWindowResize(scene), false);
     animate(scene);
 };
