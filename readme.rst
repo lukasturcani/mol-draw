@@ -55,7 +55,7 @@ Add the following to your spago_ ``packages.dhall`` file
             , repo =
                 "https://github.com/lukasturcani/molDraw"
             , version =
-                "v1.0.10"
+                "v1.0.11"
             }
         }
 
