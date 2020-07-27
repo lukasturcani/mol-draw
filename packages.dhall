@@ -132,7 +132,7 @@ let additions =
         , repo =
             "https://github.com/lukasturcani/validated-molecule"
         , version =
-            "v1.0.2"
+            "v1.0.3"
         }
     }
 
