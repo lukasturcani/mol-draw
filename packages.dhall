@@ -123,6 +123,17 @@ let upstream =
 
 let overrides = {=}
 
-let additions = {=}
+let additions =
+    { validated-molecule =
+        { dependencies =
+            [ "arrays"
+            , "lists"
+            ]
+        , repo =
+            "https://github.com/lukasturcani/validated-molecule"
+        , version =
+            "v1.0.1"
+        }
+    }
 
 in  upstream // overrides // additions
