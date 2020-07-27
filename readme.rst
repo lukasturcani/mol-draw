@@ -57,6 +57,16 @@ Add the following to your spago_ ``packages.dhall`` file
             , version =
                 "v1.0.13"
             }
+        , validated-molecule =
+            { dependencies =
+                [ "arrays"
+                , "lists"
+                ]
+            , repo =
+                "https://github.com/lukasturcani/validated-molecule"
+            , version =
+                "v1.0.3"
+            }
         }
 
 Then run::
