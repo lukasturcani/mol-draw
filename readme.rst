@@ -51,11 +51,12 @@ Add the following to your spago_ ``packages.dhall`` file
                 , "ordered-collections"
                 , "strings"
                 , "stringutils"
+                , "validated-molecule"
                 ]
             , repo =
                 "https://github.com/lukasturcani/molDraw"
             , version =
-                "v1.0.11"
+                "v1.0.13"
             }
         }
 
