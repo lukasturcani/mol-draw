@@ -71,6 +71,7 @@ Add the following to your spago_ ``packages.dhall`` file
 
 Then run::
 
+    $ spago isntall validated-molecule
     $ spago install molDraw
 
 --------------
