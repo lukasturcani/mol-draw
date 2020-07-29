@@ -55,7 +55,7 @@ Add the following to your spago_ ``packages.dhall`` file
             , repo =
                 "https://github.com/lukasturcani/molDraw"
             , version =
-                "v1.0.13"
+                "v1.0.14"
             }
         , validated-molecule =
             { dependencies =
@@ -65,13 +65,13 @@ Add the following to your spago_ ``packages.dhall`` file
             , repo =
                 "https://github.com/lukasturcani/validated-molecule"
             , version =
-                "v1.0.3"
+                "v1.0.4"
             }
         }
 
 Then run::
 
-    $ spago isntall validated-molecule
+    $ spago install validated-molecule
     $ spago install molDraw
 
 --------------
