@@ -7,6 +7,7 @@ module MolDraw.GeometryData
 , fromV3000Content
 , maybeParseV3000
 , maybeMolecule
+, fromValidatedMolecule
 ) where
 
 import Prelude
