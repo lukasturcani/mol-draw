@@ -5,7 +5,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        molDraw: './output/MolDraw/index.js',
+        'mol-draw': './output/MolDraw/index.js',
         example: './test/example/example.js'
     },
     output: {
@@ -19,7 +19,7 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: 'molDraw',
+            title: 'mol-draw',
             template: './test/example/template.html',
         }),
     ],

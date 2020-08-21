@@ -4,12 +4,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        molDraw: './output/MolDraw/index.js',
+        'mol-draw': './output/MolDraw/index.js',
     },
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'molDraw.js',
-        library: 'molDraw',
+        filename: 'mol-draw.js',
+        library: 'mol-draw',
         libraryTarget: 'umd',
     },
     externals: {
