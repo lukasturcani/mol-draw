@@ -14,9 +14,10 @@ You can edit this file as you like.
   , "ordered-collections"
   , "strings"
   , "stringutils"
+  , "validated-molecule"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
 , license = "MIT"
-, repository = "https://github.com/lukasturcani/molDraw"
+, repository = "https://github.com/lukasturcani/mol-draw"
 }

@@ -3,9 +3,9 @@
 
 .. image:: banner.png
 
-=======
-molDraw
-=======
+========
+mol-draw
+========
 
 A lightweight, 3D molecular viewer for embedding molecules into
 web pages and web apps. It is intended for use
@@ -32,47 +32,9 @@ or npm::
 PureScript
 ==========
 
-Add the following to your spago_ ``packages.dhall`` file
+You can install with spago::
 
-.. _spago: https://github.com/purescript/spago#add-a-package-to-the-package-set
-
-.. code-block:: dhall
-
-    let additions =
-        { molDraw =
-            { dependencies =
-                [ "arrays"
-                , "console"
-                , "effect"
-                , "either"
-                , "integers"
-                , "math"
-                , "numbers"
-                , "ordered-collections"
-                , "strings"
-                , "stringutils"
-                ]
-            , repo =
-                "https://github.com/lukasturcani/molDraw"
-            , version =
-                "v1.0.15"
-            }
-        , validated-molecule =
-            { dependencies =
-                [ "arrays"
-                , "lists"
-                ]
-            , repo =
-                "https://github.com/lukasturcani/validated-molecule"
-            , version =
-                "v1.0.4"
-            }
-        }
-
-Then run::
-
-    $ spago install validated-molecule
-    $ spago install molDraw
+    $ spago install mol-draw
 
 --------------
 Usage Examples
