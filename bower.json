@@ -23,6 +23,7 @@
         "purescript-numbers": "^v7.0.0",
         "purescript-ordered-collections": "^v1.6.1",
         "purescript-strings": "^v4.0.1",
-        "purescript-stringutils": "^v0.0.10"
+        "purescript-stringutils": "^v0.0.10",
+        "purescript-validated-molecule": "^v1.0.5"
     }
 }
